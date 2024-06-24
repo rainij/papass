@@ -1,0 +1,17 @@
+[project]
+name = "rspass"
+version = "0.0.1"
+dependencies = [
+    "click",
+]
+
+[project.optional-dependencies]
+dev-pylsp = [
+    "python-lsp-server",
+    "python-lsp-ruff",
+    "pylsp-mypy",
+    "pylsp-rope",
+]
+
+[tool.ruff]
+line-length = 90
