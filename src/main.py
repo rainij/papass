@@ -21,7 +21,7 @@ def main(count, random_source, delimiter, wordlist):
     wordlist = WordList.from_file(Path(__file__).parent.parent.parent / "eff_large.wordlist", None)  # TODO
 
     gen = RandomPhraseGenerator(wordlist, rng)
-    phrase = gen.get(count)
+    phrase = gen.get_phrase(count)
 
     print(phrase)
 

@@ -61,7 +61,7 @@ class RandomPhraseGenerator:
         self._rng = rng
         self._delim = " "
 
-    def get(self, count: int) -> Result:
+    def get_phrase(self, count: int) -> Result:
         """TODO."""
         return Result(
             phrase = self._delim.join([self._rng.choice(self._wordlist) for _ in range(count)]),
