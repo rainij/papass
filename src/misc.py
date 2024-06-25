@@ -2,6 +2,7 @@ import random
 from collections.abc import Sequence
 
 
+# TODO: Is this the right way to implement Sequence? Does Mypy check this?
 class WordList(Sequence[str]):
     """TODO"""
 
@@ -15,9 +16,6 @@ class WordList(Sequence[str]):
 
     def __len__(self):
         return len(self._words)
-
-    def __iter__(self):
-        return iter(self._words)
 
 
 class RandomNumberGenerator:
