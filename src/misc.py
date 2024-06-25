@@ -23,7 +23,7 @@ class WordList(Sequence[str]):
     @staticmethod
     def from_file(path: Path, config):
         with open(path, "r") as f:
-            words = f.readlines()
+            words = [w.strip() for w in f.readlines()]
             return WordList(words, config)
 
 
