@@ -1,14 +1,17 @@
 import random
 from collections.abc import Sequence
+from pathlib import Path
+from dataclasses import dataclass
+import math
 
 
-# TODO: Is this the right way to implement Sequence? Does Mypy check this?
 class WordList(Sequence[str]):
     """TODO"""
 
     _words: list[str]
 
     def __init__(self, words: list[str], config):
+        # TODO: validation, transformation
         self._words = words
 
     def __getitem__(self, index):
@@ -16,6 +19,12 @@ class WordList(Sequence[str]):
 
     def __len__(self):
         return len(self._words)
+
+    @staticmethod
+    def from_file(path: Path, config):
+        with open(path, "r") as f:
+            words = f.readlines()
+            return WordList(words, config)
 
 
 class RandomNumberGenerator:
@@ -34,6 +43,12 @@ class RandomNumberGenerator:
         return items[index]
 
 
+@dataclass
+class Result:
+    phrase: str
+    entropy: float
+
+
 class RandomPhraseGenerator:
     """TODO."""
 
@@ -46,6 +61,12 @@ class RandomPhraseGenerator:
         self._rng = rng
         self._delim = " "
 
-    def get(self, count: int) -> str:
+    def get(self, count: int) -> Result:
         """TODO."""
-        return self._delim.join([self._rng.choice(self._wordlist) for _ in range(count)])
+        return Result(
+            phrase = self._delim.join([self._rng.choice(self._wordlist) for _ in range(count)]),
+            entropy = count * self._entropy_per_word(),
+        )
+
+    def _entropy_per_word(self) -> float:
+        return math.log2(len(self._wordlist))

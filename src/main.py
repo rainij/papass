@@ -1,5 +1,6 @@
 import click
 from misc import RandomNumberGenerator, WordList, RandomPhraseGenerator
+from pathlib import Path
 
 
 @click.command()
@@ -17,7 +18,7 @@ def main(count, random_source, delimiter, wordlist):
     )
 
     rng = RandomNumberGenerator(None)
-    wordlist = WordList(["foo", "bar", "baz"], None)
+    wordlist = WordList.from_file(Path(__file__).parent.parent.parent / "eff_large.wordlist", None)  # TODO
 
     gen = RandomPhraseGenerator(wordlist, rng)
     phrase = gen.get(count)
