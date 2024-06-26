@@ -17,6 +17,9 @@ dev-pylsp = [
 [tool.ruff]
 line-length = 90
 
+[tool.ruff.format]
+docstring-code-format = true
+
 [tool.ruff.lint]
 select = ["F", "I"]
 
