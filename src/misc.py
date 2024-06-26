@@ -1,5 +1,6 @@
 import math
-from collections.abc import Sequence
+import re
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -7,13 +8,14 @@ from random_number_generator.base import RandomNumberGeneratorBase
 
 
 class WordList(Sequence[str]):
-    """TODO"""
+    """Represents a sequence of unique words."""
 
     _words: list[str]
 
-    def __init__(self, words: list[str], config):
+    def __init__(self, words: Iterable[str], config):
         # TODO: validation, transformation
-        self._words = words
+        self._validate(words)
+        self._words = list(words)
 
     def __getitem__(self, index):
         return self._words[index]
@@ -27,6 +29,20 @@ class WordList(Sequence[str]):
             words = [w.strip() for w in f.readlines()]
             return WordList(words, config)
 
+    @staticmethod
+    def _validate(words):
+        # TODOs:
+        # - testing
+        # - maybe use something else then assert. Better messages (logging)
+
+        allowed_pattern = re.compile("[a-z]+")
+
+        assert len(words) != 0, "Empty wordlist."
+        assert all(
+            allowed_pattern.match(w) for w in words
+        ), f"Words should match pattern '{allowed_pattern}'."
+        assert len(set(words)) == len(words), "All words must be different."
+
 
 @dataclass
 class Result:
@@ -35,7 +51,7 @@ class Result:
 
 
 class RandomPhraseGenerator:
-    """TODO."""
+    """Generate phrases from a wordlist using a random number generator."""
 
     _wordlist: WordList
     _rng: RandomNumberGeneratorBase
@@ -47,7 +63,7 @@ class RandomPhraseGenerator:
         self._delim = " "
 
     def get_phrase(self, count: int) -> Result:
-        """TODO."""
+        """Generate a random phrase."""
         return Result(
             phrase=self._delim.join(
                 [self._rng.choice(self._wordlist) for _ in range(count)]
