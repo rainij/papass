@@ -8,8 +8,6 @@ T = TypeVar("T")
 class RandomNumberGeneratorBase(ABC):
     """Base for all random number generators."""
 
-    def __init__(self, config): ...
-
     @abstractmethod
     def randbelow(self, upper: int) -> int:
         """Return a random integer from [0, upper).

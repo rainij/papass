@@ -6,15 +6,17 @@ from random_number_generator.base import RandomNumberGeneratorBase
 class DiceRng(RandomNumberGeneratorBase):
     """Random number generator relying on the user to throw physical dice."""
 
-    def __init__(self, config):
-        pass
+    _num_sides: int
+
+    def __init__(self, *, num_sides: int = 6):
+        assert num_sides > 1
+        self._num_sides = num_sides
 
     def randbelow(self, upper: int) -> int:
         # TODO:
         # - improve this
         # - testing (also success probability)
-
-        num_sides = 6
+        num_sides = self._num_sides
 
         num_rolls = 1
         upper_dice = num_sides

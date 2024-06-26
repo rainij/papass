@@ -2,18 +2,30 @@ from pathlib import Path
 
 import click
 from phrase_generator import RandomPhraseGenerator
-from random_number_generator.system import SystemRng
+from random_number_generator import available_rngs, get_rng
 from wordlist import WordList
 
 
 @click.command()
 @click.option(
-    "--count", "-c", type=int, required=True, help="Number of words to generate."
+    "--count",
+    "-c",
+    type=int,
+    required=True,
+    help="Number of words to generate.",
 )
 @click.option(
-    "--random-source", "-r", default="system", help="Source of randomness (system, dice)."
+    "--random-source",
+    "-r",
+    default="system",
+    help=f"Source of randomness ({', '.join(available_rngs())}).",
 )
-@click.option("--delimiter", "-d", default=" ", help="Separator between the words.")
+@click.option(
+    "--delimiter",
+    "-d",
+    default=" ",
+    help="Separator between the words.",
+)
 @click.option(
     "--min-word-size",
     "--minw",
@@ -27,11 +39,20 @@ from wordlist import WordList
     type=int,
     help="Filter out words which are longer than this.",
 )
+@click.option(
+    "--dice-sides",
+    "--ds",
+    type=int,
+    default=6,
+    help="Number of sides of dice used.",
+)
 @click.argument("wordlist")
-def main(count, random_source, delimiter, min_word_size, max_word_size, wordlist):
+def main(
+    count, random_source, delimiter, min_word_size, max_word_size, dice_sides, wordlist
+):
     """Create a passphrase"""
 
-    rng = SystemRng(None)
+    rng = get_rng(random_source, dice_sides=dice_sides)
 
     wordlist = WordList.from_file(
         Path(__file__).parent.parent.parent / "eff_large.wordlist",  # TODO

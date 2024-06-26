@@ -16,9 +16,12 @@ class RandomPhraseGenerator:
 
     _wordlist: WordList
     _rng: RandomNumberGeneratorBase
+
     _delimiter: str
 
-    def __init__(self, wordlist: WordList, rng: RandomNumberGeneratorBase, * , delimiter: str = " "):
+    def __init__(
+        self, wordlist: WordList, rng: RandomNumberGeneratorBase, *, delimiter: str = " "
+    ):
         self._wordlist = wordlist
         self._rng = rng
         # TODO: Certain delimiters will decrease the real entropy. Decide how to deal with this.
