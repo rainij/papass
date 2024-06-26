@@ -1,8 +1,8 @@
-import random
 from collections.abc import Sequence
 from pathlib import Path
 from dataclasses import dataclass
 import math
+from random_number_generator.base import RandomNumberGeneratorBase
 
 
 class WordList(Sequence[str]):
@@ -27,20 +27,7 @@ class WordList(Sequence[str]):
             return WordList(words, config)
 
 
-class RandomNumberGenerator:
-    """TODO."""
 
-    def __init__(self, config): ...
-
-    def randint(self, end: int) -> int:
-        """Return a random integer between 0 (inclusive) and end (exclusive)."""
-        return random.randint(0, end - 1)
-
-    # TODO: more generic typing
-    def choice(self, items: Sequence[str]) -> str:
-        assert items, "Empty items!"
-        index = self.randint(len(items))
-        return items[index]
 
 
 @dataclass
@@ -53,10 +40,10 @@ class RandomPhraseGenerator:
     """TODO."""
 
     _wordlist: WordList
-    _rng: RandomNumberGenerator
+    _rng: RandomNumberGeneratorBase
     _delim: str
 
-    def __init__(self, wordlist: WordList, rng: RandomNumberGenerator):
+    def __init__(self, wordlist: WordList, rng: RandomNumberGeneratorBase):
         self._wordlist = wordlist
         self._rng = rng
         self._delim = " "
