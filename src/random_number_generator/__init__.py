@@ -1,7 +1,6 @@
 from typing import Type
 
-from random_number_generator.base import RandomNumberGeneratorBase
-
+from .base import RandomNumberGeneratorBase
 from .dice import DiceRng
 from .system import SystemRng
 
