@@ -41,8 +41,8 @@ def main(count, random_source, delimiter, min_word_size, max_word_size, wordlist
 
     print(f"Wordlist size: {len(wordlist)}")
 
-    gen = RandomPhraseGenerator(wordlist, rng)
-    phrase = gen.get_phrase(count)
+    phrase_generator = RandomPhraseGenerator(wordlist, rng, delimiter=delimiter)
+    phrase = phrase_generator.get_phrase(count)
 
     print(phrase)
 
