@@ -5,7 +5,8 @@ from .dice import DiceRng
 from .system import SystemRng
 
 rngs: dict[str, tuple[Type[RandomNumberGeneratorBase], dict[str, str]]] = dict(
-    system=(SystemRng, {}), dice=(DiceRng, {"num_sides": "dice_sides"})
+    system=(SystemRng, {}),
+    dice=(DiceRng, {"num_sides": "dice_sides"}),
 )
 
 
