@@ -1,8 +1,9 @@
 from pathlib import Path
 
 import click
-from misc import RandomPhraseGenerator, WordList
+from phrase_generator import RandomPhraseGenerator
 from random_number_generator.dice import DiceRng
+from wordlist import WordList
 
 
 @click.command()
