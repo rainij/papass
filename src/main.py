@@ -2,7 +2,7 @@ from pathlib import Path
 
 import click
 from misc import RandomPhraseGenerator, WordList
-from random_number_generator.system import SystemRng
+from random_number_generator.dice import DiceRng
 
 
 @click.command()
@@ -19,7 +19,7 @@ def main(count, random_source, delimiter, wordlist):
         f"Got: count={count}, random_source={random_source}, delimiter='{delimiter}', wordlist={wordlist}."
     )
 
-    rng = SystemRng(None)
+    rng = DiceRng(None)
     wordlist = WordList.from_file(
         Path(__file__).parent.parent.parent / "eff_large.wordlist", None
     )  # TODO

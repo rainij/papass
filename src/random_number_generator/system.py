@@ -9,5 +9,5 @@ class SystemRng(RandomNumberGeneratorBase):
     def __init__(self, config):
         pass
 
-    def randbelow(self, end: int) -> int:
-        return secrets.randbelow(end)
+    def randbelow(self, upper: int) -> int:
+        return secrets.randbelow(upper)
