@@ -1,6 +1,7 @@
 [project]
 name = "rspass"
 version = "0.0.1"
+requires-python = ">=3.12"
 dependencies = [
     "click",
 ]
@@ -15,3 +16,6 @@ dev-pylsp = [
 
 [tool.ruff]
 line-length = 90
+
+[tool.mypy]
+check_untyped_defs = true
