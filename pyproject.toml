@@ -17,5 +17,8 @@ dev-pylsp = [
 [tool.ruff]
 line-length = 90
 
+[tool.ruff.lint]
+select = ["F", "I"]
+
 [tool.mypy]
 check_untyped_defs = true
