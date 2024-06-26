@@ -1,5 +1,6 @@
-from random_number_generator.base import RandomNumberGeneratorBase
 import secrets
+
+from random_number_generator.base import RandomNumberGeneratorBase
 
 
 class SystemRng(RandomNumberGeneratorBase):

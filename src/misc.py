@@ -1,7 +1,8 @@
-from collections.abc import Sequence
-from pathlib import Path
-from dataclasses import dataclass
 import math
+from collections.abc import Sequence
+from dataclasses import dataclass
+from pathlib import Path
+
 from random_number_generator.base import RandomNumberGeneratorBase
 
 
@@ -27,9 +28,6 @@ class WordList(Sequence[str]):
             return WordList(words, config)
 
 
-
-
-
 @dataclass
 class Result:
     phrase: str
@@ -51,8 +49,10 @@ class RandomPhraseGenerator:
     def get_phrase(self, count: int) -> Result:
         """TODO."""
         return Result(
-            phrase = self._delim.join([self._rng.choice(self._wordlist) for _ in range(count)]),
-            entropy = count * self._entropy_per_word(),
+            phrase=self._delim.join(
+                [self._rng.choice(self._wordlist) for _ in range(count)]
+            ),
+            entropy=count * self._entropy_per_word(),
         )
 
     def _entropy_per_word(self) -> float:

@@ -1,9 +1,9 @@
-from abc import ABC
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from typing import TypeVar
 
 T = TypeVar("T")
+
 
 class RandomNumberGeneratorBase(ABC):
     """Base for all random number generators."""
