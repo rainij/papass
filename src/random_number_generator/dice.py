@@ -15,7 +15,9 @@ class DiceRng(RandomNumberGeneratorBase):
     def randbelow(self, upper: int) -> int:
         # TODO:
         # - improve this
-        # - testing (also success probability)
+        # - testing
+        # - introduce option for success probability
+        # - better error handling and user feedback
         num_sides = self._num_sides
 
         num_rolls = 1

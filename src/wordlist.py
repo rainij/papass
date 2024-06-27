@@ -25,6 +25,7 @@ class WordList(Sequence[str]):
         self._validate(words)
         self._words = words
 
+        # TODO: Better error handling
         assert min_word_size > 0
         assert max_word_size is None or max_word_size >= min_word_size
 
@@ -51,7 +52,7 @@ class WordList(Sequence[str]):
     def _validate(words: list[str]):
         # TODOs:
         # - testing
-        # - maybe use something else then assert. Better messages (logging)
+        # - Better error handling. Better messages (logging).
 
         allowed_pattern = re.compile("[a-z]+")
 

@@ -2,7 +2,11 @@ from pathlib import Path
 
 import click
 from phrase_generator import RandomPhraseGenerator
-from random_number_generator import available_random_sources, get_rng
+from random_number_generator import (
+    available_random_sources,
+    default_random_source,
+    get_rng,
+)
 from wordlist import WordList
 
 
@@ -17,7 +21,7 @@ from wordlist import WordList
 @click.option(
     "--random-source",
     "-r",
-    default=f"{available_random_sources()[0]}",
+    default=f"{default_random_source()}",
     help=f"Source of randomness ({', '.join(available_random_sources())}).",
 )
 @click.option(
