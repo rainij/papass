@@ -46,26 +46,36 @@ from wordlist import WordList
     default=6,
     help="Number of sides of dice used.",
 )
-@click.argument("wordlist")
+@click.option(
+    "--wordlist-file",
+    "-w",
+    required=True,
+    help="A file with a new-line-separated list of words.",
+)
 def main(
-    count, random_source, delimiter, min_word_size, max_word_size, dice_sides, wordlist
+    count,
+    random_source,
+    delimiter,
+    min_word_size,
+    max_word_size,
+    dice_sides,
+    wordlist_file,
 ):
-    """Create a passphrase"""
+    """Create a passphrase."""
 
     rng = get_rng(random_source, dice_sides=dice_sides)
 
     wordlist = WordList.from_file(
-        Path(__file__).parent.parent.parent / "eff_large.wordlist",  # TODO
+        Path(wordlist_file),
         min_word_size=min_word_size,
         max_word_size=max_word_size,
     )
 
-    print(f"Wordlist size: {len(wordlist)}")
-
     phrase_generator = RandomPhraseGenerator(wordlist, rng, delimiter=delimiter)
-    phrase = phrase_generator.get_phrase(count)
+    result = phrase_generator.get_phrase(count)
 
-    print(phrase)
+    print(f"Phrase: {result.phrase}")
+    print(f"Entropy: {result.entropy}")
 
 
 if __name__ == "__main__":
