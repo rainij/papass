@@ -22,33 +22,8 @@ from wordlist import WordList
     "--random-source",
     "-r",
     default=f"{default_random_source()}",
-    help=f"Source of randomness ({', '.join(available_random_sources())}).",
-)
-@click.option(
-    "--delimiter",
-    "-d",
-    default=" ",
-    help="Separator between the words.",
-)
-@click.option(
-    "--min-word-size",
-    "--minw",
-    type=int,
-    default=1,
-    help="Filter out words which are shorter than this.",
-)
-@click.option(
-    "--max-word-size",
-    "--maxw",
-    type=int,
-    help="Filter out words which are longer than this.",
-)
-@click.option(
-    "--dice-sides",
-    "--ds",
-    type=int,
-    default=6,
-    help="Number of sides of dice used.",
+    help=f"Source of randomness (default: '{default_random_source()}',"
+    f" available: {', '.join(f'\'{s}\'' for s in available_random_sources())}).",
 )
 @click.option(
     "--wordlist-file",
@@ -56,14 +31,40 @@ from wordlist import WordList
     required=True,
     help="A file with a new-line-separated list of words.",
 )
+@click.option(
+    "--delimiter",
+    "-d",
+    default=" ",
+    help="Separator between the words (default: ' ').",
+)
+@click.option(
+    "--min-word-size",
+    "--minw",
+    type=int,
+    default=1,
+    help="Filter out words which are shorter than this (default: 1).",
+)
+@click.option(
+    "--max-word-size",
+    "--maxw",
+    type=int,
+    help="Filter out words which are longer than this (default: no limit).",
+)
+@click.option(
+    "--dice-sides",
+    "--ds",
+    type=int,
+    default=6,
+    help="Number of sides of dice (default: 6).",
+)
 def main(
     count,
     random_source,
+    wordlist_file,
     delimiter,
     min_word_size,
     max_word_size,
     dice_sides,
-    wordlist_file,
 ):
     """Create a passphrase."""
 
