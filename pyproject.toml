@@ -1,0 +1,27 @@
+[project]
+name = "rspass"
+version = "0.0.1"
+requires-python = ">=3.12"
+dependencies = [
+    "click",
+]
+
+[project.optional-dependencies]
+dev-pylsp = [
+    "python-lsp-server",
+    "python-lsp-ruff",
+    "pylsp-mypy",
+    "pylsp-rope",
+]
+
+[tool.ruff]
+line-length = 90
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = ["F", "I"]
+
+[tool.mypy]
+check_untyped_defs = true
