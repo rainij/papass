@@ -57,7 +57,7 @@ from wordlist import WordList
     default=6,
     help="Number of sides of dice (default: 6).",
 )
-def main(
+def cli(
     count,
     random_source,
     wordlist_file,
@@ -84,4 +84,4 @@ def main(
 
 
 if __name__ == "__main__":
-    main()
+    cli()
