@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import click
+
 from rspass.phrase_generator import RandomPhraseGenerator
 from rspass.random_number_generator import (
     available_random_sources,
