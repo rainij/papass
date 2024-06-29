@@ -1,6 +1,6 @@
 from functools import reduce
 
-from random_number_generator.base import RandomNumberGeneratorBase
+from .base import RandomNumberGeneratorBase
 
 
 class DiceRng(RandomNumberGeneratorBase):

@@ -1,8 +1,8 @@
 import math
 from dataclasses import dataclass
 
-from random_number_generator.base import RandomNumberGeneratorBase
-from wordlist import WordList
+from .random_number_generator.base import RandomNumberGeneratorBase
+from .wordlist import WordList
 
 
 @dataclass

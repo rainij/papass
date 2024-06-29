@@ -1,13 +1,13 @@
 from pathlib import Path
 
 import click
-from phrase_generator import RandomPhraseGenerator
-from random_number_generator import (
+from rspass.phrase_generator import RandomPhraseGenerator
+from rspass.random_number_generator import (
     available_random_sources,
     default_random_source,
     get_rng,
 )
-from wordlist import WordList
+from rspass.wordlist import WordList
 
 
 @click.command()
