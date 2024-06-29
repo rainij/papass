@@ -1,10 +1,16 @@
 [project]
 name = "rspass"
 version = "0.0.1"
+description = "A CLI to generate passphrases."
+readme = "README.md"
+authors = [{name = "Reinhard Stahn"}]
 requires-python = ">=3.12"
 dependencies = [
     "click",
 ]
+
+[project.scripts]
+rspass = "rspass.__main__:cli"
 
 [project.optional-dependencies]
 dev-pylsp = [
