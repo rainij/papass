@@ -4,7 +4,19 @@ from pathlib import Path
 
 
 class WordList(Sequence[str]):
-    """Represents a sequence of unique words."""
+    """Represents an sorted sequence of unique words.
+
+    Internally the list of words is sorted alphabetically (via `sorted`).
+
+    # Example
+
+    >>> wordlist = WordList(["c", "b", "a"])
+    >>> wordlist
+    WordList(['a', 'b', 'c'])
+    >>> assert wordlist[0] == "a"
+    >>> assert list(wordlist) == ["a", "b", "c"]
+    >>> assert wordlist == WordList(["a", "b", "c"])
+    """
 
     _words: list[str]
 
@@ -21,17 +33,6 @@ class WordList(Sequence[str]):
         :param min_word_size: Filter out words which are shorter than this.
         :param max_word_size: Filter out words which are longer than this. None means no
             filtering.
-
-        Internally the list of words is sorted alphabetically (via `sorted`).
-
-        # Examples
-
-        >>> wordlist = WordList(["c", "b", "a"])
-        >>> wordlist
-        WordList(['a', 'b', 'c'])
-        >>> assert wordlist[0] == "a"
-        >>> assert list(wordlist) == ["a", "b", "c"]
-        >>> assert wordlist == WordList(["a", "b", "c"])
         """
         words = sorted(list(words))
         self._validate(words)
