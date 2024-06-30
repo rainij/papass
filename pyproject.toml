@@ -13,11 +13,19 @@ dependencies = [
 rspass = "rspass.__main__:cli"
 
 [project.optional-dependencies]
+dev = [
+    "pytest",
+]
 dev-pylsp = [
     "python-lsp-server",
     "python-lsp-ruff",
     "pylsp-mypy",
     "pylsp-rope",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
 ]
 
 [tool.ruff]
