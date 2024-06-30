@@ -5,8 +5,13 @@ from typing import TypeVar
 T = TypeVar("T")
 
 
+# TODO: rename to NumberGeneratorBase?
 class RandomNumberGeneratorBase(ABC):
     """Base for all random number generators."""
+
+    # TODO: make the texts a bit more generic. Move the statement about uniform
+    # distribution into derived classes and make it possible for an rng to claim that it
+    # is uniform.
 
     @abstractmethod
     def randbelow(self, upper: int) -> int:
