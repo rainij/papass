@@ -22,14 +22,16 @@ class WordList(Sequence[str]):
         :param max_word_size: Filter out words which are longer than this. None means no
             filtering.
 
-        Internally the list of words is sorted alphabetically (via sorted
-        function). Hence:
+        Internally the list of words is sorted alphabetically (via `sorted`).
+
+        # Examples
 
         >>> wordlist = WordList(["c", "b", "a"])
         >>> wordlist
-        WordList(["a", "b", "c"])
+        WordList(['a', 'b', 'c'])
         >>> assert wordlist[0] == "a"
-        >>> assert list(wordlist) == ["a", "b", "c]
+        >>> assert list(wordlist) == ["a", "b", "c"]
+        >>> assert wordlist == WordList(["a", "b", "c"])
         """
         words = sorted(list(words))
         self._validate(words)
