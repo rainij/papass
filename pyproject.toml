@@ -24,7 +24,9 @@ dev-pylsp = [
 ]
 
 [tool.pytest.ini_options]
+addopts = "--doctest-modules"
 testpaths = [
+    "src",  # For doctest
     "tests",
 ]
 
