@@ -3,7 +3,7 @@ from pathlib import Path
 import click
 
 from rspass.phrase_generator import RandomPhraseGenerator
-from rspass.random_number_generator import (
+from rspass.random import (
     available_random_sources,
     default_random_source,
     get_rng,
@@ -77,7 +77,9 @@ def cli(
         max_word_size=max_word_size,
     )
 
-    phrase_generator = RandomPhraseGenerator(wordlist, rng, delimiter=delimiter)
+    phrase_generator = RandomPhraseGenerator(
+        wordlist=wordlist, rng=rng, delimiter=delimiter
+    )
     result = phrase_generator.get_phrase(count)
 
     print(f"Phrase: {result.phrase}")

@@ -1,7 +1,7 @@
 import math
 from dataclasses import dataclass
 
-from .random_number_generator.base import RandomNumberGeneratorBase
+from .random.base import RandomNumberGeneratorBase
 from .wordlist import WordList
 
 
@@ -20,7 +20,7 @@ class RandomPhraseGenerator:
     _delimiter: str
 
     def __init__(
-        self, wordlist: WordList, rng: RandomNumberGeneratorBase, *, delimiter: str = " "
+            self, *, wordlist: WordList, rng: RandomNumberGeneratorBase, delimiter: str = " "
     ):
         self._wordlist = wordlist
         self._rng = rng
