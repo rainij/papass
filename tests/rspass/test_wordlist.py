@@ -5,6 +5,7 @@ from rspass.wordlist import WordList
 # - test error handling?
 # - test logging?
 
+
 def test_initializes():
     words = ["hallo", "welt"]
     WordList(words)

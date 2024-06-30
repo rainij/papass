@@ -77,9 +77,7 @@ def cli(
         max_word_size=max_word_size,
     )
 
-    phrase_generator = PhraseGenerator(
-        wordlist=wordlist, rng=rng, delimiter=delimiter
-    )
+    phrase_generator = PhraseGenerator(wordlist=wordlist, rng=rng, delimiter=delimiter)
     result = phrase_generator.get_phrase(count)
 
     print(f"Phrase: {result.phrase}")
