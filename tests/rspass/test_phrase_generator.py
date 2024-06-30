@@ -4,6 +4,8 @@ from rspass.wordlist import WordList
 
 from tests.mocks.cycle_rng import MockCycleRng
 
+# TODO: test error handling
+
 
 class TestPhraseGenerator:
     @pytest.fixture
