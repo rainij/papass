@@ -45,3 +45,10 @@ Run unit tests via
 ```bash
 $ pytest
 ```
+
+Formatting and linting is done via [ruff](https://github.com/astral-sh/ruff).
+
+```bash
+$ ruff format .
+$ ruff check --fix .
+```
