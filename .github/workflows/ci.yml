@@ -39,4 +39,4 @@ jobs:
           pytest
       - name: Execute rspass
         run: |
-          rspass
+          rspass --help
