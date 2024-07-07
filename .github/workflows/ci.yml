@@ -37,7 +37,7 @@ jobs:
       - name: Test with pytest
         run: |
           pytest
-      # Very basic check that we can execute the cmd-tool.
+      # Very basic checks that we can execute the cmd-tool.
       - name: Execute rspass --help
         run: |
           rspass --help
