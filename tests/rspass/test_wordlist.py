@@ -68,7 +68,7 @@ class TestWordSize:
         return ["a", "ab", "abc", "abcd", "abcde"]
 
     def test_test_setup(self, words):
-        """We assume that `words` is sorted and that words[i] has length i=1."""
+        """We assume that `words` is sorted and that words[i] has length i+1."""
         assert len(words) >= 5
         assert words == sorted(words)
 
