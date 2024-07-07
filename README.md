@@ -8,21 +8,39 @@ G. Reinhold.
 
 # Usage
 
+Assuming you have a wordlist file `wordlist.txt` you can run the following command to
+generate a random list of five words:
+
 ```bash
-$ rspass --count 7 --wordlist-file /path/to/eff_large.wordlist
-Phrase: material occultist vibes departed enchanted udder occultist
-Entropy: 90.47368752524046
+$ rspass -c 5 -w /path/to/wordlist.txt
+Phrase: anthem hamstring transport doorbell circle
+Entropy: 64.62406251802891
+```
+
+By default this uses the system's most secure random number generator. To use physical dice add `-r dice`.
+
+You can download a wordlist designed for passphrase from the
+[eff](https://theworld.com/~reinhold/diceware.html). You might need to remove the dice
+numbers, that is, change e.g.
+
+```
+11114     abide
+```
+
+into
+
+```
+abide
 ```
 
 # Development
 Create a virtual environment and do
 
 ```bash
-$ pip install -r requirements.txt -e .
-$ pip install ".[dev]"
+$ pip install -r requirements.txt ".[dev]" -e .
 ```
 
-To run unit tests do
+Run unit tests via
 
 ```bash
 $ pytest
