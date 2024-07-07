@@ -1,7 +1,7 @@
 import pytest
 from rspass.random.base import RandomNumberGeneratorBase
 
-from tests.mocks.cycle_rng import CycleRng
+from tests.utils.cycle_rng import CycleRng
 
 
 class TestRandomNumberGeneratorBase:

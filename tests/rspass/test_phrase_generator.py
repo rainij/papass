@@ -2,7 +2,7 @@ import pytest
 from rspass.phrase_generator import PhraseGenerator
 from rspass.wordlist import WordList
 
-from tests.mocks.cycle_rng import CycleRng
+from tests.utils.cycle_rng import CycleRng
 
 # TODO: test error handling
 
