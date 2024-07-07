@@ -8,6 +8,7 @@ from rspass.utils import rolls_to_value
 
 def make_patched_input(rolls: Iterable[Iterable[int]]) -> Callable[[Any], str]:
     """Make a patched version of the builtin `input`."""
+
     def make_iterator() -> Iterator[str]:
         for r in rolls:
             yield " ".join(map(str, r))
