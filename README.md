@@ -19,9 +19,9 @@ Entropy: 64.62406251802891
 
 By default this uses the system's most secure random number generator. To use physical dice add `-r dice`.
 
-You can download a wordlist designed for passphrase from the
-[eff](https://theworld.com/~reinhold/diceware.html). You might need to remove the dice
-numbers, that is, change e.g.
+You can download a wordlist designed for passphrases from the
+[EFF](https://theworld.com/~reinhold/diceware.html). You might need to remove the dice
+numbers, that is, change a line like this
 
 ```
 11114     abide
