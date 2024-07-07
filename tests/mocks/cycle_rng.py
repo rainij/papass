@@ -1,27 +1,26 @@
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterator, Sequence
 
 from rspass.random.base import RandomNumberGeneratorBase
 
 
-class MockCycleRng(RandomNumberGeneratorBase):
+class CycleRng(RandomNumberGeneratorBase):
+    """A `random` number generator producing pre-determined output.
+
+    See tests for this class on how it is supposed to work.
+    """
+
     _cycle: Iterator[int]
 
-    def __init__(self, cycle: Iterable[int]):
-        cycle = list(cycle)
+    def __init__(self, cycle: Sequence[int]):
         assert cycle, "Cycle must not be empty."
 
         def _cycler() -> Iterator[int]:
-            i = 0
+            i = -1
             while True:
-                yield cycle[i]
-                i += 1
-                i = 0 if i >= len(cycle) else i
+                yield cycle[(i := (i + 1) % len(cycle))]
 
         self._cycle = _cycler()
 
     def randbelow(self, upper: int) -> int:
-        """Return a random integer from [0, upper).
-
-        The output is uniformly distributed.
-        """
+        """Return a not-so-random integer from [0, upper)."""
         return next(self._cycle) % upper
