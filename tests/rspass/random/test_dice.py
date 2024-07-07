@@ -1,21 +1,9 @@
 from collections.abc import Callable, Iterable, Iterator
-from functools import reduce
 from typing import Any
 
 import pytest
 from rspass.random import DiceRng
-
-
-# TODO: move this into rspass and test it
-def digits_to_value(base: int, digits: Iterable[int]):
-    assert 1 < base
-    assert all(0 <= d < base for d in digits)
-    return reduce(lambda acc, r: base * acc + r, digits, 0)
-
-
-def rolls_to_value(num_sides: int, rolls: Iterable[int]):
-    digits = [r - 1 for r in rolls]
-    return digits_to_value(num_sides, digits)
+from rspass.utils import rolls_to_value
 
 
 def make_patched_input(rolls: Iterable[Iterable[int]]) -> Callable[[Any], str]:
@@ -32,7 +20,7 @@ def make_patched_input(rolls: Iterable[Iterable[int]]) -> Callable[[Any], str]:
 @pytest.mark.parametrize(
     "num_sides,upper,rolls",
     [
-        # upper being a power of num_sides:
+        # `upper` is a power of `num_sides`:
         (
             6,
             6**2,
@@ -53,7 +41,7 @@ def make_patched_input(rolls: Iterable[Iterable[int]]) -> Callable[[Any], str]:
             20**3,
             [[17, 3, 13]],
         ),
-        # upper being no power of num_sides:
+        # `upper` no power of `num_sides`:
         (
             6,
             6**2 - 5,

@@ -1,4 +1,4 @@
-from functools import reduce
+from rspass.utils import rolls_to_value
 
 from .base import RandomNumberGeneratorBase
 
@@ -36,7 +36,7 @@ class DiceRng(RandomNumberGeneratorBase):
             if rolls is None:
                 continue
 
-            result = reduce(lambda acc, r: num_sides * acc + r - 1, rolls, 0)
+            result = rolls_to_value(self._num_sides, rolls)
 
             if result >= upper_multiple:
                 print("Rejected")
