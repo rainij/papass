@@ -7,6 +7,7 @@ from rspass.utils import rolls_to_value
 
 
 def make_patched_input(rolls: Iterable[Iterable[int]]) -> Callable[[Any], str]:
+    """Make a patched version of the builtin `input`."""
     def make_iterator() -> Iterator[str]:
         for r in rolls:
             yield " ".join(map(str, r))
@@ -53,7 +54,7 @@ def test_randbelow(monkeypatch, num_sides, upper, rolls):
     patched_input = make_patched_input(rolls)
     monkeypatch.setattr("builtins.input", patched_input)
 
-    # Only the last roll should be used (others were rejected).
+    # Only the last roll should be used (others are rejected).
     expected = rolls_to_value(num_sides, rolls[-1]) % upper
 
     rng = DiceRng(num_sides=num_sides)
