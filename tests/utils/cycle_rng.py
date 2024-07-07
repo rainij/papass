@@ -4,7 +4,7 @@ from rspass.random.base import RandomNumberGeneratorBase
 
 
 class CycleRng(RandomNumberGeneratorBase):
-    """A `random` number generator producing pre-determined output.
+    """A "random" number generator producing pre-determined output.
 
     See tests for this class on how it is supposed to work.
     """
