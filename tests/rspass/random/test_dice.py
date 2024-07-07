@@ -2,7 +2,7 @@ from collections.abc import Callable, Iterable, Iterator
 from typing import Any
 
 import pytest
-from rspass.random import DiceRng
+from rspass.random.dice import DiceRng
 from rspass.utils import rolls_to_value
 
 

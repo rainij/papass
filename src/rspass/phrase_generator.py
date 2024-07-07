@@ -20,7 +20,11 @@ class PhraseGenerator:
     _delimiter: str
 
     def __init__(
-        self, *, wordlist: WordList, rng: RandomNumberGeneratorBase, delimiter: str = " "
+        self,
+        *,
+        wordlist: WordList,
+        rng: RandomNumberGeneratorBase,
+        delimiter: str = " ",
     ):
         self._wordlist = wordlist
         self._rng = rng
