@@ -14,8 +14,9 @@ rspass = "rspass.__main__:cli"
 
 [project.optional-dependencies]
 dev = [
-    "ruff",
+    "mypy",
     "pytest",
+    "ruff",
 ]
 dev-pylsp = [
     "python-lsp-server",
