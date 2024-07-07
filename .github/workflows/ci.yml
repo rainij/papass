@@ -39,4 +39,7 @@ jobs:
           pytest
       - name: Execute rspass
         run: |
+          # Very basic check that we can execute the cmd-tool.
           rspass --help
+          echo -e "foo\nbar\nbaz" > words.txt
+          rspass -c 2 -w words.txt
