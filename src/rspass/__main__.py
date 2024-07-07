@@ -11,6 +11,11 @@ from rspass.random import (
 from rspass.wordlist import WordList
 
 
+# Wrapper to simplify usage below.
+def available_random_sources_str() -> str:
+    return ", ".join(f"'{s}'" for s in available_random_sources())
+
+
 @click.command()
 @click.option(
     "--count",
@@ -24,7 +29,7 @@ from rspass.wordlist import WordList
     "-r",
     default=f"{default_random_source()}",
     help=f"Source of randomness (default: '{default_random_source()}',"
-    f" available: {', '.join(f'\'{s}\'' for s in available_random_sources())}).",
+    f" available: {available_random_sources_str()}).",
 )
 @click.option(
     "--wordlist-file",
