@@ -6,7 +6,6 @@ build-backend = "flit_core.buildapi"
 name = "rspass"
 authors = [{name = "Reinhard Stahn"}]
 readme = "README.md"
-classifiers = ["License :: OSI Approved :: MIT License"]
 license = {file = "LICENSE"}
 requires-python = ">= 3.10"
 dynamic = ["version", "description"]
