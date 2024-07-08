@@ -37,7 +37,7 @@ abide
 Create a virtual environment and do
 
 ```bash
-$ pip install -r requirements.txt ".[dev]" -e .
+$ pip install -r requirements.txt .[dev]
 ```
 
 Run unit tests via
@@ -49,6 +49,6 @@ $ pytest
 Formatting and linting is done via [ruff](https://github.com/astral-sh/ruff).
 
 ```bash
-$ ruff format .
-$ ruff check --fix .
+$ ruff format
+$ ruff check --fix
 ```
