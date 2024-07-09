@@ -63,6 +63,7 @@ def available_random_sources_str() -> str:
     default=6,
     help="Number of sides of dice (default: 6).",
 )
+@click.version_option()
 def cli(
     count,
     random_source,
