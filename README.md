@@ -1,4 +1,4 @@
-# rspass
+# rs-pass
 
 **This is a work in progress**
 
