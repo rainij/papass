@@ -2,8 +2,8 @@ from collections.abc import Callable, Iterable, Iterator
 from typing import Any
 
 import pytest
-from rspass.random.dice import DiceRng
-from rspass.utils import rolls_to_value
+from papass.random.dice import DiceRng
+from papass.utils import rolls_to_value
 
 
 def make_patched_input(rolls: Iterable[Iterable[int]]) -> Callable[[Any], str]:

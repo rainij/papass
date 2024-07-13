@@ -1,6 +1,6 @@
 import pytest
-from rspass.phrase_generator import PhraseGenerator
-from rspass.wordlist import WordList
+from papass.phrase_generator import PhraseGenerator
+from papass.wordlist import WordList
 
 from tests.utils.cycle_rng import CycleRng
 

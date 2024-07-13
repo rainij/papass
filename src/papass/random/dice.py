@@ -1,4 +1,4 @@
-from rspass.utils import rolls_to_value
+from papass.utils import rolls_to_value
 
 from .base import RandomNumberGeneratorBase
 

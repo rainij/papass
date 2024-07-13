@@ -3,7 +3,7 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "rspass"
+name = "papass"
 authors = [{name = "Reinhard Stahn"}]
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -18,7 +18,7 @@ dependencies = [
 repository = "https://github.com/rainij/papass"
 
 [project.scripts]
-papass = "rspass.__main__:cli"
+papass = "papass.__main__:cli"
 
 [project.optional-dependencies]
 dev = [
