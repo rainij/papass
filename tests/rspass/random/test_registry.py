@@ -1,5 +1,5 @@
-import pytest
 import papass.random.registry
+import pytest
 from papass.random.registry import (
     available_random_sources,
     default_random_source,
