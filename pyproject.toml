@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [project.urls]
-repository = "https://github.com/rainij/papass"
+source = "https://github.com/rainij/papass"
 
 [project.scripts]
 papass = "papass.__main__:cli"
