@@ -2,13 +2,13 @@ from pathlib import Path
 
 import click
 
-from rspass.phrase_generator import PhraseGenerator
-from rspass.random import (
+from papass.phrase_generator import PhraseGenerator
+from papass.random import (
     available_random_sources,
     default_random_source,
     get_rng,
 )
-from rspass.wordlist import WordList
+from papass.wordlist import WordList
 
 
 # Wrapper to simplify usage below.

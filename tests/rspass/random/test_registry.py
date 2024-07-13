@@ -1,6 +1,6 @@
+import papass.random.registry
 import pytest
-import rspass.random.registry
-from rspass.random.registry import (
+from papass.random.registry import (
     available_random_sources,
     default_random_source,
     get_rng,
@@ -22,7 +22,7 @@ def test_available_random_sources():
 )
 def test_get_rng(monkeypatch, random_source, options):
     monkeypatch.setattr(
-        rspass.random.registry,
+        papass.random.registry,
         "_rng_registry",
         dict(cycle_rng=(CycleRng, {"cycle": "cycle_from_cmd"})),
     )

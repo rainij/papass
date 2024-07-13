@@ -1,8 +1,8 @@
-# rs-pass
+# papass
 
 **This is a work in progress**
 
-*rspass* generates passphrases following the
+*papass* generates passphrases following the
 [diceware](https://theworld.com/~reinhold/diceware.html) approach as proposed by Arnold
 G. Reinhold.
 
@@ -12,7 +12,7 @@ Assuming you have a wordlist file `wordlist.txt` you can run the following comma
 generate a random list of five words:
 
 ```bash
-$ rspass -c 5 -w /path/to/wordlist.txt
+$ papass -c 5 -w /path/to/wordlist.txt
 Phrase: anthem hamstring transport doorbell circle
 Entropy: 64.62406251802891
 ```

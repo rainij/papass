@@ -1,6 +1,6 @@
 from collections.abc import Iterator, Sequence
 
-from rspass.random.base import RandomNumberGeneratorBase
+from papass.random.base import RandomNumberGeneratorBase
 
 
 class CycleRng(RandomNumberGeneratorBase):

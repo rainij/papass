@@ -38,10 +38,10 @@ jobs:
         run: |
           pytest
       # Very basic checks that we can execute the cmd-tool.
-      - name: Execute rspass --help
+      - name: Execute papass --help
         run: |
-          rspass --help
-      - name: Execute rspass -c N -w WORDLIST
+          papass --help
+      - name: Execute papass -c N -w WORDLIST
         run: |
           echo -e "foo\nbar\nbaz" > words.txt
-          rspass -c 2 -w words.txt
+          papass -c 2 -w words.txt

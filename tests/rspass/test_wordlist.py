@@ -1,5 +1,5 @@
 import pytest
-from rspass.wordlist import WordList
+from papass.wordlist import WordList
 
 # TODOs:
 # - test error handling?

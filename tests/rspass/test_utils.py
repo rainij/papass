@@ -1,5 +1,5 @@
 import pytest
-from rspass.utils import digits_to_value, rolls_to_value
+from papass.utils import digits_to_value, rolls_to_value
 
 
 @pytest.mark.parametrize(
