@@ -94,3 +94,12 @@ class TestWordSize:
 
         wordlist = WordList(words, **options)
         assert wordlist == WordList(words[min_word_size - 1 : max_word_size])
+
+
+def test_empty_wordlist():
+    empty_1 = WordList()
+    empty_2 = WordList([])
+
+    assert len(empty_1) == 0
+    assert len(empty_2) == 0
+    assert empty_1 == empty_2

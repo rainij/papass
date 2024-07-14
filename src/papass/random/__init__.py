@@ -1,4 +1,9 @@
-from .registry import available_random_sources, available_random_sources_str, default_random_source, get_rng
+from .registry import (
+    available_random_sources,
+    available_random_sources_str,
+    default_random_source,
+    get_rng,
+)
 
 __all__ = [
     available_random_sources.__name__,

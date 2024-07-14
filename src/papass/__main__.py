@@ -79,15 +79,17 @@ def cli(
             max_word_size=max_word_size,
         )
 
-        phrase_generator = PhraseGenerator(wordlist=wordlist, rng=rng, delimiter=delimiter)
+        phrase_generator = PhraseGenerator(
+            wordlist=wordlist, rng=rng, delimiter=delimiter
+        )
         result = phrase_generator.get_phrase(count)
     except AssertionError as error:
-        print(f"Error: {error}")
-        print("Try again!")
+        click.secho(f"Error: {error}", fg="red")
+        click.echo("Try again!")
         return
 
-    print(f"Phrase: {result.phrase}")
-    print(f"Entropy: {result.entropy}")
+    click.echo(f"Phrase: {result.phrase}")
+    click.echo(f"Entropy: {result.entropy:.6}")
 
 
 if __name__ == "__main__":

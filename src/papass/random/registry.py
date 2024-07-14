@@ -36,6 +36,8 @@ def get_rng(random_source: str, **possible_options) -> RandomNumberGeneratorBase
     the random_source. It is OK if it contains superfluous options which are not relevant
     to the rng (those are ignored)
     """
-    assert random_source in _rng_registry, f"Unknown random source `{random_source}`. Use one of {available_random_sources_str()}."
+    assert (
+        random_source in _rng_registry
+    ), f"Unknown random source `{random_source}`. Use one of {available_random_sources_str()}."
     RngCls, args = _rng_registry[random_source]
     return RngCls(**{kw: possible_options[o] for kw, o in args.items()})
