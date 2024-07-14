@@ -1,5 +1,6 @@
 from collections.abc import Iterable, Sequence
 from pathlib import Path
+from typing import overload
 
 
 class WordList(Sequence[str]):
@@ -16,8 +17,6 @@ class WordList(Sequence[str]):
     >>> assert list(wordlist) == ["a", "b", "c"]
     >>> assert wordlist == WordList(["a", "b", "c"])
     """
-
-    _words: list[str]
 
     def __init__(
         self,
@@ -44,8 +43,15 @@ class WordList(Sequence[str]):
         self._filter_min_word_size(min_word_size)
         self._filter_max_word_size(max_word_size)
 
-    def __getitem__(self, index) -> str:
-        return self._words[index]
+    @overload
+    def __getitem__(self, index: int) -> str: ...
+    @overload
+    def __getitem__(self, index: slice) -> "WordList": ...
+    def __getitem__(self, index):
+        if isinstance(index, int):
+            return self._words[index]
+        else:
+            return WordList(self._words[index])
 
     def __len__(self) -> int:
         return len(self._words)
