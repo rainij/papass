@@ -1,8 +1,13 @@
-# papass
+<h1 align="center">
+  papass
+</h1>
+
+[![PyPI](https://img.shields.io/pypi/v/papass.svg)](https://pypi.org/project/papass/)
+[![CI](https://github.com/rainij/papass/actions/workflows/ci.yml/badge.svg)](https://github.com/rainij/papass/actions/workflows/ci.yml)
 
 **This is a work in progress**
 
-*papass* generates passphrases following the
+**papass** generates passphrases following the
 [diceware](https://theworld.com/~reinhold/diceware.html) approach as proposed by Arnold
 G. Reinhold.
 
