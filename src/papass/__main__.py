@@ -4,16 +4,11 @@ import click
 
 from papass.phrase_generator import PhraseGenerator
 from papass.random import (
-    available_random_sources,
+    available_random_sources_str,
     default_random_source,
     get_rng,
 )
 from papass.wordlist import WordList
-
-
-# Wrapper to simplify usage below.
-def available_random_sources_str() -> str:
-    return ", ".join(f"'{s}'" for s in available_random_sources())
 
 
 @click.command()
@@ -75,16 +70,21 @@ def cli(
 ):
     """Create a passphrase."""
 
-    rng = get_rng(random_source, dice_sides=dice_sides)
+    try:
+        rng = get_rng(random_source, dice_sides=dice_sides)
 
-    wordlist = WordList.from_file(
-        Path(wordlist_file),
-        min_word_size=min_word_size,
-        max_word_size=max_word_size,
-    )
+        wordlist = WordList.from_file(
+            Path(wordlist_file),
+            min_word_size=min_word_size,
+            max_word_size=max_word_size,
+        )
 
-    phrase_generator = PhraseGenerator(wordlist=wordlist, rng=rng, delimiter=delimiter)
-    result = phrase_generator.get_phrase(count)
+        phrase_generator = PhraseGenerator(wordlist=wordlist, rng=rng, delimiter=delimiter)
+        result = phrase_generator.get_phrase(count)
+    except AssertionError as error:
+        print(f"Error: {error}")
+        print("Try again!")
+        return
 
     print(f"Phrase: {result.phrase}")
     print(f"Entropy: {result.entropy}")
