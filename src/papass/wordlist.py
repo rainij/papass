@@ -79,6 +79,7 @@ class WordList(Sequence[str]):
         return f"{WordList.__name__}({self._words})"
 
     def to_file(self, file_path: Path | str) -> None:
+        """Write this wordlist to a file (overwrites if file exists)."""
         with open(file_path, mode="w") as fout:
             fout.write("\n".join(self))
 

@@ -84,12 +84,20 @@ def cli(
         )
         result = phrase_generator.get_phrase(count)
     except AssertionError as error:
-        click.secho(f"Error: {error}", fg="red")
+        click.secho(f"ERROR: {error}", fg="red")
         click.echo("Try again!")
         return
 
     click.echo(f"Phrase: {result.phrase}")
     click.echo(f"Entropy: {result.entropy:.6}")
+
+    if not result.entropy_is_guaranteed:
+        click.secho(
+            "WARNING: Entropy might be slightly lower than estimated. "
+            "This can occur for example if the delimiter is contained "
+            "in one of the words.",
+            fg="yellow",
+        )
 
 
 if __name__ == "__main__":
