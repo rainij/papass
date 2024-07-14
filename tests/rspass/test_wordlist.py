@@ -87,6 +87,15 @@ class TestInterface:
         wordlist_from_file = WordList.from_file(file_path)
         assert wordlist_from_file == wordlist
 
+    def test_to_file(self, tmp_path, words, wordlist):
+        file_path = tmp_path / "test.wordlist"
+
+        wordlist.to_file(file_path)
+        wordlist_2 = WordList.from_file(file_path)
+
+        assert wordlist_2 == wordlist
+        assert wordlist_2 == WordList(words)
+
 
 class TestWordSize:
     @pytest.fixture

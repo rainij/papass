@@ -64,6 +64,10 @@ class WordList(Sequence[str]):
     def __ne__(self, other: object) -> bool:
         return not self == other
 
+    @overload
+    def __add__(self, other: "WordList") -> "WordList": ...
+    @overload
+    def __add__(self, other: list) -> "WordList": ...
     def __add__(self, other) -> "WordList":
         if isinstance(other, WordList):
             return WordList(self._words + other._words)
@@ -74,16 +78,22 @@ class WordList(Sequence[str]):
     def __repr__(self) -> str:
         return f"{WordList.__name__}({self._words})"
 
+    def to_file(self, file_path: Path | str) -> None:
+        with open(file_path, mode="w") as fout:
+            fout.write("\n".join(self))
+
     @staticmethod
-    def from_file(file_path: Path, **options):
+    def from_file(file_path: Path | str, **options):
         """Construct a wordlist from a file of words (newline separated).
 
         The options are the same as the kwargs for the __init__ function.
         """
+        if isinstance(file_path, str):
+            file_path = Path(file_path)
         assert file_path.exists(), f"Wordfile does not exist: {file_path}"
 
-        with open(file_path, "r") as f:
-            words = [w.strip() for w in f.readlines()]
+        with open(file_path, "r") as fin:
+            words = [w.strip() for w in fin.readlines()]
             return WordList(words, **options)
 
     def _filter_min_word_size(self, min_word_size: int) -> None:
