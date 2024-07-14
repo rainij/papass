@@ -1,10 +1,6 @@
 import pytest
 from papass.wordlist import WordList
 
-# TODOs:
-# - test error handling?
-# - test logging?
-
 
 def test_initializes():
     words = ["hallo", "welt"]

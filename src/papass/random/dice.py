@@ -1,3 +1,5 @@
+import click
+
 from papass.utils import rolls_to_value
 
 from .base import RandomNumberGeneratorBase
@@ -6,17 +8,14 @@ from .base import RandomNumberGeneratorBase
 class DiceRng(RandomNumberGeneratorBase):
     """Random number generator relying on the user to throw physical dice."""
 
-    _num_sides: int
-
     def __init__(self, *, num_sides: int = 6):
-        assert num_sides > 1
-        self._num_sides = num_sides
+        assert num_sides > 1, f"--num-sides must be ad least 1, got {num_sides}"
+        self._num_sides: int = num_sides
 
     def randbelow(self, upper: int) -> int:
         # TODO:
         # - improve this
         # - introduce option for success probability
-        # - better error handling and user feedback
         num_sides = self._num_sides
 
         required_num_rolls = 1
@@ -39,7 +38,7 @@ class DiceRng(RandomNumberGeneratorBase):
             result = rolls_to_value(self._num_sides, rolls)
 
             if result >= upper_multiple:
-                print("Rejected")
+                click.echo("Rejected")
                 result = None
                 continue
 
@@ -54,17 +53,19 @@ class DiceRng(RandomNumberGeneratorBase):
         try:
             rolls = [int(r) for r in user_input.split()]
         except ValueError:
-            print(
+            click.echo(
                 "Invalid. Require a space-separated list of integers (like: 1 3 2). Roll again!"
             )
             return None
 
         if len(rolls) < required_num_rolls:
-            print(f"Got only {len(rolls)} rolls, need {required_num_rolls}. Roll again!")
+            click.echo(
+                f"Got only {len(rolls)} rolls, need {required_num_rolls}. Roll again!"
+            )
             return None
 
         if not all(1 <= r <= self._num_sides for r in rolls):
-            print(f"Some rolls are not between 1 and {self._num_sides}. Roll again!")
+            click.echo(f"Some rolls are not between 1 and {self._num_sides}. Roll again!")
             return None
 
         return rolls
