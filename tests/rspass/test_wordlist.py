@@ -34,6 +34,11 @@ class TestInterface:
         assert wordlist[i] == words[i]
         assert wordlist[-i] == words[-i]
 
+    def test_getitem_slice(self, wordlist, words):
+        words = sorted(words)
+        assert wordlist[1:3] == WordList(words[1:3])
+        assert list(wordlist[1:3]) == words[1:3]
+
     @pytest.mark.parametrize("other", ["abcde", "edcba", "aedbc"])
     def test_eq(self, wordlist, other: str):
         """Two wordlists are equal if they contain the same words (like a set)."""
