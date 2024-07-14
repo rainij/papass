@@ -64,6 +64,13 @@ class WordList(Sequence[str]):
     def __ne__(self, other: object) -> bool:
         return not self == other
 
+    def __add__(self, other) -> "WordList":
+        if isinstance(other, WordList):
+            return WordList(self._words + other._words)
+        elif isinstance(other, list):
+            return WordList(self._words + other)
+        raise ValueError(f"Unsupported type {type(other)}")
+
     def __repr__(self) -> str:
         return f"{WordList.__name__}({self._words})"
 

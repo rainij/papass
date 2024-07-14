@@ -52,6 +52,27 @@ class TestInterface:
     def test_ne_2(self, wordlist, other):
         assert wordlist != other
 
+    @pytest.mark.parametrize(
+        "other, result",
+        [
+            (
+                WordList(list("xy")),
+                WordList(list("abcdexy")),
+            ),
+            (
+                list("xy"),
+                WordList(list("abcdexy")),
+            ),
+        ],
+    )
+    def test_add(self, wordlist, other, result):
+        assert wordlist + other == result
+
+    @pytest.mark.parametrize("other", ["a", 1])
+    def test_add_value_error(self, wordlist, other):
+        with pytest.raises(ValueError, match="Unsupported type"):
+            wordlist + other
+
     def test_repr(self, wordlist):
         """There is a canonical __repr__ due to sorting of the words."""
         assert f"{wordlist}" == "WordList(['a', 'b', 'c', 'd', 'e'])"
