@@ -1,10 +1,6 @@
 import pytest
 from papass.wordlist import WordList
 
-# TODOs:
-# - test error handling?
-# - test logging?
-
 
 def test_initializes():
     words = ["hallo", "welt"]
@@ -34,6 +30,11 @@ class TestInterface:
         assert wordlist[i] == words[i]
         assert wordlist[-i] == words[-i]
 
+    def test_getitem_slice(self, wordlist, words):
+        words = sorted(words)
+        assert wordlist[1:3] == WordList(words[1:3])
+        assert list(wordlist[1:3]) == words[1:3]
+
     @pytest.mark.parametrize("other", ["abcde", "edcba", "aedbc"])
     def test_eq(self, wordlist, other: str):
         """Two wordlists are equal if they contain the same words (like a set)."""
@@ -46,6 +47,27 @@ class TestInterface:
     @pytest.mark.parametrize("other", [42, "abcde", list("abcde")])
     def test_ne_2(self, wordlist, other):
         assert wordlist != other
+
+    @pytest.mark.parametrize(
+        "other, result",
+        [
+            (
+                WordList(list("xy")),
+                WordList(list("abcdexy")),
+            ),
+            (
+                list("xy"),
+                WordList(list("abcdexy")),
+            ),
+        ],
+    )
+    def test_add(self, wordlist, other, result):
+        assert wordlist + other == result
+
+    @pytest.mark.parametrize("other", ["a", 1])
+    def test_add_value_error(self, wordlist, other):
+        with pytest.raises(ValueError, match="Unsupported type"):
+            wordlist + other
 
     def test_repr(self, wordlist):
         """There is a canonical __repr__ due to sorting of the words."""
@@ -60,6 +82,15 @@ class TestInterface:
 
         wordlist_from_file = WordList.from_file(file_path)
         assert wordlist_from_file == wordlist
+
+    def test_to_file(self, tmp_path, words, wordlist):
+        file_path = tmp_path / "test.wordlist"
+
+        wordlist.to_file(file_path)
+        wordlist_2 = WordList.from_file(file_path)
+
+        assert wordlist_2 == wordlist
+        assert wordlist_2 == WordList(words)
 
 
 class TestWordSize:
@@ -94,3 +125,12 @@ class TestWordSize:
 
         wordlist = WordList(words, **options)
         assert wordlist == WordList(words[min_word_size - 1 : max_word_size])
+
+
+def test_empty_wordlist():
+    empty_1 = WordList()
+    empty_2 = WordList([])
+
+    assert len(empty_1) == 0
+    assert len(empty_2) == 0
+    assert empty_1 == empty_2

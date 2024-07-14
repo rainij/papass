@@ -4,16 +4,11 @@ import click
 
 from papass.phrase_generator import PhraseGenerator
 from papass.random import (
-    available_random_sources,
+    available_random_sources_str,
     default_random_source,
     get_rng,
 )
 from papass.wordlist import WordList
-
-
-# Wrapper to simplify usage below.
-def available_random_sources_str() -> str:
-    return ", ".join(f"'{s}'" for s in available_random_sources())
 
 
 @click.command()
@@ -75,19 +70,34 @@ def cli(
 ):
     """Create a passphrase."""
 
-    rng = get_rng(random_source, dice_sides=dice_sides)
+    try:
+        rng = get_rng(random_source, dice_sides=dice_sides)
 
-    wordlist = WordList.from_file(
-        Path(wordlist_file),
-        min_word_size=min_word_size,
-        max_word_size=max_word_size,
-    )
+        wordlist = WordList.from_file(
+            Path(wordlist_file),
+            min_word_size=min_word_size,
+            max_word_size=max_word_size,
+        )
 
-    phrase_generator = PhraseGenerator(wordlist=wordlist, rng=rng, delimiter=delimiter)
-    result = phrase_generator.get_phrase(count)
+        phrase_generator = PhraseGenerator(
+            wordlist=wordlist, rng=rng, delimiter=delimiter
+        )
+        result = phrase_generator.get_phrase(count)
+    except AssertionError as error:
+        click.secho(f"ERROR: {error}", fg="red")
+        click.echo("Try again!")
+        return
 
-    print(f"Phrase: {result.phrase}")
-    print(f"Entropy: {result.entropy}")
+    click.echo(f"Phrase: {result.phrase}")
+    click.echo(f"Entropy: {result.entropy:.6}")
+
+    if not result.entropy_is_guaranteed:
+        click.secho(
+            "WARNING: Entropy might be slightly lower than estimated. "
+            "This can occur for example if the delimiter is contained "
+            "in one of the words.",
+            fg="yellow",
+        )
 
 
 if __name__ == "__main__":
