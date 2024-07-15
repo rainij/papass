@@ -1,8 +1,16 @@
+from dataclasses import dataclass
+
 import click
 
 from papass.utils import rolls_to_value
 
 from .base import RandomNumberGeneratorBase
+
+
+@dataclass
+class DiceFrame:
+    upper_multiple: int
+    required_num_rolls: int
 
 
 class DiceRng(RandomNumberGeneratorBase):
@@ -23,8 +31,8 @@ class DiceRng(RandomNumberGeneratorBase):
         # - improve this
         # - introduce option for success probability
         frame = self._compute_frame(upper)
-        required_num_rolls = frame["required_num_rolls"]
-        upper_multiple = frame["upper_multiple"]
+        required_num_rolls = frame.required_num_rolls
+        upper_multiple = frame.upper_multiple
 
         result = None
         while result is None:
@@ -45,23 +53,11 @@ class DiceRng(RandomNumberGeneratorBase):
 
         return result
 
-    def _compute_frame(self, upper: int) -> dict[str, int]:
-        required_num_rolls = 1
-        upper_dice = self._num_sides
-        upper_multiple = (upper_dice // upper) * upper
-
-        def success_probability_to_low() -> bool:
-            prob = upper_multiple / upper_dice
-            return prob < self._required_success_probability
-
-        while upper_dice < upper or success_probability_to_low():
-            required_num_rolls += 1
-            upper_dice *= self._num_sides
-            upper_multiple = (upper_dice // upper) * upper
-
-        return dict(
-            upper_multiple=upper_multiple,
-            required_num_rolls=required_num_rolls,
+    def _compute_frame(self, upper: int) -> DiceFrame:
+        return compute_dice_frame(
+            upper=upper,
+            num_sides=self._num_sides,
+            required_success_probability=self._required_success_probability,
         )
 
     def _parse_user_input(
@@ -87,3 +83,25 @@ class DiceRng(RandomNumberGeneratorBase):
             return None
 
         return rolls
+
+
+def compute_dice_frame(
+    *, num_sides: int, upper: int, required_success_probability: float
+) -> DiceFrame:
+    required_num_rolls = 1
+    upper_dice = num_sides
+    upper_multiple = (upper_dice // upper) * upper
+
+    def success_probability_to_low() -> bool:
+        prob = upper_multiple / upper_dice
+        return prob < required_success_probability
+
+    while upper_dice < upper or success_probability_to_low():
+        required_num_rolls += 1
+        upper_dice *= num_sides
+        upper_multiple = (upper_dice // upper) * upper
+
+    return DiceFrame(
+        upper_multiple=upper_multiple,
+        required_num_rolls=required_num_rolls,
+    )
