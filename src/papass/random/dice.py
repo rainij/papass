@@ -17,10 +17,10 @@ class DiceRng(RandomNumberGeneratorBase):
     """Random number generator relying on the user to throw physical dice."""
 
     def __init__(self, *, num_sides: int = 6, required_success_probability: float = 0.99):
-        assert num_sides > 1, f"--num-sides must be at least 1, got {num_sides}"
+        assert num_sides > 1, f"num_sides must be at least 1, got {num_sides}"
         assert (
             0 <= required_success_probability < 1.0
-        ), f"--required-success-probability must be >= 0 and < 1.0. Got {required_success_probability}."
+        ), f"required_success_probability must be >= 0 and < 1.0. Got {required_success_probability}."
 
         self._num_sides = num_sides
         self._required_success_probability = required_success_probability
