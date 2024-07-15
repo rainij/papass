@@ -2,13 +2,15 @@ from pathlib import Path
 
 import click
 
-from papass.phrase_generator import PhraseGenerator
+from papass import (
+    PhraseGenerator,
+    WordList,
+)
 from papass.random import (
     available_random_sources_str,
     default_random_source,
     get_rng,
 )
-from papass.wordlist import WordList
 
 
 @click.command()

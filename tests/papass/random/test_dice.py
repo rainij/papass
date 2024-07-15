@@ -158,6 +158,6 @@ def test_randbelow(monkeypatch, num_sides, upper, rolls):
 )
 def test_compute_frame(upper, req_prob, expected):
     result = compute_dice_frame(
-         num_sides=10, upper=upper, required_success_probability=req_prob
+        num_sides=10, upper=upper, required_success_probability=req_prob
     )
     assert result == expected
