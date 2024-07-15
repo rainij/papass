@@ -34,6 +34,11 @@ def make_patched_input(rolls: Iterable[Iterable[int]]) -> Callable[[Any], str]:
             [[4]],
         ),
         (
+            6,
+            6**3,
+            [[6, 6, 6]],
+        ),
+        (
             8,
             8**6,
             [[1, 2, 3, 4, 5, 6]],
@@ -47,7 +52,7 @@ def make_patched_input(rolls: Iterable[Iterable[int]]) -> Callable[[Any], str]:
         (
             6,
             6**2 - 5,
-            [[6, 6], [2, 3]],
+            [[6, 6, 6, 6, 6], [2, 3, 2, 3, 1]],
         ),
     ],
 )
@@ -58,5 +63,5 @@ def test_randbelow(monkeypatch, num_sides, upper, rolls):
     # Only the last roll should be used (others are rejected).
     expected = rolls_to_value(num_sides, rolls[-1]) % upper
 
-    rng = DiceRng(num_sides=num_sides)
+    rng = DiceRng(num_sides=num_sides, required_success_probability=0.99)
     assert rng.randbelow(upper) == expected
