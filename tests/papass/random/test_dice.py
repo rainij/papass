@@ -1,10 +1,11 @@
 from collections.abc import Callable, Iterable, Iterator
+from random import Random
 from typing import Any
 
 import pytest
-from hypothesis import given
+from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
-from papass.random.dice import DiceRng, compute_dice_frame
+from papass.random.dice import DiceRng, compute_dice_frame, query_stdin_for_dice
 from papass.utils import rolls_to_value
 
 
@@ -22,6 +23,7 @@ def make_patched_input(rolls: Iterable[Iterable[int]]) -> Callable[[Any], str]:
 
 
 def patch_input(monkeypatch, rolls: Iterable[Iterable[int]]):
+    """Patch the builtin `input`."""
     patched_input = make_patched_input(rolls)
     monkeypatch.setattr("builtins.input", patched_input)
 
@@ -71,6 +73,24 @@ def test_randbelow(monkeypatch, num_sides, upper, rolls):
 
     rng = DiceRng(num_sides=num_sides, required_success_probability=0.99)
     assert rng.randbelow(upper) == expected
+
+
+@given(
+    num_sides=st.integers(2, 20),
+    required_num_rolls=st.integers(1, 10),
+    rng=st.randoms(use_true_random=True),
+)
+@settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
+def test_query_stdin_for_dice(monkeypatch, num_sides, required_num_rolls, rng: Random):
+    rolls = [rng.randint(1, num_sides) for _ in range(required_num_rolls)]
+    patch_input(monkeypatch, [rolls])
+
+    got = query_stdin_for_dice(num_sides=num_sides, required_num_rolls=required_num_rolls)
+    assert got == rolls
+
+
+def test_uniformity():
+    pass
 
 
 @given(
