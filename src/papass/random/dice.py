@@ -88,6 +88,14 @@ class DiceRng(RandomNumberGeneratorBase):
 def compute_dice_frame(
     *, num_sides: int, upper: int, required_success_probability: float
 ) -> DiceFrame:
+    """Computes the dice frame.
+
+    The dice frame contains information on how to turn dice rolls into numbers from an
+    interval [0, upper) with a uniform distribution.
+
+    We assume that the dice rolls themselves is (at least approximately) uniform and
+    independent.
+    """
     required_num_rolls = 1
     upper_dice = num_sides
     upper_multiple = (upper_dice // upper) * upper

@@ -2,7 +2,7 @@ from collections.abc import Iterable
 from functools import reduce
 
 
-def digits_to_value(base: int, digits: Iterable[int]):
+def digits_to_value(base: int, digits: Iterable[int]) -> int:
     """Compute the integer with the given digits in base.
 
     Example:
@@ -14,7 +14,7 @@ def digits_to_value(base: int, digits: Iterable[int]):
     return reduce(lambda acc, r: base * acc + r, digits, 0)
 
 
-def rolls_to_value(num_sides: int, rolls: Iterable[int]):
+def rolls_to_value(num_sides: int, rolls: Iterable[int]) -> int:
     """Compute the integer corresponding to the given dice rolls.
 
     Example:

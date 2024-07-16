@@ -2,7 +2,9 @@ from collections.abc import Callable, Iterable, Iterator
 from typing import Any
 
 import pytest
-from papass.random.dice import DiceFrame, DiceRng, compute_dice_frame
+from hypothesis import given
+from hypothesis import strategies as st
+from papass.random.dice import DiceRng, compute_dice_frame
 from papass.utils import rolls_to_value
 
 
@@ -71,93 +73,31 @@ def test_randbelow(monkeypatch, num_sides, upper, rolls):
     assert rng.randbelow(upper) == expected
 
 
-@pytest.mark.parametrize(
-    "upper, req_prob, expected",
-    [
-        (
-            10,
-            0.999,
-            DiceFrame(
-                upper_multiple=10,
-                required_num_rolls=1,
-            ),
-        ),
-        (
-            5,
-            0.999,
-            DiceFrame(
-                upper_multiple=10,
-                required_num_rolls=1,
-            ),
-        ),
-        (
-            4,
-            0.999,
-            DiceFrame(
-                upper_multiple=100,
-                required_num_rolls=2,
-            ),
-        ),
-        (
-            20,
-            0.999,
-            DiceFrame(
-                upper_multiple=100,
-                required_num_rolls=2,
-            ),
-        ),
-        (
-            3,
-            0.8,
-            DiceFrame(
-                upper_multiple=9,
-                required_num_rolls=1,
-            ),
-        ),
-        (
-            3,
-            0.95,
-            DiceFrame(
-                upper_multiple=99,
-                required_num_rolls=2,
-            ),
-        ),
-        (
-            3,
-            0.998,
-            DiceFrame(
-                upper_multiple=999,
-                required_num_rolls=3,
-            ),
-        ),
-        (
-            17,
-            0.8,
-            DiceFrame(
-                upper_multiple=85,
-                required_num_rolls=2,
-            ),
-        ),
-        (
-            17,
-            0.98,
-            DiceFrame(
-                upper_multiple=986,
-                required_num_rolls=3,
-            ),
-        ),
-        (
-            17,
-            0.9995,
-            DiceFrame(
-                upper_multiple=9996,
-                required_num_rolls=4,
-            ),
-        ),
-    ],
+@given(
+    num_sides=st.integers(2, 20),
+    upper=st.integers(2, 1000_000),
+    req_prob_exponent=st.integers(1, 6),
 )
-def test_compute_frame(upper, req_prob, expected):
+def test_compute_frame(num_sides, upper, req_prob_exponent):
+    required_success_probability = 1.0 - 10 ** (-req_prob_exponent)
+    # Due to possible floating point issues (not sure if really needed)
+    epsilon = 10 ** (-2 * req_prob_exponent)
+
     result = compute_dice_frame(
-        num_sides=10, upper=upper, required_success_probability=req_prob
+        num_sides=num_sides,
+        upper=upper,
+        required_success_probability=required_success_probability,
     )
-    assert result == expected
+
+    # The success probability is as high as desired
+    upper_dice = num_sides**result.required_num_rolls
+    upper_multiple = (upper_dice // upper) * upper
+    assert upper_multiple == result.upper_multiple
+    success_probability = upper_multiple / upper_dice
+    assert success_probability > required_success_probability - epsilon
+
+    # Less rolls would not work:
+    upper_dice_less = num_sides ** (result.required_num_rolls - 1)
+    upper_multiple_less = (upper_dice_less // upper) * upper
+    success_probability_less = upper_multiple_less / upper_dice_less
+    assert success_probability_less < required_success_probability + epsilon
