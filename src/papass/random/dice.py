@@ -26,7 +26,11 @@ class DiceRng(RandomNumberGeneratorBase):
         self._required_success_probability = required_success_probability
 
     def randbelow(self, upper: int) -> int:
-        """TODO: docstring"""
+        """Generate random integers i with 0 <= i < upper.
+
+        If the dice are fair (all sides occur with the same probability) and the rolls are
+        independent the distriubtion of i is uniform.
+        """
         # TODO:
         # - improve this
         # - introduce option for success probability
@@ -36,8 +40,7 @@ class DiceRng(RandomNumberGeneratorBase):
 
         result = None
         while result is None:
-            user_input = input(f"Roll at least {required_num_rolls} dice: ")
-            rolls = self._parse_user_input(user_input, required_num_rolls)
+            rolls = self._next_rolls(required_num_rolls)
 
             if rolls is None:
                 continue
@@ -60,10 +63,19 @@ class DiceRng(RandomNumberGeneratorBase):
             required_success_probability=self._required_success_probability,
         )
 
+    def _next_rolls(self, required_num_rolls: int) -> list[int] | None:
+        """Query stdin for desired number of rolls.
+
+        Return `None` if user gives invalid input.
+        """
+        user_input = input(f"Roll at least {required_num_rolls} dice: ")
+        rolls = self._parse_user_input(user_input, required_num_rolls)
+        return rolls
+
     def _parse_user_input(
         self, user_input: str, required_num_rolls: int
     ) -> list[int] | None:
-        """Returns None if user input could not be parsed."""
+        """Returns `None` if user input could not be parsed."""
         try:
             rolls = [int(r) for r in user_input.split()]
         except ValueError:
