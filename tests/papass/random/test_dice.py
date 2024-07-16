@@ -63,9 +63,15 @@ def patch_input(monkeypatch, rolls: Iterable[Iterable[int]]):
             6**2 - 5,
             [[6, 6, 6, 6, 6], [2, 3, 2, 3, 1]],
         ),
+        (
+            9,
+            9**2 - 1,
+            [[9, 9, 9, 9, 9], [1, 2, 3, 4, 5]],
+        ),
     ],
 )
 def test_randbelow(monkeypatch, num_sides, upper, rolls):
+    """*Basic* test showing that randbelow behaves as expected."""
     patch_input(monkeypatch, rolls)
 
     # Only the last roll should be used (others are rejected).
@@ -82,15 +88,12 @@ def test_randbelow(monkeypatch, num_sides, upper, rolls):
 )
 @settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
 def test_query_stdin_for_dice(monkeypatch, num_sides, required_num_rolls, rng: Random):
+    """Test that valid input from stdin gets parsed correctly."""
     rolls = [rng.randint(1, num_sides) for _ in range(required_num_rolls)]
     patch_input(monkeypatch, [rolls])
 
     got = query_stdin_for_dice(num_sides=num_sides, required_num_rolls=required_num_rolls)
     assert got == rolls
-
-
-def test_uniformity():
-    pass
 
 
 @given(
@@ -121,3 +124,12 @@ def test_compute_frame(num_sides, upper, req_prob_exponent):
     upper_multiple_less = (upper_dice_less // upper) * upper
     success_probability_less = upper_multiple_less / upper_dice_less
     assert success_probability_less < required_success_probability + epsilon
+
+
+def test_randbelow_uniformity():
+    """Test that randbelow has a uniform distribution on [0, upper)."""
+    # TODO
+    # - monkeypatch query_stdin_for_dice and make sure that mapping is injective
+    # - test that output is indeed in [0, upper)
+    # - test surjectivity?
+    pass
