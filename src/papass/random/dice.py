@@ -17,6 +17,14 @@ class DiceRng(RandomNumberGeneratorBase):
     """Random number generator relying on the user to throw physical dice."""
 
     def __init__(self, *, num_sides: int = 6, required_success_probability: float = 0.99):
+        """Create a `DiceRng`.
+
+        :param num_sides: Number of sides of the dice.
+        :param required_success_probability: The minimal required probability that
+            `randbelow` does not reject a roll. If `upper` is a power of `num_sides` this
+            probability is always 100%. But in general the number of required rolls
+            increases with this probability.
+        """
         assert num_sides > 1, f"num_sides must be at least 1, got {num_sides}"
         assert (
             0 <= required_success_probability < 1.0
@@ -26,10 +34,10 @@ class DiceRng(RandomNumberGeneratorBase):
         self._required_success_probability = required_success_probability
 
     def randbelow(self, upper: int) -> int:
-        """Generate random integers i with 0 <= i < upper.
+        """Generate random integers `i` with `0 <= i < upper`.
 
         If the dice are fair (all sides occur with the same probability) and the rolls are
-        independent the distriubtion of i is uniform.
+        independent the distriubtion of `i` is uniform.
         """
         frame = self._compute_frame(upper)
         required_num_rolls = frame.required_num_rolls

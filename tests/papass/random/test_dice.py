@@ -1,10 +1,13 @@
+from collections import defaultdict
 from collections.abc import Callable, Iterable, Iterator
 from random import Random
 from typing import Any
 
+import click
 import pytest
 from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
+from papass.random import dice
 from papass.random.dice import DiceRng, compute_dice_frame, query_stdin_for_dice
 from papass.utils import rolls_to_value
 
@@ -126,10 +129,34 @@ def test_compute_frame(num_sides, upper, req_prob_exponent):
     assert success_probability_less < required_success_probability + epsilon
 
 
-def test_randbelow_uniformity():
+def test_randbelow_uniformity(monkeypatch, rand_seed: int = 0):
     """Test that randbelow has a uniform distribution on [0, upper)."""
-    # TODO
-    # - monkeypatch query_stdin_for_dice and make sure that mapping is injective
-    # - test that output is indeed in [0, upper)
-    # - test surjectivity?
-    pass
+    num_sides = 6
+    num_rolls = 5  # depends on success probability
+    upper = 10
+    num_calls = 10000
+
+    rand_rng = Random(rand_seed)
+
+    def patched_query_stdin_for_dice(**_ignored) -> list[int]:
+        out = [rand_rng.randint(1, num_sides) for _ in range(num_rolls)]
+        return out
+
+    monkeypatch.setattr(dice, "query_stdin_for_dice", patched_query_stdin_for_dice)
+    monkeypatch.setattr(click, "echo", lambda *_: None)
+
+    dice_rng = DiceRng(num_sides=num_sides, required_success_probability=0.99)
+
+    results: defaultdict[int, int] = defaultdict(int)
+    for _ in range(num_calls):
+        result = dice_rng.randbelow(upper)
+        assert 0 <= result < upper, "In bounds."
+        results[result] += 1
+
+    assert sum(results.values()) == num_calls
+
+    for _value, count in results.items():
+        fraction = count / num_calls
+        expectation_lower = 1.0 / (upper + 1)
+        expectation_upper = 1.0 / (upper - 1)
+        assert expectation_lower < fraction < expectation_upper
