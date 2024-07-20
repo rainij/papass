@@ -129,34 +129,45 @@ def test_compute_frame(num_sides, upper, req_prob_exponent):
     assert success_probability_less < required_success_probability + epsilon
 
 
-def test_randbelow_uniformity(monkeypatch, rand_seed: int = 0):
+class TestUniformity:
     """Test that randbelow has a uniform distribution on [0, upper)."""
-    num_sides = 6
-    num_rolls = 5  # depends on success probability
-    upper = 10
-    num_calls = 10000
 
-    rand_rng = Random(rand_seed)
+    @given(rand_rng=st.randoms(use_true_random=True))
+    @settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
+    def test_part_1(self, monkeypatch, rand_rng):
+        """This tests that randbelow maps into [0,upper) and is uniform on its range.
 
-    def patched_query_stdin_for_dice(**_ignored) -> list[int]:
-        out = [rand_rng.randint(1, num_sides) for _ in range(num_rolls)]
-        return out
+        It does not test that the range of randbelow the full interval.
+        """
+        num_sides = 6
+        num_rolls = 5  # depends on success probability
+        upper = 100
+        num_calls = upper // 2
 
-    monkeypatch.setattr(dice, "query_stdin_for_dice", patched_query_stdin_for_dice)
-    monkeypatch.setattr(click, "echo", lambda *_: None)
+        memo: list[int] = []
+        def patched_query_stdin_for_dice(memo = memo, **_ignored) -> list[int]:
+            # The memo memorizes all outputs
+            out = [rand_rng.randint(1, num_sides) for _ in range(num_rolls)]
+            value = rolls_to_value(num_sides, rolls=out)
+            memo.append(value % upper)
+            return out
 
-    dice_rng = DiceRng(num_sides=num_sides, required_success_probability=0.99)
+        monkeypatch.setattr(dice, "query_stdin_for_dice", patched_query_stdin_for_dice)
+        monkeypatch.setattr(click, "echo", lambda *_: None)
 
-    results: defaultdict[int, int] = defaultdict(int)
-    for _ in range(num_calls):
-        result = dice_rng.randbelow(upper)
-        assert 0 <= result < upper, "In bounds."
-        results[result] += 1
+        dice_rng = DiceRng(num_sides=num_sides, required_success_probability=0.99)
 
-    assert sum(results.values()) == num_calls
+        all_values = []
+        raw_values = []
+        for _ in range(num_calls):
+            value = dice_rng.randbelow(upper)
+            assert 0 <= value < upper, "Not inside bounds."
+            all_values.append(value)
+            # The last entry of memo lead to the observed value:
+            raw_values.append(memo[-1])
 
-    for _value, count in results.items():
-        fraction = count / num_calls
-        expectation_lower = 1.0 / (upper + 1)
-        expectation_upper = 1.0 / (upper - 1)
-        assert expectation_lower < fraction < expectation_upper
+        assert len(all_values) == num_calls
+        # This essentially tests that the map from non-rejected raw values to actual
+        # outputs of randbelow is injective. This injectivity makes sure that randbelow is
+        # uniform on its range (assuming the dice rolls are uniform).
+        assert len(set(all_values)) == len(set(raw_values))
