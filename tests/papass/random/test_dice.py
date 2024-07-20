@@ -1,4 +1,3 @@
-from collections import defaultdict
 from collections.abc import Callable, Iterable, Iterator
 from random import Random
 from typing import Any
@@ -145,7 +144,8 @@ class TestUniformity:
         num_calls = upper // 2
 
         memo: list[int] = []
-        def patched_query_stdin_for_dice(memo = memo, **_ignored) -> list[int]:
+
+        def patched_query_stdin_for_dice(memo=memo, **_ignored) -> list[int]:
             # The memo memorizes all outputs
             out = [rand_rng.randint(1, num_sides) for _ in range(num_rolls)]
             value = rolls_to_value(num_sides, rolls=out)
@@ -171,3 +171,26 @@ class TestUniformity:
         # outputs of randbelow is injective. This injectivity makes sure that randbelow is
         # uniform on its range (assuming the dice rolls are uniform).
         assert len(set(all_values)) == len(set(raw_values))
+
+    @given(rand_rng=st.randoms(use_true_random=True))
+    @settings(max_examples=1, suppress_health_check=[HealthCheck.function_scoped_fixture])
+    def test_part_2(self, monkeypatch, rand_rng):
+        """Test that all values from [0, upper) are possible."""
+        # These values make it *extremely* unlikely the the heuristic check below fails:
+        num_sides = 6
+        num_rolls = 5  # depends on success probability
+        upper = 10
+        num_calls = 1000
+
+        def patched_query_stdin_for_dice(**_ignored) -> list[int]:
+            out = [rand_rng.randint(1, num_sides) for _ in range(num_rolls)]
+            return out
+
+        monkeypatch.setattr(dice, "query_stdin_for_dice", patched_query_stdin_for_dice)
+        monkeypatch.setattr(click, "echo", lambda *_: None)
+
+        dice_rng = DiceRng(num_sides=6, required_success_probability=0.99)
+        assert False
+
+        obtained_values = [dice_rng.randbelow(upper) for _ in range(num_calls)]
+        assert set(obtained_values) == set(range(upper)), "Heuristic surjectivity check."
