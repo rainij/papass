@@ -179,8 +179,8 @@ class TestUniformity:
         # These values make it *extremely* unlikely the the heuristic check below fails:
         num_sides = 6
         num_rolls = 5  # depends on success probability
-        upper = 10
-        num_calls = 100
+        upper = 7
+        num_calls = 300
 
         def patched_query_stdin_for_dice(**_ignored) -> list[int]:
             out = [rand_rng.randint(1, num_sides) for _ in range(num_rolls)]
