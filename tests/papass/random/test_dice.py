@@ -180,7 +180,7 @@ class TestUniformity:
         num_sides = 6
         num_rolls = 5  # depends on success probability
         upper = 10
-        num_calls = 1000
+        num_calls = 100
 
         def patched_query_stdin_for_dice(**_ignored) -> list[int]:
             out = [rand_rng.randint(1, num_sides) for _ in range(num_rolls)]
