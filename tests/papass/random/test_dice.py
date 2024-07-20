@@ -190,7 +190,6 @@ class TestUniformity:
         monkeypatch.setattr(click, "echo", lambda *_: None)
 
         dice_rng = DiceRng(num_sides=6, required_success_probability=0.99)
-        assert False
 
         obtained_values = [dice_rng.randbelow(upper) for _ in range(num_calls)]
         assert set(obtained_values) == set(range(upper)), "Heuristic surjectivity check."
