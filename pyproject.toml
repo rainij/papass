@@ -22,6 +22,7 @@ papass = "papass.__main__:cli"
 
 [project.optional-dependencies]
 dev = [
+    "hypothesis",
     "mypy",
     "pytest",
     "ruff",
@@ -34,7 +35,7 @@ dev-pylsp = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "--doctest-modules"
+addopts = "--doctest-modules --hypothesis-profile dev"
 testpaths = [
     "src",  # For doctest
     "tests",

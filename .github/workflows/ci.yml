@@ -36,7 +36,7 @@ jobs:
           mypy src/ tests/
       - name: Test with pytest
         run: |
-          pytest
+          pytest --hypothesis-profile ci
       # Very basic checks that we can execute the cmd-tool.
       - name: Execute papass --help
         run: |
