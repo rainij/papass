@@ -44,15 +44,20 @@ class DiceRng(RandomNumberGeneratorBase):
         upper_multiple = frame.upper_multiple
 
         result = None
+        count = 0
         while result is None:
+            assert count < 20, "Too many wrong inputs."
+
             rolls = self._next_rolls(required_num_rolls)
 
             if rolls is None:
+                count += 1
                 continue
 
             result = rolls_to_value(self._num_sides, rolls)
 
             if result >= upper_multiple:
+                count = 0
                 click.echo("Rejected. Try again!")
                 result = None
                 continue
@@ -69,6 +74,7 @@ class DiceRng(RandomNumberGeneratorBase):
         )
 
     def _next_rolls(self, required_num_rolls: int) -> list[int] | None:
+        """Get rolls from user."""
         return query_stdin_for_dice(
             num_sides=self._num_sides, required_num_rolls=required_num_rolls
         )

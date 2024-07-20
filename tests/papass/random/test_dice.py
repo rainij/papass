@@ -139,15 +139,16 @@ class TestUniformity:
         It does not test that the range of randbelow the full interval.
         """
         num_sides = 6
-        num_rolls = 5  # depends on success probability
         upper = 100
         num_calls = upper // 2
 
         memo: list[int] = []
 
-        def patched_query_stdin_for_dice(memo=memo, **_ignored) -> list[int]:
+        def patched_query_stdin_for_dice(
+            required_num_rolls, memo=memo, **_ignored
+        ) -> list[int]:
             # The memo memorizes all outputs
-            out = [rand_rng.randint(1, num_sides) for _ in range(num_rolls)]
+            out = [rand_rng.randint(1, num_sides) for _ in range(required_num_rolls)]
             value = rolls_to_value(num_sides, rolls=out)
             memo.append(value % upper)
             return out
@@ -172,24 +173,28 @@ class TestUniformity:
         # uniform on its range (assuming the dice rolls are uniform).
         assert len(set(all_values)) == len(set(raw_values))
 
-    @given(rand_rng=st.randoms(use_true_random=True))
+    @given(
+        # Taking a seed is faster than taking an rng in case of failures:
+        rand_seed=st.integers(0, 2**128),
+    )
     @settings(max_examples=1, suppress_health_check=[HealthCheck.function_scoped_fixture])
-    def test_part_2(self, monkeypatch, rand_rng):
+    def test_part_2(self, monkeypatch, rand_seed):
         """Test that all values from [0, upper) are possible."""
         # These values make it *extremely* unlikely the the heuristic check below fails:
-        num_sides = 6
-        num_rolls = 5  # depends on success probability
-        upper = 7
-        num_calls = 300
+        num_sides = 5
+        upper = 3
+        num_calls = 200
 
-        def patched_query_stdin_for_dice(**_ignored) -> list[int]:
-            out = [rand_rng.randint(1, num_sides) for _ in range(num_rolls)]
+        rand_rng = Random(rand_seed)
+
+        def patched_query_stdin_for_dice(required_num_rolls, **_ignored) -> list[int]:
+            out = [rand_rng.randint(1, num_sides) for _ in range(required_num_rolls)]
             return out
 
         monkeypatch.setattr(dice, "query_stdin_for_dice", patched_query_stdin_for_dice)
         monkeypatch.setattr(click, "echo", lambda *_: None)
 
-        dice_rng = DiceRng(num_sides=6, required_success_probability=0.99)
+        dice_rng = DiceRng(num_sides=num_sides, required_success_probability=0.99)
 
         obtained_values = [dice_rng.randbelow(upper) for _ in range(num_calls)]
         assert set(obtained_values) == set(range(upper)), "Heuristic surjectivity check."
