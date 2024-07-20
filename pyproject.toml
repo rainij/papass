@@ -26,6 +26,7 @@ dev = [
     "mypy",
     "pytest",
     "ruff",
+    "sphinx",
 ]
 dev-pylsp = [
     "python-lsp-server",

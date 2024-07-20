@@ -1,5 +1,7 @@
-.hypothesis
-.ropeproject
 __pycache__
 *.egg-info
-dist
+
+/.hypothesis
+/.ropeproject
+/dist
+/docs/build
