@@ -1,6 +1,6 @@
 """A simple library to generate passphrases."""
 
-from .phrase_generator import PhraseGenerator
+from .phrase_generator import PhraseGenerator, RpgResult
 from .random import DiceRng, RandomNumberGeneratorBase, SystemRng
 from .wordlist import WordList
 
@@ -10,6 +10,7 @@ __all__ = [
     DiceRng.__name__,
     PhraseGenerator.__name__,
     RandomNumberGeneratorBase.__name__,
+    RpgResult.__name__,
     SystemRng.__name__,
     WordList.__name__,
 ]

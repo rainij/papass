@@ -6,9 +6,10 @@ from typing import overload
 class WordList(Sequence[str]):
     """Represents an sorted sequence of unique words.
 
-    Internally the list of words is deduplicated and sorted (via `sorted`).
+    Internally the list of words is deduplicated and sorted (via ``sorted``).
 
-    # Example
+    Example
+    =======
 
     >>> wordlist = WordList(["c", "b", "a"])
     >>> wordlist
