@@ -42,7 +42,7 @@ abide
 Create a virtual environment and do
 
 ```shell
-$ pip install -r requirements.txt .[dev]
+$ pip install -r requirements.txt
 ```
 
 Run unit tests via
