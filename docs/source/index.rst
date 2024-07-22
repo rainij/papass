@@ -5,5 +5,6 @@ papass documentation
    :maxdepth: 1
    :caption: Contents:
 
-   usage
+   usage_cli
+   usage_library
    api

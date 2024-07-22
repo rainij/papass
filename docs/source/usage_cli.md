@@ -1,4 +1,4 @@
-# Usage (cli)
+# Usage of the CLI
 
 ## Installation
 
