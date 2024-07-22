@@ -11,3 +11,4 @@ documentation for details.
    :caption: Contents:
 
    usage/installation
+   api/api
