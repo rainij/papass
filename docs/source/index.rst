@@ -7,8 +7,8 @@ documentation for details.
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
-   usage/installation
-   api/api
+   installation
+   api
