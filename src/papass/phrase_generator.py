@@ -9,6 +9,7 @@ from .wordlist import WordList
 @dataclass
 class RpgResult:
     """Represents the result of random phrase generation."""
+
     phrase: str
     entropy: float
     # Whether we can guarantee that the entropy is that big (otherwise it is just an upper

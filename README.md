@@ -11,12 +11,12 @@
 [diceware](https://theworld.com/~reinhold/diceware.html) approach as proposed by Arnold
 G. Reinhold.
 
-# Usage
+# Quickstart
 
 Assuming you have a wordlist file `wordlist.txt` you can run the following command to
 generate a random list of five words:
 
-```bash
+```shell
 $ papass -c 5 -w /path/to/wordlist.txt
 Phrase: anthem hamstring transport doorbell circle
 Entropy: 64.62406251802891
@@ -41,19 +41,19 @@ abide
 # Development
 Create a virtual environment and do
 
-```bash
+```shell
 $ pip install -r requirements.txt .[dev]
 ```
 
 Run unit tests via
 
-```bash
+```shell
 $ pytest
 ```
 
 Formatting and linting is done via [ruff](https://github.com/astral-sh/ruff).
 
-```bash
+```shell
 $ ruff format
 $ ruff check --fix
 ```
