@@ -1,5 +1,5 @@
-papass documentation
-====================
+papass
+======
 
 .. toctree::
    :maxdepth: 1

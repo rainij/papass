@@ -22,21 +22,8 @@ Phrase: anthem hamstring transport doorbell circle
 Entropy: 64.62406251802891
 ```
 
-By default this uses the system's most secure random number generator. To use physical dice add `-r dice`.
-
-You can download a wordlist designed for passphrases from the
-[EFF](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases). You might
-need to remove the dice numbers, that is, change a line like this
-
-```
-11114     abide
-```
-
-into
-
-```
-abide
-```
+By default this uses the system's most secure random number generator. To use physical
+dice add `-r dice`.
 
 # Development
 Create a virtual environment and do
