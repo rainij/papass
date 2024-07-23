@@ -1,4 +1,7 @@
-# Usage of the CLI
+# Usage
+
+`papass` primarily is a command line tool. For usage as a library look into the [API
+documentation](./api.rst).
 
 ## Installation
 

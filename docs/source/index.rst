@@ -6,5 +6,4 @@ papass documentation
    :caption: Contents:
 
    usage_cli
-   usage_library
    api
