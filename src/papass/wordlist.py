@@ -56,15 +56,18 @@ class WordList(Sequence[str]):
     @overload
     def __getitem__(self, index: slice) -> "WordList": ...
     def __getitem__(self, index):
+        """Get a word at an index or a new word list from a slice."""
         if isinstance(index, int):
             return self._words[index]
         else:
             return WordList(self._words[index])
 
     def __len__(self) -> int:
+        """Return the number of words."""
         return len(self._words)
 
     def __eq__(self, other: object) -> bool:
+        """Two word lists are equal if they contain the same words."""
         if not isinstance(other, WordList):
             return False
         return self._words == other._words
@@ -74,6 +77,11 @@ class WordList(Sequence[str]):
     @overload
     def __add__(self, other: list) -> "WordList": ...
     def __add__(self, other) -> "WordList":
+        """Combine two word lists to a new word list made of the union of their words.
+
+        If the second summand is a list of words it behaves as if this list was converted
+        to a word list first.
+        """
         if isinstance(other, WordList):
             return WordList(self._words + other._words)
         elif isinstance(other, list):
@@ -81,6 +89,7 @@ class WordList(Sequence[str]):
         raise ValueError(f"Unsupported type {type(other)}")
 
     def __repr__(self) -> str:
+        """A string representation which could be used to initialize an equivalent word list."""
         return f"{WordList.__name__}({self._words})"
 
     def to_file(self, file_path: Path | str) -> None:
@@ -92,7 +101,7 @@ class WordList(Sequence[str]):
     def from_file(file_path: Path | str, **options):
         """Construct a wordlist from a file of words (newline separated).
 
-        The options are the same as the kwargs for the __init__ function.
+        The ``options`` are the same as those for ``__init__``.
         """
         if isinstance(file_path, str):
             file_path = Path(file_path)
