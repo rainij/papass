@@ -60,6 +60,11 @@ from papass.random import (
     default=6,
     help="Number of sides of dice (default: 6).",
 )
+@click.option(
+    "--remove-leading-digits",
+    is_flag=True,
+    help="If wordlist contains entries like `123 foo` normalizes it to `foo`.",
+)
 @click.version_option()
 def cli(
     count,
@@ -69,6 +74,7 @@ def cli(
     min_word_size,
     max_word_size,
     dice_sides,
+    remove_leading_digits,
 ):
     """Create a passphrase."""
 
@@ -79,6 +85,7 @@ def cli(
             Path(wordlist_file),
             min_word_size=min_word_size,
             max_word_size=max_word_size,
+            remove_leading_digits=remove_leading_digits,
         )
 
         phrase_generator = PhraseGenerator(

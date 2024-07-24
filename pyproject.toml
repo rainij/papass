@@ -24,8 +24,11 @@ papass = "papass.__main__:cli"
 dev = [
     "hypothesis",
     "mypy",
+    "myst-parser",
     "pytest",
     "ruff",
+    "sphinx",
+    "sphinx-book-theme",
 ]
 dev-pylsp = [
     "python-lsp-server",
