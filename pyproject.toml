@@ -15,6 +15,7 @@ dependencies = [
 ]
 
 [project.urls]
+documentation = "https://papass.readthedocs.io"
 source = "https://github.com/rainij/papass"
 
 [project.scripts]

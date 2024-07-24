@@ -34,7 +34,7 @@ abide
 you can run the following command to quickly generate a random list of four words:
 
 ```{code} console
-$ papass -c 4 -w ../eff_large.wordlist
+$ papass -c 4 -w wordlist.txt
 Phrase: grimy street acetone overcast
 Entropy: 51.6993
 ```
