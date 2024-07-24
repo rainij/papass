@@ -21,8 +21,8 @@ class DiceRng(RandomNumberGeneratorBase):
 
         :param num_sides: Number of sides of the dice.
         :param required_success_probability: The minimal required probability that
-            `randbelow` does not reject a roll. If `upper` is a power of `num_sides` this
-            probability is always 100%. But in general the number of required rolls
+            ``randbelow`` does not reject a roll. If ``upper`` is a power of ``num_sides``
+            this probability is always 100%. But in general the number of required rolls
             increases with this probability.
         """
         assert num_sides > 1, f"num_sides must be at least 1, got {num_sides}"
@@ -34,10 +34,10 @@ class DiceRng(RandomNumberGeneratorBase):
         self._required_success_probability = required_success_probability
 
     def randbelow(self, upper: int) -> int:
-        """Generate random integers `i` with `0 <= i < upper`.
+        """Generate random integers ``i`` with ``0 <= i < upper``.
 
         If the dice are fair (all sides occur with the same probability) and the rolls are
-        independent the distriubtion of `i` is uniform.
+        independent the distribution of ``i`` is uniform.
         """
         frame = self._compute_frame(upper)
         required_num_rolls = frame.required_num_rolls
@@ -83,7 +83,7 @@ class DiceRng(RandomNumberGeneratorBase):
 def query_stdin_for_dice(*, num_sides: int, required_num_rolls: int) -> list[int] | None:
     """Query stdin for desired number of dice rolls.
 
-    Return `None` if user gives invalid input.
+    Return ``None`` if user gives invalid input.
     """
     user_input = input(f"Roll at least {required_num_rolls} dice: ")
     rolls = _parse_stdin(
@@ -98,7 +98,7 @@ def compute_dice_frame(
     """Computes the dice frame.
 
     The dice frame contains information on how to turn dice rolls into numbers from an
-    interval [0, upper) with a uniform distribution.
+    interval ``[0, upper)`` with a uniform distribution.
 
     We assume that the dice rolls themselves is (at least approximately) uniform and
     independent.
@@ -127,7 +127,7 @@ def _parse_stdin(
 ) -> list[int] | None:
     """Parse user input as a list of dice rolls.
 
-    Returns `None` if input is invalid.
+    Returns ``None`` if input is invalid.
 
     Example:
     >>> _parse_stdin("2 3 5", num_sides=6, required_num_rolls=3)

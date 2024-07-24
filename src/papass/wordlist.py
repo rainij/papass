@@ -28,7 +28,7 @@ class WordList(Sequence[str]):
         max_word_size: int | None = None,
         remove_leading_digits: bool = False,
     ):
-        """Construct a wordlist from words.
+        """Construct a wordlist from ``words``.
 
         :param words: Words to construct wordlist from.
         :param min_word_size: Filter out words which are shorter than this.
