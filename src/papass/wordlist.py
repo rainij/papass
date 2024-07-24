@@ -1,3 +1,4 @@
+import re
 from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import overload
@@ -25,6 +26,7 @@ class WordList(Sequence[str]):
         *,
         min_word_size: int = 1,
         max_word_size: int | None = None,
+        remove_leading_digits: bool = False,
     ):
         """Construct a wordlist from words.
 
@@ -32,7 +34,12 @@ class WordList(Sequence[str]):
         :param min_word_size: Filter out words which are shorter than this.
         :param max_word_size: Filter out words which are longer than this. None means no
             filtering.
+        :param trim_leading_digits: Some word lists contain lines like
+            ``12345  someword``. If ``True`` we just read ``someword``.
         """
+        if remove_leading_digits:
+            words = _remove_leading_digits(words)
+
         words = sorted(set(words))
         self._words: list[str] = words
 
@@ -106,3 +113,7 @@ class WordList(Sequence[str]):
             return
 
         self._words = [w for w in self._words if len(w) <= max_word_size]
+
+
+def _remove_leading_digits(words: Iterable[str]) -> list[str]:
+    return [re.sub(r"\d+\s+", "", w) for w in words]

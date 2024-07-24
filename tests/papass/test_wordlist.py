@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 import pytest
 from papass.wordlist import WordList
 
@@ -134,3 +136,23 @@ def test_empty_wordlist():
     assert len(empty_1) == 0
     assert len(empty_2) == 0
     assert empty_1 == empty_2
+
+
+class TestRemoveLeadingDigits:
+    @pytest.fixture
+    def words(self) -> SimpleNamespace:
+        return SimpleNamespace(
+            # Mixing leading digits with non-leading digits is allowed
+            original=["11    aaa", " bbb", "12 ccc", "13ddd"],
+            trimmed=["aaa", " bbb", "ccc", "13ddd"],
+        )
+
+    def test_remove_it(self, words):
+        wl_trim = WordList(words.original, remove_leading_digits=True)
+        assert wl_trim != WordList(words.original)
+        assert wl_trim == WordList(words.trimmed)
+
+    def test_do_not_remove_it(self, words):
+        wl_no_trim = WordList(words.original, remove_leading_digits=False)
+        assert wl_no_trim == WordList(words.original)
+        assert wl_no_trim != WordList(words.trimmed)

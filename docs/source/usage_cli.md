@@ -75,16 +75,15 @@ the tool chooses the number of rolls in a way so that this does not happen too o
 
 You can download a wordlist designed for passphrases from the
 [EFF](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases). You might
-need to remove the dice numbers, that is, change a line like this
+need to use the flag `--remove-leading-digits` in order to ignore the leading digits in
+the file
 
 ```
-11114     abide
-```
-
-into
-
-```
-abide
+11111   abacus
+11112   abdomen
+11113   abdominal
+11114   abide
+...
 ```
 
 ## On the entropy
@@ -128,7 +127,7 @@ Entropy: ...
 WARNING: Entropy might be slightly lower than estimated. This can occur for example if the delimiter is contained in one of the words.
 ```
 
-Note that this is just a simple heuristic which is biased in the following sense
+Note that this uses just a simple heuristic which is biased in the following sense
 
 - If the warning does not appear the entropy estimate is correct.
 - If the warning appears the entropy can still be correct. The tool just wasn't able to prove that.
