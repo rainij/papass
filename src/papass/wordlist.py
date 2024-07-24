@@ -69,9 +69,6 @@ class WordList(Sequence[str]):
             return False
         return self._words == other._words
 
-    def __ne__(self, other: object) -> bool:
-        return not self == other
-
     @overload
     def __add__(self, other: "WordList") -> "WordList": ...
     @overload
