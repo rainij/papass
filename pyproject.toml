@@ -28,6 +28,7 @@ dev = [
     "pytest",
     "ruff",
     "sphinx",
+    "sphinx-book-theme",
 ]
 dev-pylsp = [
     "python-lsp-server",
