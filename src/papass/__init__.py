@@ -56,7 +56,7 @@ from .phrase_generator import PhraseGenerator, RpgResult
 from .random import DiceRng, RandomNumberGeneratorBase, SystemRng
 from .wordlist import WordList
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 __all__ = [
     DiceRng.__name__,
