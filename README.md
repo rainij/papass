@@ -29,8 +29,8 @@ full documentation.
 
 # Development
 Create a virtual environment (e.g. via `python -m venv` or
-[mamba/micromamba](https://mamba.readthedocs.io)). Then install the development
-dependencies and the package locally in editable mode:
+[mamba/micromamba](https://mamba.readthedocs.io)). Install (development) dependencies and
+`papass` in editable mode:
 
 ```shell
 $ pip install -r requirements.txt -e .
