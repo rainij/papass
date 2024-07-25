@@ -1,4 +1,4 @@
-# Usage
+# Introduction
 
 `papass` primarily is a command line tool. For usage as a library or from within an
 interactive python or [ipython](https://ipython.org/) session look into the [API

@@ -28,10 +28,12 @@ dice add `-r dice`. See [papass.readthedocs.io](https://papass.readthedocs.io) f
 full documentation.
 
 # Development
-Create a virtual environment and install the development dependencies
+Create a virtual environment (e.g. via `python -m venv` or
+[mamba/micromamba](https://mamba.readthedocs.io)). Install (development) dependencies and
+`papass` in editable mode:
 
 ```shell
-$ pip install -r requirements.txt
+$ pip install -r requirements.txt -e .
 ```
 
 Run unit tests via
