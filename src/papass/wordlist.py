@@ -108,7 +108,7 @@ class WordList(Sequence[str]):
         assert file_path.exists(), f"Wordfile does not exist: {file_path}"
 
         with open(file_path, "r") as fin:
-            words = [w.strip() for w in fin.readlines()]
+            words = [w.strip("\n") for w in fin.readlines()]
             return WordList(words, **options)
 
     def _filter_min_word_size(self, min_word_size: int) -> None:

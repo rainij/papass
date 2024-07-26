@@ -78,13 +78,14 @@ def test_dice_rng_simple(
 
 
 @pytest.mark.parametrize("opt_delimiter", ["-d", "--delimiter"])
-@pytest.mark.parametrize("delimiter", [" ", "#"])
+@pytest.mark.parametrize("delimiter", ["@", "#"])
 def test_delimiter(tmp_path, opt_delimiter, delimiter):
     runner = CliRunner()
-    wordlist_content = "foo\nbar"
+    # whitespace intentional:
+    wordlist_content = " foo\n bar"
     count = 2
     output_pattern = re.compile(
-        rf"^Phrase: (foo|bar){delimiter}(foo|bar)\nEntropy: 2\.0$"
+        rf"^Phrase: ( foo| bar){delimiter}( foo| bar)\nEntropy: 2\.0\n"
     )
 
     with runner.isolated_filesystem(temp_dir=tmp_path):
@@ -132,6 +133,23 @@ def test_max_word_size(tmp_path, opt_max_word_size):
         result = runner.invoke(
             cli, ["-c", str(count), "-w", WORDLIST_NAME, opt_max_word_size, "3"]
         )
+
+        assert result.exit_code == 0
+        assert output_pattern.match(result.output)
+
+
+@pytest.mark.parametrize("opt_remove", ["--remove-leading-digits"])
+def test_remove_leading_digits(tmp_path, opt_remove):
+    runner = CliRunner()
+    wordlist_content = "123 foo\nbar"
+    count = 1
+    output_pattern = re.compile(r"^Phrase: (foo| bar)\nEntropy: 1\.0$")
+
+    with runner.isolated_filesystem(temp_dir=tmp_path):
+        with open(WORDLIST_NAME, "w") as f:
+            f.write(wordlist_content)
+
+        result = runner.invoke(cli, ["-c", str(count), "-w", WORDLIST_NAME, opt_remove])
 
         assert result.exit_code == 0
         assert output_pattern.match(result.output)
