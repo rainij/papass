@@ -126,7 +126,7 @@ something like this *could* happen:
 $ papass -c 2 -w wordlist.txt -r system -d ""
 Phrase: foobarfoo
 Entropy: ...
-WARNING: Entropy might be slightly lower than estimated. This can occur for example if the delimiter is contained in one of the words.
+WARNING: Entropy might be slightly lower than estimated. See https://papass.readthedocs.io/en/stable/usage_cli.html#entropy-guarantee.
 ```
 
 Note that this uses just a simple heuristic which is biased in the following sense

@@ -104,7 +104,7 @@ def cli(
     if not result.entropy_is_guaranteed:
         click.secho(
             "WARNING: Entropy might be slightly lower than estimated. "
-            "See https://papass.readthedocs.io/en/stable/#entropy-guarantee.",
+            "See https://papass.readthedocs.io/en/stable/usage_cli.html#entropy-guarantee.",
             fg="yellow",
         )
 
