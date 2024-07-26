@@ -104,8 +104,7 @@ def cli(
     if not result.entropy_is_guaranteed:
         click.secho(
             "WARNING: Entropy might be slightly lower than estimated. "
-            "This can occur for example if the delimiter is contained "
-            "in one of the words.",
+            "See https://papass.readthedocs.io/en/stable/#entropy-guarantee.",
             fg="yellow",
         )
 

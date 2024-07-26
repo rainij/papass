@@ -87,6 +87,7 @@ the file
 ```
 
 ## On the entropy
+
 The entropy is a measure on how save your passphrase is. In our case the entropy {math}`H`
 can be computed as
 
@@ -99,6 +100,7 @@ words. Note that {math}`N^k` is the number of possible passphrases and hence a c
 would need to try around {math}`N^k/2` passphrases to find your passphrase by a
 brute-force approach (assuming they know which wordlist you used).
 
+{#entropy-guarantee}
 Note that in general the above formula can overestimate the real entropy which should be
 more precisely defined as
 
