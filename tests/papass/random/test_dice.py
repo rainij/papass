@@ -1,6 +1,4 @@
-from collections.abc import Callable, Iterable, Iterator
 from random import Random
-from typing import Any
 
 import click
 import pytest
@@ -10,24 +8,7 @@ from papass.random import dice
 from papass.random.dice import DiceRng, compute_dice_frame, query_stdin_for_dice
 from papass.utils import rolls_to_value
 
-
-def make_patched_input(rolls: Iterable[Iterable[int]]) -> Callable[[Any], str]:
-    """Make a patched version of the builtin `input`."""
-
-    def make_iterator() -> Iterator[str]:
-        for r in rolls:
-            yield " ".join(map(str, r))
-
-        raise AssertionError("Unexpectedly many requests to roll.")
-
-    iterator = make_iterator()
-    return lambda _: next(iterator)
-
-
-def patch_input(monkeypatch, rolls: Iterable[Iterable[int]]):
-    """Patch the builtin `input`."""
-    patched_input = make_patched_input(rolls)
-    monkeypatch.setattr("builtins.input", patched_input)
+from tests.utils.mock import patch_input
 
 
 @pytest.mark.parametrize(
