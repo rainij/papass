@@ -3,6 +3,7 @@ import re
 import pytest
 from click.testing import CliRunner
 from papass.__main__ import cli
+
 from tests.utils.mock import patch_input
 
 
@@ -14,9 +15,10 @@ def test_version():
     assert "version" in result.output
 
 
-def test_help():
+@pytest.mark.parametrize("opt_help", ["--help", "-h"])
+def test_help(opt_help):
     runner = CliRunner()
-    result = runner.invoke(cli, ["--help"])
+    result = runner.invoke(cli, [opt_help])
 
     assert result.exit_code == 0
     assert "Usage" in result.output
@@ -45,10 +47,13 @@ def test_system_rng_simple(tmp_path, opt_count, opt_wordlist_file, opt_random_so
         assert result.exit_code == 0
         assert output_pattern.match(result.output)
 
+
 @pytest.mark.parametrize("opt_count", ["-c", "--count"])
 @pytest.mark.parametrize("opt_wordlist_file", ["-w", "--wordlist-file"])
 @pytest.mark.parametrize("opt_random_source", ["-r", "--random-source"])
-def test_dice_rng_simple(monkeypatch, tmp_path, opt_count, opt_wordlist_file, opt_random_source):
+def test_dice_rng_simple(
+    monkeypatch, tmp_path, opt_count, opt_wordlist_file, opt_random_source
+):
     runner = CliRunner()
     wordlist_name = "wordlist.txt"
     wordlist_content = "muh\nmae\nwau\nnak"
@@ -64,7 +69,8 @@ def test_dice_rng_simple(monkeypatch, tmp_path, opt_count, opt_wordlist_file, op
             f.write(wordlist_content)
 
         result = runner.invoke(
-            cli, [opt_count, str(count), opt_wordlist_file, wordlist_name] + random_source,
+            cli,
+            [opt_count, str(count), opt_wordlist_file, wordlist_name] + random_source,
         )
 
         assert result.exit_code == 0

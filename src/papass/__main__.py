@@ -14,6 +14,7 @@ from papass.random import (
 
 
 @click.command()
+@click.help_option("--help", "-h")
 @click.option(
     "--count",
     "-c",
