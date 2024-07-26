@@ -1,11 +1,11 @@
-# papass
-
 ```{toctree}
 :maxdepth: 1
 :caption: Contents
+:hidden:
 
+usage_cli
 api
 ```
 
-```{include} usage_cli.md
+```{include} ../../README.md
 ```

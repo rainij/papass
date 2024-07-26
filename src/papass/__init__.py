@@ -1,4 +1,4 @@
-"""``papass`` is a simple library to generate passphrases.
+"""papass is a simple library to generate passphrases.
 
 Everything from the ``papass`` module is considered public. Everything else is considered
 private.
