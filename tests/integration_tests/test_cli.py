@@ -143,7 +143,7 @@ def test_remove_leading_digits(tmp_path, opt_remove):
     runner = CliRunner()
     wordlist_content = "123 foo\nbar"
     count = 1
-    output_pattern = re.compile(r"^Phrase: (foo| bar)\nEntropy: 1\.0$")
+    output_pattern = re.compile(r"^Phrase: (foo|bar)\nEntropy: 1\.0$")
 
     with runner.isolated_filesystem(temp_dir=tmp_path):
         with open(WORDLIST_NAME, "w") as f:
