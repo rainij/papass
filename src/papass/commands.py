@@ -13,6 +13,8 @@ from papass.random import (
     default_randomness_source,
     get_rng,
 )
+from papass.alphabet import alphabet_base_names
+from papass.alphabet import alphabet_shortcuts
 
 RESULT_BG_COLOR = (0, 44, 77)
 
@@ -121,7 +123,6 @@ def pp(
     "--length",
     "-l",
     type=int,
-    required=True,
     help="Number of words to generate.",
 )
 @click.option(
@@ -143,10 +144,26 @@ def pp(
 @click.option(
     "--alphabet-exclude", "-e", help="The characters to exclude from the alphabet."
 )
-def pw(length, randomness_source, dice_sides, alphabet, alphabet_names, alphabet_exclude):
+@click.option(
+    "--show-alphabet-names", is_flag=True, help="Show available alphabet names and exit."
+)
+def pw(
+    length,
+    randomness_source,
+    dice_sides,
+    alphabet,
+    alphabet_names,
+    alphabet_exclude,
+    show_alphabet_names,
+):
     """Create a password."""
 
+    if show_alphabet_names:
+        print_alphabet_names()
+        return
+
     try:
+        assert length, "Missing option --length."
         alpha: str = alphabet or ""
 
         if alphabet_names:
@@ -169,3 +186,14 @@ def pw(length, randomness_source, dice_sides, alphabet, alphabet_names, alphabet
 
     click.echo(f"Password: {password}")
     click.echo(f"Entropy: {result.entropy:.6}")
+
+
+def print_alphabet_names() -> None:
+    base_names = {k: click.style(v, bg=RESULT_BG_COLOR) for k, v  in alphabet_base_names().items()}
+    shortcuts = {k: ",".join(v) for k, v  in alphabet_shortcuts().items()}
+
+    click.echo("The following values can be used with --alphabet-names:")
+    click.echo("\n".join(f"{name}: {alpha}" for name, alpha in base_names.items()))
+
+    click.echo("\nIn addition the following shortcuts can be used:")
+    click.echo("\n".join(f"{short}: {name}" for short, name in shortcuts.items()))

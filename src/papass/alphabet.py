@@ -21,12 +21,12 @@ _shortcuts = dict(
 )
 
 
-def alphabet_names():
-    return ", ".join(f"'{n}'" for n in _components)
+def alphabet_base_names() -> dict[str, str]:
+    return _components.copy()
 
 
-def alphabet_shortcut_names():
-    return ", ".join(f"'{n}'" for n in _shortcuts)
+def alphabet_shortcuts() -> dict[str, list[str]]:
+    return _shortcuts.copy()
 
 
 def alphabet_from_charset_names(names: Iterable[str]) -> str:
@@ -41,7 +41,15 @@ def alphabet_from_charset_names(names: Iterable[str]) -> str:
         else:
             raise AssertionError(
                 f"Unknown alphabet name '{name}'. Choose one of "
-                + f"{alphabet_names()}, or a shortcut {alphabet_shortcut_names()}."
+                + f"{_base_names()}, or a shortcut {_shortcut_names()}."
             )
 
     return reduce(lambda a, n: a + _components[n], raw_names, "")
+
+
+def _base_names():
+    return ", ".join(f"'{n}'" for n in _components)
+
+
+def _shortcut_names():
+    return ", ".join(f"'{n}'" for n in _shortcuts)
