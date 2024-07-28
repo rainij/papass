@@ -1,6 +1,6 @@
 import click
 
-from papass.commands import pp
+from papass.commands import pp, pw
 
 
 @click.group()
@@ -12,6 +12,7 @@ def cli():
 
 
 cli.add_command(pp, "pp")
+cli.add_command(pw, "pw")
 
 if __name__ == "__main__":
     cli()

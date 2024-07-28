@@ -15,7 +15,6 @@ from papass.random import (
 
 @click.command()
 @click.help_option("--help", "-h")
-@click.version_option()
 @click.option(
     "--length",
     "-l",
@@ -108,3 +107,9 @@ def pp(
             "See https://papass.readthedocs.io/en/stable/usage_cli.html#entropy-guarantee.",
             fg="yellow",
         )
+
+
+@click.command()
+@click.help_option("--help", "-h")
+def pw():
+    pass
