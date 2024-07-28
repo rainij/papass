@@ -11,6 +11,9 @@ from papass.random import (
     default_randomness_source,
     get_rng,
 )
+from papass import PasswordGenerator
+
+RESULT_BG_COLOR = (0, 44, 77)
 
 
 @click.command()
@@ -89,16 +92,18 @@ def pp(
             remove_leading_digits=remove_leading_digits,
         )
 
-        phrase_generator = PassphraseGenerator(
+        passphrase_generator = PassphraseGenerator(
             wordlist=wordlist, rng=rng, delimiter=delimiter
         )
-        result = phrase_generator.generate(length)
+        result = passphrase_generator.generate(length)
     except AssertionError as error:
         click.secho(f"ERROR: {error}", fg="red")
         click.echo("Try again!")
         return
 
-    click.echo(f"Phrase: {result.passphrase}")
+    passphrase = click.style(result.passphrase, bg=RESULT_BG_COLOR)
+
+    click.echo(f"Passphrase: {passphrase}")
     click.echo(f"Entropy: {result.entropy:.6}")
 
     if not result.entropy_is_guaranteed:
@@ -111,5 +116,45 @@ def pp(
 
 @click.command()
 @click.help_option("--help", "-h")
-def pw():
-    pass
+@click.option(
+    "--length",
+    "-l",
+    type=int,
+    required=True,
+    help="Number of words to generate.",
+)
+@click.option(
+    "--randomness-source",
+    "-r",
+    default=f"{default_randomness_source()}",
+    help=f"Source of randomness (default: '{default_randomness_source()}',"
+    f" available: {available_randomness_sources_str()}).",
+)
+@click.option(
+    "--dice-sides",
+    "--ds",
+    type=int,
+    default=6,
+    help="Number of sides of dice (default: 6).",
+)
+@click.option(
+    "--alphabet",
+    "-a",
+    help="The alphabet to draw characters from."
+)
+def pw(length, randomness_source, dice_sides, alphabet):
+    """Create a password."""
+
+    try:
+        rng = get_rng(randomness_source, dice_sides=dice_sides)
+        password_generator = PasswordGenerator(rng=rng, alphabet=alphabet)
+        result = password_generator.generate(length)
+    except AssertionError as error:
+        click.secho(f"ERROR: {error}", fg="red")
+        click.echo("Try again!")
+        return
+
+    password = click.style(result.password, bg=RESULT_BG_COLOR)
+
+    click.echo(f"Password: {password}")
+    click.echo(f"Entropy: {result.entropy:.6}")
