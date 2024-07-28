@@ -1,10 +1,10 @@
 import pytest
-from papass import PassPhraseGenerator, WordList
+from papass import PassphraseGenerator, WordList
 
 from tests.utils.cycle_rng import CycleRng
 
 
-class TestPassPhraseGenerator:
+class TestPassphraseGenerator:
     @pytest.fixture
     def wordlist(self):
         """Four words. Two bits of entropy per word."""
@@ -19,13 +19,13 @@ class TestPassPhraseGenerator:
         ],
     )
     def test_uses_rng_choice_in_order(self, wordlist, cycle, passphrase):
-        ppg = PassPhraseGenerator(wordlist=wordlist, rng=CycleRng(cycle), delimiter="")
+        ppg = PassphraseGenerator(wordlist=wordlist, rng=CycleRng(cycle), delimiter="")
 
         assert ppg.generate(4).passphrase == passphrase
 
     @pytest.mark.parametrize("length", range(4))
     def test_entropy(self, wordlist, length):
-        ppg = PassPhraseGenerator(
+        ppg = PassphraseGenerator(
             wordlist=wordlist, rng=CycleRng(range(4)), delimiter=" "
         )
 
@@ -34,7 +34,7 @@ class TestPassPhraseGenerator:
 
     @pytest.mark.parametrize("delimiter", list(" @-*"))
     def test_delimiter(self, wordlist, delimiter: str):
-        ppg = PassPhraseGenerator(
+        ppg = PassphraseGenerator(
             wordlist=wordlist, rng=CycleRng(range(4)), delimiter=delimiter
         )
 
@@ -73,7 +73,7 @@ class TestEntropyGuarantee:
         ],
     )
     def test_is_guaranteed(self, wordlist, delimiter):
-        ppg = PassPhraseGenerator(
+        ppg = PassphraseGenerator(
             wordlist=wordlist, delimiter=delimiter, rng=CycleRng([0, 1])
         )
         result = ppg.generate(2)
@@ -90,7 +90,7 @@ class TestEntropyGuarantee:
     def test_is_not_guaranteed(self, wordlist, delimiter):
         """With the chosen wordlist these delimiters decrease the number of possible
         passphrases. Hence check must return False."""
-        ppg = PassPhraseGenerator(
+        ppg = PassphraseGenerator(
             wordlist=wordlist, delimiter=delimiter, rng=CycleRng([0, 1])
         )
 

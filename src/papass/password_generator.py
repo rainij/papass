@@ -6,14 +6,14 @@ from papass.random import RngBase
 
 
 @dataclass
-class PassWordResult:
+class PasswordResult:
     """Represents the result of password generation."""
 
     password: str
     entropy: float
 
 
-class PassWordGenerator:
+class PasswordGenerator:
     """Generate passwords from a list of characters using a random number generator."""
 
     def __init__(self, *, alphabet: Sequence[str], rng: RngBase):
@@ -24,6 +24,7 @@ class PassWordGenerator:
 
         The the alphabet gets deduplicated internally.
         """
+        assert len(alphabet) > 0, "Alphabet must not be empty."
         assert all(
             len(c) == 1 for c in alphabet
         ), "Alphabet must be a list of characters (length 1)."
@@ -31,8 +32,8 @@ class PassWordGenerator:
         self._alphabet = list(sorted(set(alphabet)))
         self._rng = rng
 
-    def generate(self, length: int) -> PassWordResult:
-        return PassWordResult(
+    def generate(self, length: int) -> PasswordResult:
+        return PasswordResult(
             password="".join(self._choose_char() for _ in range(length)),
             entropy=length * self._entropy_per_char,
         )
