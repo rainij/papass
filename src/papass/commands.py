@@ -4,6 +4,7 @@ import click
 
 from papass import (
     PassphraseGenerator,
+    PasswordGenerator,
     WordList,
 )
 from papass.random import (
@@ -11,7 +12,7 @@ from papass.random import (
     default_randomness_source,
     get_rng,
 )
-from papass import PasswordGenerator
+from papass.alphabet import alphabet_from_charset_names
 
 RESULT_BG_COLOR = (0, 44, 77)
 
@@ -137,17 +138,21 @@ def pp(
     default=6,
     help="Number of sides of dice (default: 6).",
 )
-@click.option(
-    "--alphabet",
-    "-a",
-    help="The alphabet to draw characters from."
-)
-def pw(length, randomness_source, dice_sides, alphabet):
+@click.option("--alphabet", "-a", help="The alphabet to draw characters from.")
+@click.option("--alphabet-names", "--an", help="Comma separated list of alphabet names.")
+def pw(length, randomness_source, dice_sides, alphabet, alphabet_names):
     """Create a password."""
 
     try:
+        alpha: str = alphabet or ""
+
+        if alphabet_names:
+            alpha += alphabet_from_charset_names(alphabet_names.split(","))
+
+        assert alpha, "No alphabet given. You have to specify --alphabet or alphabet-names or both."
+
         rng = get_rng(randomness_source, dice_sides=dice_sides)
-        password_generator = PasswordGenerator(rng=rng, alphabet=alphabet)
+        password_generator = PasswordGenerator(rng=rng, alphabet=alpha)
         result = password_generator.generate(length)
     except AssertionError as error:
         click.secho(f"ERROR: {error}", fg="red")
