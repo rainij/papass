@@ -2,7 +2,7 @@ import math
 from dataclasses import dataclass
 from functools import cached_property
 
-from .random.base import RandomNumberGeneratorBase
+from .random.base import RngBase
 from .wordlist import WordList
 
 
@@ -21,7 +21,7 @@ class PassPhraseGenerator:
     """Generate phrases from a wordlist using a random number generator."""
 
     _wordlist: WordList
-    _rng: RandomNumberGeneratorBase
+    _rng: RngBase
 
     _delimiter: str
 
@@ -29,7 +29,7 @@ class PassPhraseGenerator:
         self,
         *,
         wordlist: WordList,
-        rng: RandomNumberGeneratorBase,
+        rng: RngBase,
         delimiter: str = " ",
     ):
         """Create a passphrase generator.

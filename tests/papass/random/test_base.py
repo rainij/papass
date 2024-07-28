@@ -1,5 +1,5 @@
 import pytest
-from papass.random.base import RandomNumberGeneratorBase
+from papass.random.base import RngBase
 
 from tests.utils.cycle_rng import CycleRng
 
@@ -10,7 +10,7 @@ def get_cycle():
 
 class TestRandomNumberGeneratorBase:
     @pytest.fixture(scope="class")
-    def cycle_rng(self) -> RandomNumberGeneratorBase:
+    def cycle_rng(self) -> RngBase:
         return CycleRng(get_cycle())
 
     @pytest.mark.parametrize("i", range(4))

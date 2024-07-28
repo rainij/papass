@@ -53,7 +53,7 @@ which has the property that ``True`` is always correct and ``False`` basically m
 """
 
 from .passphrase_generator import PassPhraseGenerator, PassPhraseResult
-from .random import DiceRng, RandomNumberGeneratorBase, SystemRng
+from .random import DiceRng, RngBase, SystemRng
 from .wordlist import WordList
 
 __version__ = "0.0.4"
@@ -61,7 +61,7 @@ __version__ = "0.0.4"
 __all__ = [
     DiceRng.__name__,
     PassPhraseGenerator.__name__,
-    RandomNumberGeneratorBase.__name__,
+    RngBase.__name__,
     PassPhraseResult.__name__,
     SystemRng.__name__,
     WordList.__name__,

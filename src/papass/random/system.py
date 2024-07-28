@@ -1,9 +1,9 @@
 import secrets
 
-from .base import RandomNumberGeneratorBase
+from .base import RngBase
 
 
-class SystemRng(RandomNumberGeneratorBase):
+class SystemRng(RngBase):
     """Random number generator using the most secure rng of the operating system."""
 
     def randbelow(self, upper: int) -> int:

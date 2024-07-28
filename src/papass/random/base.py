@@ -5,7 +5,7 @@ from typing import TypeVar
 T = TypeVar("T")
 
 
-class RandomNumberGeneratorBase(ABC):
+class RngBase(ABC):
     """Base for all random number generators."""
 
     @abstractmethod

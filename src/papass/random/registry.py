@@ -1,10 +1,10 @@
 from typing import Type
 
-from .base import RandomNumberGeneratorBase
+from .base import RngBase
 from .dice import DiceRng
 from .system import SystemRng
 
-_rng_registry: dict[str, tuple[Type[RandomNumberGeneratorBase], dict[str, str]]] = dict(
+_rng_registry: dict[str, tuple[Type[RngBase], dict[str, str]]] = dict(
     # This maps the random_source to two things:
     # 1. A ctor for an rng.
     # 2. A dict mapping the __init__ options of the rng to their corresponding command line options.
@@ -29,7 +29,7 @@ def available_randomness_sources_str() -> str:
     return ", ".join(f"'{s}'" for s in available_random_sources())
 
 
-def get_rng(random_source: str, **possible_options) -> RandomNumberGeneratorBase:
+def get_rng(random_source: str, **possible_options) -> RngBase:
     """Get a random number generator of the given source.
 
     The `possible_options` should contain all command line options which are relevant for
