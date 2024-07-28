@@ -141,13 +141,15 @@ def pp(
     default=6,
     help="Number of sides of dice (default: 6).",
 )
-@click.option("--alphabet", "-a", help="The alphabet to draw characters from.")
+@click.option("--alphabet", "-a", help="The characters for the password.")
 @click.option("--alphabet-names", "--an", help="Comma separated list of alphabet names.")
 @click.option(
     "--alphabet-exclude", "-e", help="The characters to exclude from the alphabet."
 )
 @click.option(
-    "--show-alphabet-names", is_flag=True, help="Show available alphabet names and exit."
+    "--show-alphabet-names",
+    is_flag=True,
+    help="Show available --alphabet-names and exit.",
 )
 def pw(
     length,
@@ -158,7 +160,10 @@ def pw(
     alphabet_exclude,
     show_alphabet_names,
 ):
-    """Create a password."""
+    """Create a password.
+
+    NOTE: You can use both --alphabet and --alphabet-names together (they merge).
+    """
 
     if show_alphabet_names:
         print_alphabet_names()

@@ -18,13 +18,13 @@ def test_help(opt_help):
     assert "Usage" in result.output
 
 
-@pytest.mark.parametrize("opt_count", ["-l", "--length"])
+@pytest.mark.parametrize("opt_length", ["-l", "--length"])
 @pytest.mark.parametrize("opt_wordlist_file", ["-w", "--wordlist-file"])
 @pytest.mark.parametrize("opt_random_source", [None, "-r", "--randomness-source"])
-def test_system_rng_simple(tmp_path, opt_count, opt_wordlist_file, opt_random_source):
+def test_system_rng_simple(tmp_path, opt_length, opt_wordlist_file, opt_random_source):
     runner = CliRunner()
     wordlist_content = "foo\nbar"
-    count = 4
+    length = 4
     output_pattern = re.compile(r"^Passphrase: (foo|bar)( foo| bar){3}\nEntropy: 4\.0$")
 
     random_source = [] if opt_random_source is None else [opt_random_source, "system"]
@@ -35,7 +35,7 @@ def test_system_rng_simple(tmp_path, opt_count, opt_wordlist_file, opt_random_so
 
         result = runner.invoke(
             cli,
-            ["pp", opt_count, str(count), opt_wordlist_file, WORDLIST_NAME]
+            ["pp", opt_length, str(length), opt_wordlist_file, WORDLIST_NAME]
             + random_source,
         )
 
@@ -43,15 +43,16 @@ def test_system_rng_simple(tmp_path, opt_count, opt_wordlist_file, opt_random_so
         assert output_pattern.match(result.output)
 
 
-@pytest.mark.parametrize("opt_count", ["-l", "--length"])
+@pytest.mark.parametrize("opt_length", ["-l", "--length"])
 @pytest.mark.parametrize("opt_wordlist_file", ["-w", "--wordlist-file"])
 @pytest.mark.parametrize("opt_random_source", ["-r", "--randomness-source"])
+@pytest.mark.parametrize("opt_dice_sides", ["--ds", "--dice-sides"])
 def test_dice_rng_simple(
-    monkeypatch, tmp_path, opt_count, opt_wordlist_file, opt_random_source
+        monkeypatch, tmp_path, opt_length, opt_wordlist_file, opt_random_source, opt_dice_sides
 ):
     runner = CliRunner()
     wordlist_content = "muh\nmae\nwau\nnak"
-    count = 3
+    length = 3
     output_pattern = re.compile(r"^Passphrase: \w\w\w \w\w\w \w\w\w\nEntropy: 6\.0$")
 
     random_source = [opt_random_source, "dice"]
@@ -64,8 +65,8 @@ def test_dice_rng_simple(
 
         result = runner.invoke(
             cli,
-            ["pp", opt_count, str(count), opt_wordlist_file, WORDLIST_NAME]
-            + random_source,
+            ["pp", opt_length, str(length), opt_wordlist_file, WORDLIST_NAME]
+            + [opt_dice_sides, "6"] + random_source,
         )
 
         assert result.exit_code == 0
@@ -78,7 +79,7 @@ def test_delimiter(tmp_path, opt_delimiter, delimiter):
     runner = CliRunner()
     # whitespace intentional:
     wordlist_content = " foo\n bar"
-    count = 2
+    length = 2
     output_pattern = re.compile(
         rf"^Passphrase: ( foo| bar){delimiter}( foo| bar)\nEntropy: 2\.0\n"
     )
@@ -88,7 +89,7 @@ def test_delimiter(tmp_path, opt_delimiter, delimiter):
             f.write(wordlist_content)
 
         result = runner.invoke(
-            cli, ["pp", "-l", str(count), "-w", WORDLIST_NAME, opt_delimiter, delimiter]
+            cli, ["pp", "-l", str(length), "-w", WORDLIST_NAME, opt_delimiter, delimiter]
         )
 
         assert result.exit_code == 0
@@ -99,7 +100,7 @@ def test_delimiter(tmp_path, opt_delimiter, delimiter):
 def test_min_word_size(tmp_path, opt_min_word_size):
     runner = CliRunner()
     wordlist_content = "fo\nfoo"
-    count = 2
+    length = 2
     output_pattern = re.compile(r"^Passphrase: foo foo\nEntropy: 0\.0$")
 
     with runner.isolated_filesystem(temp_dir=tmp_path):
@@ -107,7 +108,7 @@ def test_min_word_size(tmp_path, opt_min_word_size):
             f.write(wordlist_content)
 
         result = runner.invoke(
-            cli, ["pp", "-l", str(count), "-w", WORDLIST_NAME, opt_min_word_size, "3"]
+            cli, ["pp", "-l", str(length), "-w", WORDLIST_NAME, opt_min_word_size, "3"]
         )
 
         assert result.exit_code == 0
@@ -118,7 +119,7 @@ def test_min_word_size(tmp_path, opt_min_word_size):
 def test_max_word_size(tmp_path, opt_max_word_size):
     runner = CliRunner()
     wordlist_content = "fooo\nfoo"
-    count = 2
+    length = 2
     output_pattern = re.compile(r"^Passphrase: foo foo\nEntropy: 0\.0$")
 
     with runner.isolated_filesystem(temp_dir=tmp_path):
@@ -126,7 +127,7 @@ def test_max_word_size(tmp_path, opt_max_word_size):
             f.write(wordlist_content)
 
         result = runner.invoke(
-            cli, ["pp", "-l", str(count), "-w", WORDLIST_NAME, opt_max_word_size, "3"]
+            cli, ["pp", "-l", str(length), "-w", WORDLIST_NAME, opt_max_word_size, "3"]
         )
 
         assert result.exit_code == 0
@@ -137,7 +138,7 @@ def test_max_word_size(tmp_path, opt_max_word_size):
 def test_remove_leading_digits(tmp_path, opt_remove):
     runner = CliRunner()
     wordlist_content = "123 foo\nbar"
-    count = 1
+    length = 1
     output_pattern = re.compile(r"^Passphrase: (foo|bar)\nEntropy: 1\.0$")
 
     with runner.isolated_filesystem(temp_dir=tmp_path):
@@ -145,7 +146,7 @@ def test_remove_leading_digits(tmp_path, opt_remove):
             f.write(wordlist_content)
 
         result = runner.invoke(
-            cli, ["pp", "-l", str(count), "-w", WORDLIST_NAME, opt_remove]
+            cli, ["pp", "-l", str(length), "-w", WORDLIST_NAME, opt_remove]
         )
 
         assert result.exit_code == 0
