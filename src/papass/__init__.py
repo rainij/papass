@@ -26,12 +26,12 @@ systems most secure random source for simplicity but you can also take the one w
 requires physical dice to be thrown.
 
 >>> rng = SystemRng()
->>> rpg = PassPhraseGenerator(wordlist=wordlist, rng=rng, delimiter=" ")
+>>> ppg = PassPhraseGenerator(wordlist=wordlist, rng=rng, delimiter=" ")
 
 This can now be used to create a random phrase:
 
 >>> num_words = 5
->>> rpg.get_phrase(num_words)
+>>> ppg.get_phrase(num_words)
 PassPhraseResult(phrase=..., entropy=10.0, entropy_is_guaranteed=True)
 
 The actual ``phrase`` is random of course. It could be something like ``'dog duck cat duck

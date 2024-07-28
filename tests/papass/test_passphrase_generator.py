@@ -19,26 +19,26 @@ class TestPhraseGenerator:
         ],
     )
     def test_get_phrase_uses_rng_choice_in_order(self, wordlist, cycle, phrase):
-        rpg = PassPhraseGenerator(wordlist=wordlist, rng=CycleRng(cycle), delimiter="")
+        ppg = PassPhraseGenerator(wordlist=wordlist, rng=CycleRng(cycle), delimiter="")
 
-        assert rpg.get_phrase(4).phrase == phrase
+        assert ppg.get_phrase(4).phrase == phrase
 
     @pytest.mark.parametrize("count", range(4))
     def test_entropy(self, wordlist, count):
-        rpg = PassPhraseGenerator(
+        ppg = PassPhraseGenerator(
             wordlist=wordlist, rng=CycleRng(range(4)), delimiter=" "
         )
 
         # wordlist has 4 words, so 2 bits of entropy per word.
-        assert rpg.get_phrase(count).entropy == pytest.approx(2 * count)
+        assert ppg.get_phrase(count).entropy == pytest.approx(2 * count)
 
     @pytest.mark.parametrize("delimiter", list(" @-*"))
     def test_delimiter(self, wordlist, delimiter: str):
-        rpg = PassPhraseGenerator(
+        ppg = PassPhraseGenerator(
             wordlist=wordlist, rng=CycleRng(range(4)), delimiter=delimiter
         )
 
-        assert rpg.get_phrase(3).phrase == delimiter.join(wordlist[:3])
+        assert ppg.get_phrase(3).phrase == delimiter.join(wordlist[:3])
 
 
 class TestEntropyGuarantee:
@@ -73,10 +73,10 @@ class TestEntropyGuarantee:
         ],
     )
     def test_is_guaranteed(self, wordlist, delimiter):
-        rpg = PassPhraseGenerator(
+        ppg = PassPhraseGenerator(
             wordlist=wordlist, delimiter=delimiter, rng=CycleRng([0, 1])
         )
-        result = rpg.get_phrase(2)
+        result = ppg.get_phrase(2)
         assert result.entropy_is_guaranteed
 
     @pytest.mark.parametrize(
@@ -90,13 +90,13 @@ class TestEntropyGuarantee:
     def test_is_not_guaranteed(self, wordlist, delimiter):
         """With the chosen wordlist these delimiters decrease the number of possible
         passphrases. Hence check must return False."""
-        rpg = PassPhraseGenerator(
+        ppg = PassPhraseGenerator(
             wordlist=wordlist, delimiter=delimiter, rng=CycleRng([0, 1])
         )
 
         # Edge case: If only one word is generated the guarantee naturally holds.
-        result_1 = rpg.get_phrase(1)
-        result_2 = rpg.get_phrase(2)
+        result_1 = ppg.get_phrase(1)
+        result_2 = ppg.get_phrase(2)
 
         assert result_1.entropy_is_guaranteed
         assert not result_2.entropy_is_guaranteed
