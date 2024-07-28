@@ -31,8 +31,8 @@ requires physical dice to be thrown.
 This can now be used to create a random phrase:
 
 >>> num_words = 5
->>> ppg.get_phrase(num_words)
-PassPhraseResult(phrase=..., entropy=10.0, entropy_is_guaranteed=True)
+>>> ppg.generate(num_words)
+PassPhraseResult(passphrase=..., entropy=10.0, entropy_is_guaranteed=True)
 
 The actual ``phrase`` is random of course. It could be something like ``'dog duck cat duck
 duck'``. The ``entropy`` is ``10.0`` in this example because there are ``2**10==4**5``
@@ -53,6 +53,7 @@ which has the property that ``True`` is always correct and ``False`` basically m
 """
 
 from .passphrase_generator import PassPhraseGenerator, PassPhraseResult
+from .password_generator import PassWordGenerator, PassWordResult
 from .random import DiceRng, RngBase, SystemRng
 from .wordlist import WordList
 
@@ -61,8 +62,10 @@ __version__ = "0.0.4"
 __all__ = [
     DiceRng.__name__,
     PassPhraseGenerator.__name__,
-    RngBase.__name__,
     PassPhraseResult.__name__,
+    PassWordGenerator.__name__,
+    PassWordResult.__name__,
+    RngBase.__name__,
     SystemRng.__name__,
     WordList.__name__,
 ]

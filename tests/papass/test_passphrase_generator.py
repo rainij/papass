@@ -4,7 +4,7 @@ from papass import PassPhraseGenerator, WordList
 from tests.utils.cycle_rng import CycleRng
 
 
-class TestPhraseGenerator:
+class TestPassPhraseGenerator:
     @pytest.fixture
     def wordlist(self):
         """Four words. Two bits of entropy per word."""
@@ -21,7 +21,7 @@ class TestPhraseGenerator:
     def test_get_phrase_uses_rng_choice_in_order(self, wordlist, cycle, phrase):
         ppg = PassPhraseGenerator(wordlist=wordlist, rng=CycleRng(cycle), delimiter="")
 
-        assert ppg.get_phrase(4).phrase == phrase
+        assert ppg.generate(4).passphrase == phrase
 
     @pytest.mark.parametrize("count", range(4))
     def test_entropy(self, wordlist, count):
@@ -30,7 +30,7 @@ class TestPhraseGenerator:
         )
 
         # wordlist has 4 words, so 2 bits of entropy per word.
-        assert ppg.get_phrase(count).entropy == pytest.approx(2 * count)
+        assert ppg.generate(count).entropy == pytest.approx(2 * count)
 
     @pytest.mark.parametrize("delimiter", list(" @-*"))
     def test_delimiter(self, wordlist, delimiter: str):
@@ -38,7 +38,7 @@ class TestPhraseGenerator:
             wordlist=wordlist, rng=CycleRng(range(4)), delimiter=delimiter
         )
 
-        assert ppg.get_phrase(3).phrase == delimiter.join(wordlist[:3])
+        assert ppg.generate(3).passphrase == delimiter.join(wordlist[:3])
 
 
 class TestEntropyGuarantee:
@@ -76,7 +76,7 @@ class TestEntropyGuarantee:
         ppg = PassPhraseGenerator(
             wordlist=wordlist, delimiter=delimiter, rng=CycleRng([0, 1])
         )
-        result = ppg.get_phrase(2)
+        result = ppg.generate(2)
         assert result.entropy_is_guaranteed
 
     @pytest.mark.parametrize(
@@ -95,8 +95,8 @@ class TestEntropyGuarantee:
         )
 
         # Edge case: If only one word is generated the guarantee naturally holds.
-        result_1 = ppg.get_phrase(1)
-        result_2 = ppg.get_phrase(2)
+        result_1 = ppg.generate(1)
+        result_2 = ppg.generate(2)
 
         assert result_1.entropy_is_guaranteed
         assert not result_2.entropy_is_guaranteed

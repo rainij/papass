@@ -92,13 +92,13 @@ def pp(
         phrase_generator = PassPhraseGenerator(
             wordlist=wordlist, rng=rng, delimiter=delimiter
         )
-        result = phrase_generator.get_phrase(length)
+        result = phrase_generator.generate(length)
     except AssertionError as error:
         click.secho(f"ERROR: {error}", fg="red")
         click.echo("Try again!")
         return
 
-    click.echo(f"Phrase: {result.phrase}")
+    click.echo(f"Phrase: {result.passphrase}")
     click.echo(f"Entropy: {result.entropy:.6}")
 
     if not result.entropy_is_guaranteed:
