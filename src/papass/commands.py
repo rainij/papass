@@ -15,6 +15,7 @@ from papass.random import (
 
 @click.command()
 @click.help_option("--help", "-h")
+@click.version_option()
 @click.option(
     "--count",
     "-c",
@@ -66,7 +67,6 @@ from papass.random import (
     is_flag=True,
     help="If wordlist contains entries like `123 foo` normalizes it to `foo`.",
 )
-@click.version_option()
 def pp(
     count,
     random_source,
