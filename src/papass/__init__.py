@@ -52,7 +52,7 @@ which has the property that ``True`` is always correct and ``False`` basically m
 `don't know`.
 """
 
-from .phrase_generator import PassPhraseGenerator, PassPhraseResult
+from .passphrase_generator import PassPhraseGenerator, PassPhraseResult
 from .random import DiceRng, RandomNumberGeneratorBase, SystemRng
 from .wordlist import WordList
 

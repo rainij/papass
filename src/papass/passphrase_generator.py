@@ -32,7 +32,7 @@ class PassPhraseGenerator:
         rng: RandomNumberGeneratorBase,
         delimiter: str = " ",
     ):
-        """Create a random phrase generator.
+        """Create a passphrase generator.
 
         :param wordlist: The words to draw from.
         :param rng: The random source to be used to draw words.

@@ -1,6 +1,5 @@
 import pytest
-from papass.phrase_generator import PassPhraseGenerator
-from papass.wordlist import WordList
+from papass import PassPhraseGenerator, WordList
 
 from tests.utils.cycle_rng import CycleRng
 
@@ -26,7 +25,9 @@ class TestPhraseGenerator:
 
     @pytest.mark.parametrize("count", range(4))
     def test_entropy(self, wordlist, count):
-        rpg = PassPhraseGenerator(wordlist=wordlist, rng=CycleRng(range(4)), delimiter=" ")
+        rpg = PassPhraseGenerator(
+            wordlist=wordlist, rng=CycleRng(range(4)), delimiter=" "
+        )
 
         # wordlist has 4 words, so 2 bits of entropy per word.
         assert rpg.get_phrase(count).entropy == pytest.approx(2 * count)
