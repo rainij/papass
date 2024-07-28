@@ -1,10 +1,10 @@
 import pytest
-from papass import PassWordGenerator
+from papass import PasswordGenerator
 
 from tests.utils.cycle_rng import CycleRng
 
 
-class TestPassWordGenerator:
+class TestPasswordGenerator:
     @pytest.fixture
     def alphabet(self):
         alpha = "abcdefgh"
@@ -21,7 +21,7 @@ class TestPassWordGenerator:
         ],
     )
     def test_uses_rng_choice_in_order(self, alphabet, cycle, password):
-        pwg = PassWordGenerator(alphabet=alphabet, rng=CycleRng(cycle))
+        pwg = PasswordGenerator(alphabet=alphabet, rng=CycleRng(cycle))
         result = pwg.generate(4)
 
         assert result.password == password
@@ -29,7 +29,17 @@ class TestPassWordGenerator:
 
     @pytest.mark.parametrize("length", range(4))
     def test_entropy(self, alphabet, length):
-        pwg = PassWordGenerator(alphabet=alphabet, rng=CycleRng(range(4)))
+        pwg = PasswordGenerator(alphabet=alphabet, rng=CycleRng(range(4)))
 
         # alphabet has 8 characters, so 3 bits of entropy per character:
         assert pwg.generate(length).entropy == pytest.approx(3 * length)
+
+    @pytest.mark.parametrize("alphabet", ["ab", "a", "aa", "*3#a=+"])
+    def test_valid_alphabets(self, alphabet):
+        pwg = PasswordGenerator(alphabet=alphabet, rng=CycleRng(range(4)))
+        pwg.generate(5)
+
+    @pytest.mark.parametrize("alphabet", ["", [], ["a", "b", "bb"]])
+    def test_invalid_alphabets(self, alphabet):
+        with pytest.raises(AssertionError):
+            PasswordGenerator(alphabet=alphabet, rng=CycleRng(range(4)))
