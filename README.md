@@ -6,8 +6,6 @@
 [![Documentation Status](https://readthedocs.org/projects/papass/badge/?version=latest)](https://papass.readthedocs.io/en/latest)
 [![CI](https://github.com/rainij/papass/actions/workflows/ci.yml/badge.svg)](https://github.com/rainij/papass/actions/workflows/ci.yml)
 
-**This is a work in progress**
-
 **papass** generates passphrases following the
 [diceware](https://theworld.com/~reinhold/diceware.html) approach as proposed by Arnold
 G. Reinhold.
