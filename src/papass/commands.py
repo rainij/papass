@@ -3,7 +3,7 @@ from pathlib import Path
 import click
 
 from papass import (
-    PhraseGenerator,
+    PassPhraseGenerator,
     WordList,
 )
 from papass.random import (
@@ -89,7 +89,7 @@ def pp(
             remove_leading_digits=remove_leading_digits,
         )
 
-        phrase_generator = PhraseGenerator(
+        phrase_generator = PassPhraseGenerator(
             wordlist=wordlist, rng=rng, delimiter=delimiter
         )
         result = phrase_generator.get_phrase(length)
