@@ -7,14 +7,16 @@ from papass import (
     PasswordGenerator,
     WordList,
 )
-from papass.alphabet import alphabet_from_charset_names
+from papass.alphabet import (
+    alphabet_base_names,
+    alphabet_from_charset_names,
+    alphabet_shortcuts,
+)
 from papass.random import (
     available_randomness_sources_str,
     default_randomness_source,
     get_rng,
 )
-from papass.alphabet import alphabet_base_names
-from papass.alphabet import alphabet_shortcuts
 
 RESULT_BG_COLOR = (0, 44, 77)
 
@@ -189,8 +191,10 @@ def pw(
 
 
 def print_alphabet_names() -> None:
-    base_names = {k: click.style(v, bg=RESULT_BG_COLOR) for k, v  in alphabet_base_names().items()}
-    shortcuts = {k: ",".join(v) for k, v  in alphabet_shortcuts().items()}
+    base_names = {
+        k: click.style(v, bg=RESULT_BG_COLOR) for k, v in alphabet_base_names().items()
+    }
+    shortcuts = {k: ",".join(v) for k, v in alphabet_shortcuts().items()}
 
     click.echo("The following values can be used with --alphabet-names:")
     click.echo("\n".join(f"{name}: {alpha}" for name, alpha in base_names.items()))
