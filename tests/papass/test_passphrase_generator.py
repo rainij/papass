@@ -11,26 +11,26 @@ class TestPassPhraseGenerator:
         return WordList(["a", "b", "c", "d"])
 
     @pytest.mark.parametrize(
-        "cycle,phrase",
+        "cycle, passphrase",
         [
             ([2], "cccc"),
             ([0, 1], "abab"),
             ([0, 3, 1, 2], "adbc"),
         ],
     )
-    def test_get_phrase_uses_rng_choice_in_order(self, wordlist, cycle, phrase):
+    def test_uses_rng_choice_in_order(self, wordlist, cycle, passphrase):
         ppg = PassPhraseGenerator(wordlist=wordlist, rng=CycleRng(cycle), delimiter="")
 
-        assert ppg.generate(4).passphrase == phrase
+        assert ppg.generate(4).passphrase == passphrase
 
-    @pytest.mark.parametrize("count", range(4))
-    def test_entropy(self, wordlist, count):
+    @pytest.mark.parametrize("length", range(4))
+    def test_entropy(self, wordlist, length):
         ppg = PassPhraseGenerator(
             wordlist=wordlist, rng=CycleRng(range(4)), delimiter=" "
         )
 
         # wordlist has 4 words, so 2 bits of entropy per word.
-        assert ppg.generate(count).entropy == pytest.approx(2 * count)
+        assert ppg.generate(length).entropy == pytest.approx(2 * length)
 
     @pytest.mark.parametrize("delimiter", list(" @-*"))
     def test_delimiter(self, wordlist, delimiter: str):
