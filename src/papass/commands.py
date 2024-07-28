@@ -177,7 +177,7 @@ def pw(
             alpha += alphabet_from_charset_names(alphabet_names.split(","))
 
         if alphabet_exclude:
-            alpha = str(c for c in alpha if c not in alphabet_exclude)
+            alpha = "".join(c for c in alpha if c not in alphabet_exclude)
 
         assert alpha, "No alphabet given. Did you forget --alphabet or alphabet-names?"
 

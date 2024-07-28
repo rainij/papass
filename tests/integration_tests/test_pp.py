@@ -43,19 +43,12 @@ def test_system_rng_simple(tmp_path, opt_length, opt_wordlist_file, opt_random_s
         assert output_pattern.match(result.output)
 
 
-@pytest.mark.parametrize("opt_length", ["-l", "--length"])
-@pytest.mark.parametrize("opt_wordlist_file", ["-w", "--wordlist-file"])
-@pytest.mark.parametrize("opt_random_source", ["-r", "--randomness-source"])
 @pytest.mark.parametrize("opt_dice_sides", ["--ds", "--dice-sides"])
-def test_dice_rng_simple(
-        monkeypatch, tmp_path, opt_length, opt_wordlist_file, opt_random_source, opt_dice_sides
-):
+def test_dice_rng_simple(monkeypatch, tmp_path, opt_dice_sides):
     runner = CliRunner()
     wordlist_content = "muh\nmae\nwau\nnak"
     length = 3
     output_pattern = re.compile(r"^Passphrase: \w\w\w \w\w\w \w\w\w\nEntropy: 6\.0$")
-
-    random_source = [opt_random_source, "dice"]
 
     patch_input(monkeypatch, [[1, 1], [1, 6], [6, 6]])
 
@@ -65,8 +58,8 @@ def test_dice_rng_simple(
 
         result = runner.invoke(
             cli,
-            ["pp", opt_length, str(length), opt_wordlist_file, WORDLIST_NAME]
-            + [opt_dice_sides, "6"] + random_source,
+            ["pp", "-l", str(length), "-w", WORDLIST_NAME]
+            + [opt_dice_sides, "6", "-r", "dice"],
         )
 
         assert result.exit_code == 0
