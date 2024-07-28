@@ -7,12 +7,12 @@ from papass import (
     PasswordGenerator,
     WordList,
 )
+from papass.alphabet import alphabet_from_charset_names
 from papass.random import (
     available_randomness_sources_str,
     default_randomness_source,
     get_rng,
 )
-from papass.alphabet import alphabet_from_charset_names
 
 RESULT_BG_COLOR = (0, 44, 77)
 
@@ -140,7 +140,10 @@ def pp(
 )
 @click.option("--alphabet", "-a", help="The alphabet to draw characters from.")
 @click.option("--alphabet-names", "--an", help="Comma separated list of alphabet names.")
-def pw(length, randomness_source, dice_sides, alphabet, alphabet_names):
+@click.option(
+    "--alphabet-exclude", "-e", help="The characters to exclude from the alphabet."
+)
+def pw(length, randomness_source, dice_sides, alphabet, alphabet_names, alphabet_exclude):
     """Create a password."""
 
     try:
@@ -149,7 +152,10 @@ def pw(length, randomness_source, dice_sides, alphabet, alphabet_names):
         if alphabet_names:
             alpha += alphabet_from_charset_names(alphabet_names.split(","))
 
-        assert alpha, "No alphabet given. You have to specify --alphabet or alphabet-names or both."
+        if alphabet_exclude:
+            alpha = str(c for c in alpha if c not in alphabet_exclude)
+
+        assert alpha, "No alphabet given. Did you forget --alphabet or alphabet-names?"
 
         rng = get_rng(randomness_source, dice_sides=dice_sides)
         password_generator = PasswordGenerator(rng=rng, alphabet=alpha)
