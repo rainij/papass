@@ -25,7 +25,7 @@ def test_system_rng_simple(tmp_path, opt_count, opt_wordlist_file, opt_random_so
     runner = CliRunner()
     wordlist_content = "foo\nbar"
     count = 4
-    output_pattern = re.compile(r"^Phrase: (foo|bar)( foo| bar){3}\nEntropy: 4\.0$")
+    output_pattern = re.compile(r"^Passphrase: (foo|bar)( foo| bar){3}\nEntropy: 4\.0$")
 
     random_source = [] if opt_random_source is None else [opt_random_source, "system"]
 
@@ -52,7 +52,7 @@ def test_dice_rng_simple(
     runner = CliRunner()
     wordlist_content = "muh\nmae\nwau\nnak"
     count = 3
-    output_pattern = re.compile(r"^Phrase: \w\w\w \w\w\w \w\w\w\nEntropy: 6\.0$")
+    output_pattern = re.compile(r"^Passphrase: \w\w\w \w\w\w \w\w\w\nEntropy: 6\.0$")
 
     random_source = [opt_random_source, "dice"]
 
@@ -80,7 +80,7 @@ def test_delimiter(tmp_path, opt_delimiter, delimiter):
     wordlist_content = " foo\n bar"
     count = 2
     output_pattern = re.compile(
-        rf"^Phrase: ( foo| bar){delimiter}( foo| bar)\nEntropy: 2\.0\n"
+        rf"^Passphrase: ( foo| bar){delimiter}( foo| bar)\nEntropy: 2\.0\n"
     )
 
     with runner.isolated_filesystem(temp_dir=tmp_path):
@@ -100,7 +100,7 @@ def test_min_word_size(tmp_path, opt_min_word_size):
     runner = CliRunner()
     wordlist_content = "fo\nfoo"
     count = 2
-    output_pattern = re.compile(r"^Phrase: foo foo\nEntropy: 0\.0$")
+    output_pattern = re.compile(r"^Passphrase: foo foo\nEntropy: 0\.0$")
 
     with runner.isolated_filesystem(temp_dir=tmp_path):
         with open(WORDLIST_NAME, "w") as f:
@@ -119,7 +119,7 @@ def test_max_word_size(tmp_path, opt_max_word_size):
     runner = CliRunner()
     wordlist_content = "fooo\nfoo"
     count = 2
-    output_pattern = re.compile(r"^Phrase: foo foo\nEntropy: 0\.0$")
+    output_pattern = re.compile(r"^Passphrase: foo foo\nEntropy: 0\.0$")
 
     with runner.isolated_filesystem(temp_dir=tmp_path):
         with open(WORDLIST_NAME, "w") as f:
@@ -138,7 +138,7 @@ def test_remove_leading_digits(tmp_path, opt_remove):
     runner = CliRunner()
     wordlist_content = "123 foo\nbar"
     count = 1
-    output_pattern = re.compile(r"^Phrase: (foo|bar)\nEntropy: 1\.0$")
+    output_pattern = re.compile(r"^Passphrase: (foo|bar)\nEntropy: 1\.0$")
 
     with runner.isolated_filesystem(temp_dir=tmp_path):
         with open(WORDLIST_NAME, "w") as f:
