@@ -18,9 +18,9 @@ def test_help(opt_help):
     assert "Usage" in result.output
 
 
-@pytest.mark.parametrize("opt_count", ["-c", "--count"])
+@pytest.mark.parametrize("opt_count", ["-l", "--length"])
 @pytest.mark.parametrize("opt_wordlist_file", ["-w", "--wordlist-file"])
-@pytest.mark.parametrize("opt_random_source", [None, "-r", "--random-source"])
+@pytest.mark.parametrize("opt_random_source", [None, "-r", "--randomness-source"])
 def test_system_rng_simple(tmp_path, opt_count, opt_wordlist_file, opt_random_source):
     runner = CliRunner()
     wordlist_content = "foo\nbar"
@@ -43,9 +43,9 @@ def test_system_rng_simple(tmp_path, opt_count, opt_wordlist_file, opt_random_so
         assert output_pattern.match(result.output)
 
 
-@pytest.mark.parametrize("opt_count", ["-c", "--count"])
+@pytest.mark.parametrize("opt_count", ["-l", "--length"])
 @pytest.mark.parametrize("opt_wordlist_file", ["-w", "--wordlist-file"])
-@pytest.mark.parametrize("opt_random_source", ["-r", "--random-source"])
+@pytest.mark.parametrize("opt_random_source", ["-r", "--randomness-source"])
 def test_dice_rng_simple(
     monkeypatch, tmp_path, opt_count, opt_wordlist_file, opt_random_source
 ):
@@ -88,7 +88,7 @@ def test_delimiter(tmp_path, opt_delimiter, delimiter):
             f.write(wordlist_content)
 
         result = runner.invoke(
-            cli, ["pp", "-c", str(count), "-w", WORDLIST_NAME, opt_delimiter, delimiter]
+            cli, ["pp", "-l", str(count), "-w", WORDLIST_NAME, opt_delimiter, delimiter]
         )
 
         assert result.exit_code == 0
@@ -107,7 +107,7 @@ def test_min_word_size(tmp_path, opt_min_word_size):
             f.write(wordlist_content)
 
         result = runner.invoke(
-            cli, ["pp", "-c", str(count), "-w", WORDLIST_NAME, opt_min_word_size, "3"]
+            cli, ["pp", "-l", str(count), "-w", WORDLIST_NAME, opt_min_word_size, "3"]
         )
 
         assert result.exit_code == 0
@@ -126,14 +126,14 @@ def test_max_word_size(tmp_path, opt_max_word_size):
             f.write(wordlist_content)
 
         result = runner.invoke(
-            cli, ["pp", "-c", str(count), "-w", WORDLIST_NAME, opt_max_word_size, "3"]
+            cli, ["pp", "-l", str(count), "-w", WORDLIST_NAME, opt_max_word_size, "3"]
         )
 
         assert result.exit_code == 0
         assert output_pattern.match(result.output)
 
 
-@pytest.mark.parametrize("opt_remove", ["--remove-leading-digits"])
+@pytest.mark.parametrize("opt_remove", ["--rld", "--remove-leading-digits"])
 def test_remove_leading_digits(tmp_path, opt_remove):
     runner = CliRunner()
     wordlist_content = "123 foo\nbar"
@@ -145,7 +145,7 @@ def test_remove_leading_digits(tmp_path, opt_remove):
             f.write(wordlist_content)
 
         result = runner.invoke(
-            cli, ["pp", "-c", str(count), "-w", WORDLIST_NAME, opt_remove]
+            cli, ["pp", "-l", str(count), "-w", WORDLIST_NAME, opt_remove]
         )
 
         assert result.exit_code == 0

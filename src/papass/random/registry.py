@@ -13,7 +13,7 @@ _rng_registry: dict[str, tuple[Type[RandomNumberGeneratorBase], dict[str, str]]]
 )
 
 
-def default_random_source() -> str:
+def default_randomness_source() -> str:
     """Default value for --random-source."""
     # NOTE: dicts are ordered by insertion order.
     return list(_rng_registry.keys())[0]
@@ -24,7 +24,7 @@ def available_random_sources() -> list[str]:
     return list(_rng_registry.keys())
 
 
-def available_random_sources_str() -> str:
+def available_randomness_sources_str() -> str:
     """A string representing all valid values for --random-source."""
     return ", ".join(f"'{s}'" for s in available_random_sources())
 
@@ -38,6 +38,6 @@ def get_rng(random_source: str, **possible_options) -> RandomNumberGeneratorBase
     """
     assert (
         random_source in _rng_registry
-    ), f"Unknown random source `{random_source}`. Use one of {available_random_sources_str()}."
+    ), f"Unknown random source `{random_source}`. Use one of {available_randomness_sources_str()}."
     RngCls, args = _rng_registry[random_source]
     return RngCls(**{kw: possible_options[o] for kw, o in args.items()})

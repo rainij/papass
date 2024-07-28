@@ -7,8 +7,8 @@ from papass import (
     WordList,
 )
 from papass.random import (
-    available_random_sources_str,
-    default_random_source,
+    available_randomness_sources_str,
+    default_randomness_source,
     get_rng,
 )
 
@@ -17,18 +17,18 @@ from papass.random import (
 @click.help_option("--help", "-h")
 @click.version_option()
 @click.option(
-    "--count",
-    "-c",
+    "--length",
+    "-l",
     type=int,
     required=True,
     help="Number of words to generate.",
 )
 @click.option(
-    "--random-source",
+    "--randomness-source",
     "-r",
-    default=f"{default_random_source()}",
-    help=f"Source of randomness (default: '{default_random_source()}',"
-    f" available: {available_random_sources_str()}).",
+    default=f"{default_randomness_source()}",
+    help=f"Source of randomness (default: '{default_randomness_source()}',"
+    f" available: {available_randomness_sources_str()}).",
 )
 @click.option(
     "--wordlist-file",
@@ -64,12 +64,13 @@ from papass.random import (
 )
 @click.option(
     "--remove-leading-digits",
+    "--rld",
     is_flag=True,
     help="If wordlist contains entries like `123 foo` normalizes it to `foo`.",
 )
 def pp(
-    count,
-    random_source,
+    length,
+    randomness_source,
     wordlist_file,
     delimiter,
     min_word_size,
@@ -80,7 +81,7 @@ def pp(
     """Create a passphrase."""
 
     try:
-        rng = get_rng(random_source, dice_sides=dice_sides)
+        rng = get_rng(randomness_source, dice_sides=dice_sides)
 
         wordlist = WordList.from_file(
             Path(wordlist_file),
@@ -92,7 +93,7 @@ def pp(
         phrase_generator = PhraseGenerator(
             wordlist=wordlist, rng=rng, delimiter=delimiter
         )
-        result = phrase_generator.get_phrase(count)
+        result = phrase_generator.get_phrase(length)
     except AssertionError as error:
         click.secho(f"ERROR: {error}", fg="red")
         click.echo("Try again!")
