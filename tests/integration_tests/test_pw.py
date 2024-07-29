@@ -68,3 +68,16 @@ def test_alphabet_exclude(opt_exclude):
 
     assert result.exit_code == 0
     assert output_pattern.match(result.output)
+
+
+@pytest.mark.parametrize("opt_help_alpha", ["--help-alphabet-names"])
+def test_help_alphabet_names(opt_help_alpha):
+    runner = CliRunner()
+    output_pattern = re.compile(r"^The following values can be used with --alphabet-names:")
+
+    result = runner.invoke(
+        cli, ["pw", opt_help_alpha]
+    )
+
+    assert result.exit_code == 0
+    assert output_pattern.match(result.output)
