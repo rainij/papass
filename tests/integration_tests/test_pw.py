@@ -73,11 +73,24 @@ def test_alphabet_exclude(opt_exclude):
 @pytest.mark.parametrize("opt_help_alpha", ["--help-alphabet-names"])
 def test_help_alphabet_names(opt_help_alpha):
     runner = CliRunner()
-    output_pattern = re.compile(r"^The following values can be used with --alphabet-names:")
-
-    result = runner.invoke(
-        cli, ["pw", opt_help_alpha]
+    output_pattern = re.compile(
+        r"^The following values can be used with --alphabet-names:"
     )
+
+    result = runner.invoke(cli, ["pw", opt_help_alpha])
+
+    assert result.exit_code == 0
+    assert output_pattern.match(result.output)
+
+
+@pytest.mark.parametrize("opt_names", ["--an", "--alphabet-names"])
+@pytest.mark.parametrize("names", ["digits", "lower,digits", "letters,digits"])
+def test_alphabet_names(opt_names, names):
+    runner = CliRunner()
+    length = 17
+    output_pattern = re.compile(r"^Password: \w{17}\nEntropy: \d+\.\d+$")
+
+    result = runner.invoke(cli, ["pw", "-l", str(length), opt_names, names])
 
     assert result.exit_code == 0
     assert output_pattern.match(result.output)
