@@ -21,34 +21,6 @@ $ papass --help
 
 ## Usage
 
-### Password generation
-
-The following command generates a password of length 20 from all letters (lower- and
-upper-case), digits and the special symbols `@#`. But it excludes `0oO1l` from the
-alphabet of characters to be used for password creation:
-
-```{code} console
-$ papass pw -l 20 -p letters,digits -i "@#" -e "0oO1l"
-Password: gNEVUI#dBHpEDRKahfLm
-Entropy: 117.653
-```
-
-The entropy measures how strong the generated password is against brute-force cracking. In
-this case it is around 118 because there are around {math}`2^{118}` possible passwords
-over the selected alphabet (configured by the `-p`, `-i` and `-e` options). It increases
-if you make your alphabet larger or use a bigger length.
-
-The above command uses the operating systems most secure random number generator. You can
-utilize physical dice with `-r dice`:
-
-TODO
-
-To see what `-p` accepts use
-
-```{code} console
-$ papass pw --help-alpha-preset
-```
-
 ### Passphrase generation
 
 Assuming you have a wordlist file `wordlist.txt` like this one
@@ -101,7 +73,7 @@ Roll at least 5 dice: ...
 This never happens if the number of words is actually a power of six. In all other cases
 the tool chooses the number of rolls in a way so that this does not happen too often.
 
-### Where to get wordlists from
+#### Where to get wordlists from
 
 You can download a wordlist designed for passphrases from the
 [EFF](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases). You might
@@ -116,7 +88,7 @@ the file
 ...
 ```
 
-### On the entropy
+#### On the entropy
 
 The entropy is a measure on how save your passphrase is. In our case the entropy {math}`H`
 can be computed as
@@ -165,3 +137,29 @@ Note that this uses just a simple heuristic which is biased in the following sen
 - If the warning appears the entropy can still be correct. The tool just wasn't able to prove that.
 
 In practice however the entropy decrease should be small. The warning exists for the paranoid 😉.
+
+### Password generation
+
+The following command generates a password of length 20 from all letters (lower- and
+upper-case), digits and the special symbols `@#`. But it excludes `0oO1l` from the
+alphabet of characters to be used for password creation:
+
+```{code} console
+$ papass pw -l 20 -p letters,digits -i "@#" -e "0oO1l"
+Password: gNEVUI#dBHpEDRKahfLm
+Entropy: 117.653
+```
+
+The entropy measures how strong the generated password is against brute-force cracking. In
+this case it is around 118 because there are around {math}`2^{118}` possible passwords
+over the selected alphabet (configured by the `-p`, `-i` and `-e` options). It increases
+if you make your alphabet larger or use a bigger length.
+
+The above command uses the operating systems most secure random number generator. You can
+utilize physical dice with `-r dice`.
+
+To see what `-p` accepts use
+
+```{code} console
+$ papass pw --help-alpha-preset
+```

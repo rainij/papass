@@ -19,6 +19,7 @@ class PasswordResult:
     settings is ``2**entropy``.
     """
 
+
 class PasswordGenerator:
     """Generate passwords from a list of characters using a random number generator."""
 
