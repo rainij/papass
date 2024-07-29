@@ -85,7 +85,15 @@ def pp(
     dice_sides,
     remove_leading_digits,
 ):
-    """Create a passphrase."""
+    """Create a passphrase.
+
+    \b
+    Example:
+    \b
+    $ papass pp -l 4 -w wordlist.txt
+    Passphrase: gents backed marvelous mounting
+    Entropy: 51.6993
+    """
 
     try:
         rng = get_rng(randomness_source, dice_sides=dice_sides)
@@ -125,7 +133,7 @@ def pp(
     "--length",
     "-l",
     type=int,
-    help="Number of words to generate.",
+    help="Number of characters the password should contain.",
 )
 @click.option(
     "--randomness-source",
@@ -141,10 +149,10 @@ def pp(
     default=6,
     help="Number of sides of dice (default: 6).",
 )
-@click.option("--alpha-include", "-i", help="The characters for the password.")
-@click.option("--alpha-preset", "-p", help="Comma separated list of alphabet names.")
+@click.option("--alpha-include", "-i", help="Include these characters for password generation.")
+@click.option("--alpha-preset", "-p", help="Comma separated list of pre-defined character sets. See also --help-alpha-preset.")
 @click.option(
-    "--alpha-exclude", "-e", help="The characters to exclude from the alphabet."
+    "--alpha-exclude", "-e", help="Exclude these characters for password generation."
 )
 @click.option(
     "--help-alpha-preset",
@@ -162,7 +170,14 @@ def pw(
 ):
     """Create a password.
 
-    NOTE: You can use both --alphabet and --alphabet-names together (they merge).
+    \b
+    Example:
+    \b
+    $ papass pw -l 20 -p letters,digits
+    Password: UOytQY57pcUldprI7LYL
+    Entropy: 119.084
+
+    NOTE: You can use all --alpha-* options simultaneously.
     """
 
     if help_alpha_preset:
