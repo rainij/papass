@@ -1,10 +1,13 @@
-"""papass is a simple library to generate passphrases.
+"""papass is a simple library to generate passphrases and passwords.
 
 Everything from the ``papass`` module is considered public. Everything else is considered
 private.
 
 Usage
 =====
+
+Passphrase generation
+---------------------
 
 First we create two word lists:
 
@@ -34,9 +37,9 @@ This can now be used to create a random phrase:
 >>> ppg.generate(num_words)
 PassphraseResult(passphrase=..., entropy=10.0, entropy_is_guaranteed=True)
 
-The actual ``phrase`` is random of course. It could be something like ``'dog duck cat duck
-duck'``. The ``entropy`` is ``10.0`` in this example because there are ``2**10==4**5``
-possible phrases made up from ``5`` words with ``4`` possibilities each.
+The actual ``passphrase`` is random of course. It could be something like ``'dog duck cat
+duck duck'``. The ``entropy`` is ``10.0`` in this example because there are
+``2**10==4**5`` possible phrases made up from ``5`` words with ``4`` possibilities each.
 
 The ``entropy_is_guaranteed=True`` tells us that the entropy is indeed not lower than
 expected. Note that in principle it might be possible that there are less possible phrases
@@ -50,6 +53,23 @@ If ``entropy_is_guaranteed=False`` this doesn't necessarily mean that the entrop
 (and even `if`, it is probably not much lower). The check relies on a simple heuristic
 which has the property that ``True`` is always correct and ``False`` basically means
 `don't know`.
+
+Password generation
+-------------------
+
+Create a password generator like so
+
+>>> rng = SystemRng()
+>>> pwg = PasswordGenerator(alphabet="0123", rng=rng)
+
+A password of length 10 can be generated like this
+
+>>> pwg.generate(10)
+PasswordResult(password=..., entropy=20.0)
+
+The actual ``password`` is random of course. It could be any sequence of characters from
+the ``alphabet`` like e.g ``'3002212230'``. The ``entropy`` is ``20.0`` because there are
+``2**20.0`` possible passwords of length 10 over this alphabet.
 """
 
 from .passphrase_generator import PassphraseGenerator, PassphraseResult
