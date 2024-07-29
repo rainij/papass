@@ -15,7 +15,7 @@ G. Reinhold.
 Assuming you have a wordlist file `wordlist.txt` you can run the following command to
 generate a random list of four words:
 
-```shell
+```{code} console
 $ papass pp -l 4 -w wordlist.txt
 Passphrase: grimy street acetone overcast
 Entropy: 51.6993
@@ -24,7 +24,7 @@ Entropy: 51.6993
 By default this uses the system's most secure random number generator. To use physical
 dice add `-r dice`. Passwords can be created too:
 
-```shell
+```{code} console
 $ papass pw -l 20 -p letters,digits
 Password: rXJndFnML2j3YqVo2WgF
 Entropy: 119.084
@@ -37,27 +37,27 @@ Create a virtual environment (e.g. via `python -m venv` or
 [mamba/micromamba](https://mamba.readthedocs.io)). Install (development) dependencies and
 `papass` in editable mode:
 
-```shell
+```{code} console
 $ pip install -r requirements.txt -e .
 ```
 
 Run tests and type checking via
 
-```shell
+```{code} console
 $ pytest
 $ mypy .
 ```
 
 Formatting and linting is done via [ruff](https://github.com/astral-sh/ruff).
 
-```shell
+```{code} console
 $ ruff format
 $ ruff check --fix
 ```
 
 To build the docs install e.g. [make](https://www.gnu.org/software/make/) and do
 
-```shell
+```{code} console
 $ pip install -r docs/requirements.txt
 $ make -C docs/ html
 ```
