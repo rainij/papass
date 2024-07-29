@@ -191,7 +191,7 @@ def pw(
         return
 
     try:
-        assert length, "Missing option --length."
+        assert length is not None, "Missing option --length."
         alpha: str = alpha_include or ""
 
         if alpha_preset:
