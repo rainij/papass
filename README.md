@@ -16,14 +16,21 @@ Assuming you have a wordlist file `wordlist.txt` you can run the following comma
 generate a random list of four words:
 
 ```shell
-$ papass -c 4 -w wordlist.txt
-Phrase: grimy street acetone overcast
+$ papass pp -l 4 -w wordlist.txt
+Passphrase: grimy street acetone overcast
 Entropy: 51.6993
 ```
 
 By default this uses the system's most secure random number generator. To use physical
-dice add `-r dice`. See [papass.readthedocs.io](https://papass.readthedocs.io) for the
-full documentation.
+dice add `-r dice`. Passwords can be created too:
+
+```shell
+$ papass pw -l 20 -p letters,digits
+Password: rXJndFnML2j3YqVo2WgF
+Entropy: 119.084
+```
+
+See [papass.readthedocs.io](https://papass.readthedocs.io) for the full documentation.
 
 # Development
 Create a virtual environment (e.g. via `python -m venv` or
@@ -34,10 +41,11 @@ Create a virtual environment (e.g. via `python -m venv` or
 $ pip install -r requirements.txt -e .
 ```
 
-Run unit tests via
+Run unit tests and mypy via
 
 ```shell
 $ pytest
+$ mypy .
 ```
 
 Formatting and linting is done via [ruff](https://github.com/astral-sh/ruff).
