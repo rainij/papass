@@ -41,7 +41,7 @@ Create a virtual environment (e.g. via `python -m venv` or
 $ pip install -r requirements.txt -e .
 ```
 
-Run unit tests and mypy via
+Run tests and type checking via
 
 ```shell
 $ pytest
