@@ -6,8 +6,6 @@
 [![Documentation Status](https://readthedocs.org/projects/papass/badge/?version=latest)](https://papass.readthedocs.io/en/latest)
 [![CI](https://github.com/rainij/papass/actions/workflows/ci.yml/badge.svg)](https://github.com/rainij/papass/actions/workflows/ci.yml)
 
-**This is a work in progress**
-
 **papass** generates passphrases following the
 [diceware](https://theworld.com/~reinhold/diceware.html) approach as proposed by Arnold
 G. Reinhold.
@@ -17,41 +15,49 @@ G. Reinhold.
 Assuming you have a wordlist file `wordlist.txt` you can run the following command to
 generate a random list of four words:
 
-```shell
-$ papass -c 4 -w wordlist.txt
-Phrase: grimy street acetone overcast
+```{code} console
+$ papass pp -l 4 -w wordlist.txt
+Passphrase: grimy street acetone overcast
 Entropy: 51.6993
 ```
 
 By default this uses the system's most secure random number generator. To use physical
-dice add `-r dice`. See [papass.readthedocs.io](https://papass.readthedocs.io) for the
-full documentation.
+dice add `-r dice`. Passwords can be created too:
+
+```{code} console
+$ papass pw -l 20 -p letters,digits
+Password: rXJndFnML2j3YqVo2WgF
+Entropy: 119.084
+```
+
+See [papass.readthedocs.io](https://papass.readthedocs.io) for the full documentation.
 
 # Development
 Create a virtual environment (e.g. via `python -m venv` or
 [mamba/micromamba](https://mamba.readthedocs.io)). Install (development) dependencies and
 `papass` in editable mode:
 
-```shell
+```{code} console
 $ pip install -r requirements.txt -e .
 ```
 
-Run unit tests via
+Run tests and type checking via
 
-```shell
+```{code} console
 $ pytest
+$ mypy .
 ```
 
 Formatting and linting is done via [ruff](https://github.com/astral-sh/ruff).
 
-```shell
+```{code} console
 $ ruff format
 $ ruff check --fix
 ```
 
 To build the docs install e.g. [make](https://www.gnu.org/software/make/) and do
 
-```shell
+```{code} console
 $ pip install -r docs/requirements.txt
 $ make -C docs/ html
 ```

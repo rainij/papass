@@ -8,18 +8,20 @@ Reference](./api.rst).
 
 Install via [pipx](https://pipx.pypa.io/stable/):
 
-```{code-block} console
+```{code} console
 $ pipx install papass
 ```
 
 Check that it works:
 
-```{code-block} console
+```{code} console
 $ papass --help
 ...
 ```
 
 ## Usage
+
+### Passphrase generation
 
 Assuming you have a wordlist file `wordlist.txt` like this one
 
@@ -34,8 +36,8 @@ abide
 you can run the following command to quickly generate a random list of four words:
 
 ```{code} console
-$ papass -c 4 -w wordlist.txt
-Phrase: grimy street acetone overcast
+$ papass pp -l 4 -w wordlist.txt
+Passphrase: grimy street acetone overcast
 Entropy: 51.6993
 ```
 
@@ -45,12 +47,12 @@ use **physical dice** use the ``-r dice`` option.
 In the following example you have to roll five dice four times:
 
 ```{code} console
-$ papass -c 4 -w wordlist.txt -r dice
+$ papass pp -l 4 -w wordlist.txt -r dice
 Roll at least 5 dice: 1 6 3 4 4
 Roll at least 5 dice: 4 1 1 2 5
 Roll at least 5 dice: 3 1 2 1 4
 Roll at least 5 dice: 4 4 1 3 6
-Phrase: colossal math fleshed payday
+Passphrase: colossal math fleshed payday
 Entropy: 51.6993
 ```
 
@@ -59,10 +61,10 @@ to be a power of six (or the number of sides of the dice). Some tools also allow
 at the cost of truncating the word list and hence loosing entropy. ``papass`` on the other
 hand uses all the words, but at the cost of rejecting some of the rolls (**rejection
 sampling**). This is necessary to obtain a uniform distribution on the words. This looks
-like this:
+like so:
 
 ```{code} console
-$ papass -c 4 -w wordlist.txt -r dice
+$ papass pp -l 4 -w wordlist.txt -r dice
 Roll at least 5 dice: 6 6 6 6 6
 Rejected. Try again!
 Roll at least 5 dice: ...
@@ -71,7 +73,7 @@ Roll at least 5 dice: ...
 This never happens if the number of words is actually a power of six. In all other cases
 the tool chooses the number of rolls in a way so that this does not happen too often.
 
-## Where to get wordlists from
+#### Where to get wordlists from
 
 You can download a wordlist designed for passphrases from the
 [EFF](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases). You might
@@ -86,7 +88,7 @@ the file
 ...
 ```
 
-## On the entropy
+#### On the entropy
 
 The entropy is a measure on how save your passphrase is. In our case the entropy {math}`H`
 can be computed as
@@ -135,3 +137,29 @@ Note that this uses just a simple heuristic which is biased in the following sen
 - If the warning appears the entropy can still be correct. The tool just wasn't able to prove that.
 
 In practice however the entropy decrease should be small. The warning exists for the paranoid 😉.
+
+### Password generation
+
+The following command generates a password of length 20 from all letters (lower- and
+upper-case), digits and the special symbols `@#`. But it excludes `0oO1l` from the
+alphabet of characters to be used for password creation:
+
+```{code} console
+$ papass pw -l 20 -p letters,digits -i "@#" -e "0oO1l"
+Password: gNEVUI#dBHpEDRKahfLm
+Entropy: 117.653
+```
+
+The entropy measures how strong the generated password is against brute-force cracking. In
+this case it is around 118 because there are around {math}`2^{118}` possible passwords
+over the selected alphabet (configured by the `-p`, `-i` and `-e` options). It increases
+if you make your alphabet larger or use a bigger length.
+
+The above command uses the operating systems most secure random number generator. You can
+utilize physical dice with `-r dice`.
+
+To see what `-p` accepts use
+
+```{code} console
+$ papass pw --help-alpha-preset
+```

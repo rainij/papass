@@ -1,9 +1,9 @@
 from collections.abc import Iterator, Sequence
 
-from papass.random.base import RandomNumberGeneratorBase
+from papass.random.base import RngBase
 
 
-class CycleRng(RandomNumberGeneratorBase):
+class CycleRng(RngBase):
     """A "random" number generator producing pre-determined output.
 
     See tests for this class on how it is supposed to work.

@@ -4,7 +4,7 @@ import click
 
 from papass.utils import rolls_to_value
 
-from .base import RandomNumberGeneratorBase
+from .base import RngBase
 
 
 @dataclass
@@ -13,7 +13,7 @@ class DiceFrame:
     required_num_rolls: int
 
 
-class DiceRng(RandomNumberGeneratorBase):
+class DiceRng(RngBase):
     """Random number generator relying on the user to throw physical dice."""
 
     def __init__(self, *, num_sides: int = 6, required_success_probability: float = 0.99):

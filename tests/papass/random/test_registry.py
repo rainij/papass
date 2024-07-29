@@ -2,7 +2,7 @@ import papass.random.registry
 import pytest
 from papass.random.registry import (
     available_random_sources,
-    default_random_source,
+    default_randomness_source,
     get_rng,
 )
 
@@ -10,7 +10,7 @@ from tests.utils.cycle_rng import CycleRng
 
 
 def test_default_random_source():
-    assert default_random_source()
+    assert default_randomness_source()
 
 
 def test_available_random_sources():

@@ -25,6 +25,11 @@ myst_enable_extensions = [
     "attrs_block",
 ]
 
+autodoc_default_options = {
+    "public-members": True,
+    "exclude-members": "__weakref__, __hash__, __repr__",
+}
+
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

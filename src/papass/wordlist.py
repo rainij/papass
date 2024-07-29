@@ -32,8 +32,8 @@ class WordList(Sequence[str]):
 
         :param words: Words to construct wordlist from.
         :param min_word_size: Filter out words which are shorter than this.
-        :param max_word_size: Filter out words which are longer than this. None means no
-            filtering.
+        :param max_word_size: Filter out words which are longer than this. ``None`` means
+            no filtering.
         :param trim_leading_digits: Some word lists contain lines like
             ``12345  someword``. If ``True`` we just read ``someword``.
         """
@@ -75,7 +75,7 @@ class WordList(Sequence[str]):
     @overload
     def __add__(self, other: "WordList") -> "WordList": ...
     @overload
-    def __add__(self, other: list) -> "WordList": ...
+    def __add__(self, other: list[str]) -> "WordList": ...
     def __add__(self, other) -> "WordList":
         """Combine two word lists to a new word list made of the union of their words.
 
