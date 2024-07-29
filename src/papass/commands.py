@@ -64,7 +64,7 @@ RESULT_BG_COLOR = (0, 44, 77)
 )
 @click.option(
     "--dice-sides",
-    "--ds",
+    "-s",
     type=int,
     default=6,
     help="Number of sides of dice (default: 6).",
@@ -136,7 +136,7 @@ def pp(
 )
 @click.option(
     "--dice-sides",
-    "--ds",
+    "-s",
     type=int,
     default=6,
     help="Number of sides of dice (default: 6).",

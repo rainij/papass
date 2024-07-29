@@ -43,7 +43,7 @@ def test_system_rng_simple(tmp_path, opt_length, opt_wordlist_file, opt_random_s
         assert output_pattern.match(result.output)
 
 
-@pytest.mark.parametrize("opt_dice_sides", ["--ds", "--dice-sides"])
+@pytest.mark.parametrize("opt_dice_sides", ["-s", "--dice-sides"])
 def test_dice_rng_simple(monkeypatch, tmp_path, opt_dice_sides):
     runner = CliRunner()
     wordlist_content = "muh\nmae\nwau\nnak"

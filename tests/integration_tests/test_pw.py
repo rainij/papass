@@ -36,7 +36,7 @@ def test_system_rng_simple(opt_length, opt_include, opt_random_source):
     assert output_pattern.match(result.output)
 
 
-@pytest.mark.parametrize("opt_dice_sides", ["--ds", "--dice-sides"])
+@pytest.mark.parametrize("opt_dice_sides", ["-s", "--dice-sides"])
 def test_dice_rng_simple(monkeypatch, opt_dice_sides):
     runner = CliRunner()
     alphabet = "abcd"
