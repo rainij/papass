@@ -141,43 +141,43 @@ def pp(
     default=6,
     help="Number of sides of dice (default: 6).",
 )
-@click.option("--alphabet", "-a", help="The characters for the password.")
-@click.option("--alphabet-names", "--an", help="Comma separated list of alphabet names.")
+@click.option("--alpha-include", "-i", help="The characters for the password.")
+@click.option("--alpha-preset", "-p", help="Comma separated list of alphabet names.")
 @click.option(
-    "--alphabet-exclude", "-e", help="The characters to exclude from the alphabet."
+    "--alpha-exclude", "-e", help="The characters to exclude from the alphabet."
 )
 @click.option(
-    "--help-alphabet-names",
+    "--help-alpha-preset",
     is_flag=True,
-    help="Show available --alphabet-names and exit.",
+    help="Show available --alpha-preset names and exit.",
 )
 def pw(
     length,
     randomness_source,
     dice_sides,
-    alphabet,
-    alphabet_names,
-    alphabet_exclude,
-    help_alphabet_names,
+    alpha_include,
+    alpha_preset,
+    alpha_exclude,
+    help_alpha_preset,
 ):
     """Create a password.
 
     NOTE: You can use both --alphabet and --alphabet-names together (they merge).
     """
 
-    if help_alphabet_names:
+    if help_alpha_preset:
         print_alphabet_names()
         return
 
     try:
         assert length, "Missing option --length."
-        alpha: str = alphabet or ""
+        alpha: str = alpha_include or ""
 
-        if alphabet_names:
-            alpha += alphabet_from_charset_names(alphabet_names.split(","))
+        if alpha_preset:
+            alpha += alphabet_from_charset_names(alpha_preset.split(","))
 
-        if alphabet_exclude:
-            alpha = "".join(c for c in alpha if c not in alphabet_exclude)
+        if alpha_exclude:
+            alpha = "".join(c for c in alpha if c not in alpha_exclude)
 
         assert alpha, "No alphabet given. Did you forget --alphabet or alphabet-names?"
 
@@ -201,8 +201,10 @@ def print_alphabet_names() -> None:
     }
     shortcuts = {k: ",".join(v) for k, v in alphabet_shortcuts().items()}
 
-    click.echo("The following values can be used with --alphabet-names:")
+    click.echo("The following values can be used with -p, --alpha-preset:")
     click.echo("\n".join(f"{name:9}: {alpha}" for name, alpha in base_names.items()))
 
     click.echo("\nIn addition the following shortcuts can be used:")
     click.echo("\n".join(f"{short:9}: {name}" for short, name in shortcuts.items()))
+
+    click.echo("\nExample: -p letters,digits")

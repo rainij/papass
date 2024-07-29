@@ -17,9 +17,9 @@ def test_help(opt_help):
 
 
 @pytest.mark.parametrize("opt_length", ["-l", "--length"])
-@pytest.mark.parametrize("opt_alphabet", ["-a", "--alphabet"])
+@pytest.mark.parametrize("opt_include", ["-i", "--alpha-include"])
 @pytest.mark.parametrize("opt_random_source", [None, "-r", "--randomness-source"])
-def test_system_rng_simple(opt_length, opt_alphabet, opt_random_source):
+def test_system_rng_simple(opt_length, opt_include, opt_random_source):
     runner = CliRunner()
     alphabet = "abcd"
     length = 13
@@ -29,7 +29,7 @@ def test_system_rng_simple(opt_length, opt_alphabet, opt_random_source):
 
     result = runner.invoke(
         cli,
-        ["pw", opt_length, str(length), opt_alphabet, alphabet] + random_source,
+        ["pw", opt_length, str(length), opt_include, alphabet] + random_source,
     )
 
     assert result.exit_code == 0
@@ -47,7 +47,7 @@ def test_dice_rng_simple(monkeypatch, opt_dice_sides):
 
     result = runner.invoke(
         cli,
-        ["pw", "-l", str(length), "-a", alphabet]
+        ["pw", "-l", str(length), "-i", alphabet]
         + [opt_dice_sides, "6", "-r", "dice", opt_dice_sides, "6"],
     )
 
@@ -55,42 +55,42 @@ def test_dice_rng_simple(monkeypatch, opt_dice_sides):
     assert output_pattern.match(result.output)
 
 
-@pytest.mark.parametrize("opt_exclude", ["-e", "--alphabet-exclude"])
-def test_alphabet_exclude(opt_exclude):
+@pytest.mark.parametrize("opt", ["-e", "--alpha-exclude"])
+def test_alpha_exclude(opt):
     runner = CliRunner()
     alphabet = "abcdxy"
     length = 13
     output_pattern = re.compile(r"^Password: [abcd]{13}\nEntropy: 26\.0$")
 
     result = runner.invoke(
-        cli, ["pw", "-l", str(length), "-a", alphabet, opt_exclude, "xyz"]
+        cli, ["pw", "-l", str(length), "-i", alphabet, opt, "xyz"]
     )
 
     assert result.exit_code == 0
     assert output_pattern.match(result.output)
 
 
-@pytest.mark.parametrize("opt_help_alpha", ["--help-alphabet-names"])
-def test_help_alphabet_names(opt_help_alpha):
+@pytest.mark.parametrize("opt", ["--help-alpha-preset"])
+def test_help_alpha_preset(opt):
     runner = CliRunner()
     output_pattern = re.compile(
-        r"^The following values can be used with --alphabet-names:"
+        r"^The following values can be used with -p, --alpha-preset:"
     )
 
-    result = runner.invoke(cli, ["pw", opt_help_alpha])
+    result = runner.invoke(cli, ["pw", opt])
 
     assert result.exit_code == 0
     assert output_pattern.match(result.output)
 
 
-@pytest.mark.parametrize("opt_names", ["--an", "--alphabet-names"])
+@pytest.mark.parametrize("opt", ["-p", "--alpha-preset"])
 @pytest.mark.parametrize("names", ["digits", "lower,digits", "letters,digits"])
-def test_alphabet_names(opt_names, names):
+def test_alpha_preset(opt, names):
     runner = CliRunner()
     length = 17
     output_pattern = re.compile(r"^Password: \w{17}\nEntropy: \d+\.\d+$")
 
-    result = runner.invoke(cli, ["pw", "-l", str(length), opt_names, names])
+    result = runner.invoke(cli, ["pw", "-l", str(length), opt, names])
 
     assert result.exit_code == 0
     assert output_pattern.match(result.output)
