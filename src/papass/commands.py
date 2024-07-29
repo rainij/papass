@@ -8,9 +8,9 @@ from papass import (
     WordList,
 )
 from papass.alphabet import (
-    alphabet_base_names,
-    alphabet_from_charset_names,
-    alphabet_shortcuts,
+    alphabet_preset_base,
+    alphabet_from_preset,
+    alphabet_preset_shortcuts,
 )
 from papass.random import (
     available_randomness_sources_str,
@@ -181,7 +181,7 @@ def pw(
     """
 
     if help_alpha_preset:
-        print_alphabet_names()
+        print_alpha_preset()
         return
 
     try:
@@ -189,7 +189,7 @@ def pw(
         alpha: str = alpha_include or ""
 
         if alpha_preset:
-            alpha += alphabet_from_charset_names(alpha_preset.split(","))
+            alpha += alphabet_from_preset(alpha_preset.split(","))
 
         if alpha_exclude:
             alpha = "".join(c for c in alpha if c not in alpha_exclude)
@@ -210,16 +210,16 @@ def pw(
     click.echo(f"Entropy: {result.entropy:.6}")
 
 
-def print_alphabet_names() -> None:
-    base_names = {
-        k: click.style(v, bg=RESULT_BG_COLOR) for k, v in alphabet_base_names().items()
+def print_alpha_preset() -> None:
+    base = {
+        k: click.style(v, bg=RESULT_BG_COLOR) for k, v in alphabet_preset_base().items()
     }
-    shortcuts = {k: ",".join(v) for k, v in alphabet_shortcuts().items()}
+    shortcuts = {k: ",".join(v) for k, v in alphabet_preset_shortcuts().items()}
 
-    click.echo("The following values can be used with -p, --alpha-preset:")
-    click.echo("\n".join(f"{name:9}: {alpha}" for name, alpha in base_names.items()))
+    click.echo("The following names can be used with -p, --alpha-preset:")
+    click.echo("\n".join(f"{name:9}: {alpha}" for name, alpha in base.items()))
 
     click.echo("\nIn addition the following shortcuts can be used:")
-    click.echo("\n".join(f"{short:9}: {name}" for short, name in shortcuts.items()))
+    click.echo("\n".join(f"{short:9}: {names}" for short, names in shortcuts.items()))
 
     click.echo("\nExample: -p letters,digits")

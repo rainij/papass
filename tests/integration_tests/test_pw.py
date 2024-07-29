@@ -74,7 +74,7 @@ def test_alpha_exclude(opt):
 def test_help_alpha_preset(opt):
     runner = CliRunner()
     output_pattern = re.compile(
-        r"^The following values can be used with -p, --alpha-preset:"
+        r"^The following names can be used with -p, --alpha-preset:"
     )
 
     result = runner.invoke(cli, ["pw", opt])
