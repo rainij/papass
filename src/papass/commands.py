@@ -8,8 +8,8 @@ from papass import (
     WordList,
 )
 from papass.alphabet import (
-    alphabet_preset_base,
     alphabet_from_preset,
+    alphabet_preset_base,
     alphabet_preset_shortcuts,
 )
 from papass.random import (
@@ -149,8 +149,14 @@ def pp(
     default=6,
     help="Number of sides of dice (default: 6).",
 )
-@click.option("--alpha-include", "-i", help="Include these characters for password generation.")
-@click.option("--alpha-preset", "-p", help="Comma separated list of pre-defined character sets. See also --help-alpha-preset.")
+@click.option(
+    "--alpha-include", "-i", help="Include these characters for password generation."
+)
+@click.option(
+    "--alpha-preset",
+    "-p",
+    help="Comma separated list of pre-defined character sets. See also --help-alpha-preset.",
+)
 @click.option(
     "--alpha-exclude", "-e", help="Exclude these characters for password generation."
 )

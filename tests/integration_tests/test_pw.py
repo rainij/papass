@@ -62,9 +62,7 @@ def test_alpha_exclude(opt):
     length = 13
     output_pattern = re.compile(r"^Password: [abcd]{13}\nEntropy: 26\.0$")
 
-    result = runner.invoke(
-        cli, ["pw", "-l", str(length), "-i", alphabet, opt, "xyz"]
-    )
+    result = runner.invoke(cli, ["pw", "-l", str(length), "-i", alphabet, opt, "xyz"])
 
     assert result.exit_code == 0
     assert output_pattern.match(result.output)
