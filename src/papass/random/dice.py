@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Protocol
 
 import click
 
@@ -7,16 +8,77 @@ from papass.utils import rolls_to_value
 from .base import RngBase
 
 
+class QueryForDice(Protocol):
+    """A callback to be used with ``DiceRng``."""
+    # TODO: remove None
+    def __call__(self, *, num_sides: int, required_num_rolls: int) -> list[int] | None:
+        """
+        :param num_sides: Number of sides of the dice.
+        :param require_num_rolls: The number of rolls.
+        :return: A list of rolls of the required length.
+        """
+
+
 @dataclass
 class DiceFrame:
     upper_multiple: int
     required_num_rolls: int
 
 
+# TODO: move this somewhere else
+def query_stdin_for_dice(*, num_sides: int, required_num_rolls: int) -> list[int] | None:
+    """Query stdin for desired number of dice rolls.
+
+    Return ``None`` if user gives invalid input.
+    """
+    user_input = input(f"Roll at least {required_num_rolls} dice: ")
+    rolls = _parse_stdin(
+        user_input, num_sides=num_sides, required_num_rolls=required_num_rolls
+    )
+    return rolls
+
+
+def _parse_stdin(
+    user_input: str, *, num_sides: int, required_num_rolls: int
+) -> list[int] | None:
+    """Parse user input as a list of dice rolls.
+
+    Returns ``None`` if input is invalid.
+
+    Example:
+    >>> _parse_stdin("2 3 5", num_sides=6, required_num_rolls=3)
+    [2, 3, 5]
+    """
+    try:
+        rolls = [int(r) for r in user_input.split()]
+    except ValueError:
+        click.echo(
+            "Invalid. Require a space-separated list of integers (like: 1 3 2). Roll again!"
+        )
+        return None
+
+    if len(rolls) < required_num_rolls:
+        click.echo(f"Got only {len(rolls)} rolls, need {required_num_rolls}. Roll again!")
+        return None
+
+    if not all(1 <= r <= num_sides for r in rolls):
+        click.echo(f"Some rolls are not between 1 and {num_sides}. Roll again!")
+        return None
+
+    return rolls
+
+
+
 class DiceRng(RngBase):
     """Random number generator relying on the user to throw physical dice."""
 
-    def __init__(self, *, num_sides: int = 6, required_success_probability: float = 0.99):
+    def __init__(
+        self,
+        *,
+        query_for_dice: QueryForDice = query_stdin_for_dice,
+        num_sides: int = 6,
+        required_success_probability: float = 0.99,
+    ):
         """Create a `DiceRng`.
 
         :param num_sides: Number of sides of the dice.
@@ -30,6 +92,7 @@ class DiceRng(RngBase):
             0 <= required_success_probability < 1.0
         ), f"required_success_probability must be >= 0 and < 1.0. Got {required_success_probability}."
 
+        self._query_for_dice = query_for_dice
         self._num_sides = num_sides
         self._required_success_probability = required_success_probability
 
@@ -75,21 +138,12 @@ class DiceRng(RngBase):
 
     def _next_rolls(self, required_num_rolls: int) -> list[int] | None:
         """Get rolls from user."""
-        return query_stdin_for_dice(
+        return self._query_for_dice(
             num_sides=self._num_sides, required_num_rolls=required_num_rolls
         )
 
 
-def query_stdin_for_dice(*, num_sides: int, required_num_rolls: int) -> list[int] | None:
-    """Query stdin for desired number of dice rolls.
 
-    Return ``None`` if user gives invalid input.
-    """
-    user_input = input(f"Roll at least {required_num_rolls} dice: ")
-    rolls = _parse_stdin(
-        user_input, num_sides=num_sides, required_num_rolls=required_num_rolls
-    )
-    return rolls
 
 
 def compute_dice_frame(
@@ -120,33 +174,3 @@ def compute_dice_frame(
         upper_multiple=upper_multiple,
         required_num_rolls=required_num_rolls,
     )
-
-
-def _parse_stdin(
-    user_input: str, *, num_sides: int, required_num_rolls: int
-) -> list[int] | None:
-    """Parse user input as a list of dice rolls.
-
-    Returns ``None`` if input is invalid.
-
-    Example:
-    >>> _parse_stdin("2 3 5", num_sides=6, required_num_rolls=3)
-    [2, 3, 5]
-    """
-    try:
-        rolls = [int(r) for r in user_input.split()]
-    except ValueError:
-        click.echo(
-            "Invalid. Require a space-separated list of integers (like: 1 3 2). Roll again!"
-        )
-        return None
-
-    if len(rolls) < required_num_rolls:
-        click.echo(f"Got only {len(rolls)} rolls, need {required_num_rolls}. Roll again!")
-        return None
-
-    if not all(1 <= r <= num_sides for r in rolls):
-        click.echo(f"Some rolls are not between 1 and {num_sides}. Roll again!")
-        return None
-
-    return rolls
