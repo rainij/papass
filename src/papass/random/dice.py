@@ -32,10 +32,6 @@ class DiceFrame:
 
 # TODO: move this somewhere else
 class QueryStdinForDice(QueryForDice):
-    def __init__(self):
-        self._max_allowed_rejections = 100
-        self._num_rejections = 0
-
     def __call__(self, *, num_sides: int, required_num_rolls: int) -> list[int]:
         """Query stdin for desired number of dice rolls.
 
@@ -93,7 +89,7 @@ class DiceRng(RngBase):
     def __init__(
         self,
         *,
-        query_for_dice: QueryForDice = QueryStdinForDice(),  # TODO: remove default
+        query_for_dice: QueryForDice = QueryStdinForDice(),
         num_sides: int = 6,
         required_success_probability: float = 0.99,
     ):

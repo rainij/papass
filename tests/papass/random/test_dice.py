@@ -1,14 +1,12 @@
 from random import Random
 
-import click
 import pytest
-from hypothesis import HealthCheck, given, settings
+from hypothesis import given
 from hypothesis import strategies as st
-from papass.random import dice
 from papass.random.dice import DiceRng, compute_dice_frame
 from papass.utils import rolls_to_value
 
-from tests.utils.mock import patch_input
+from tests.utils.mock import MockCallbackQueryForDice, MockIterQueryForDice
 
 
 @pytest.mark.parametrize(
@@ -49,19 +47,20 @@ from tests.utils.mock import patch_input
         (
             9,
             9**2 - 1,
-            [[9, 9, 9, 9, 9], [1, 2, 3, 4, 5]],
+            [[9, 9, 9, 9], [1, 2, 3, 4]],
         ),
     ],
 )
-def test_randbelow(monkeypatch, num_sides, upper, rolls):
+def test_randbelow(num_sides, upper, rolls):
     """*Basic* test showing that randbelow behaves as expected."""
-    patch_input(monkeypatch, rolls)
+    query = MockIterQueryForDice(rolls)
+    rng = DiceRng(
+        query_for_dice=query, num_sides=num_sides, required_success_probability=0.99
+    )
 
-    # Only the last roll should be used (others are rejected).
     expected = rolls_to_value(num_sides, rolls[-1]) % upper
-
-    rng = DiceRng(num_sides=num_sides, required_success_probability=0.99)
     assert rng.randbelow(upper) == expected
+    assert query.num_rejections == len(rolls) - 1
 
 
 # TODO move this test
@@ -114,8 +113,7 @@ class TestUniformity:
     """Test that randbelow has a uniform distribution on [0, upper)."""
 
     @given(rand_rng=st.randoms(use_true_random=True))
-    @settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
-    def test_part_1(self, monkeypatch, rand_rng):
+    def test_part_1(self, rand_rng):
         """This tests that randbelow maps into [0,upper) and is uniform on its range.
 
         It does not test that the range of randbelow the full interval.
@@ -126,19 +124,17 @@ class TestUniformity:
 
         memo: list[int] = []
 
-        def patched_query_stdin_for_dice(
-            required_num_rolls, memo=memo, **_ignored
-        ) -> list[int]:
+        def rolls_callback(required_num_rolls: int, memo=memo, **_ignored) -> list[int]:
             # The memo memorizes all outputs
             out = [rand_rng.randint(1, num_sides) for _ in range(required_num_rolls)]
             value = rolls_to_value(num_sides, rolls=out)
             memo.append(value % upper)
             return out
 
-        monkeypatch.setattr(dice, "query_stdin_for_dice", patched_query_stdin_for_dice)
-        monkeypatch.setattr(click, "echo", lambda *_: None)
-
-        dice_rng = DiceRng(num_sides=num_sides, required_success_probability=0.99)
+        query = MockCallbackQueryForDice(rolls_callback)
+        dice_rng = DiceRng(
+            query_for_dice=query, num_sides=num_sides, required_success_probability=0.99
+        )
 
         all_values = []
         raw_values = []
@@ -159,8 +155,7 @@ class TestUniformity:
         # Taking a seed is faster than taking an rng in case of failures:
         rand_seed=st.integers(0, 2**128),
     )
-    @settings(max_examples=1, suppress_health_check=[HealthCheck.function_scoped_fixture])
-    def test_part_2(self, monkeypatch, rand_seed):
+    def test_part_2(self, rand_seed):
         """Test that all values from [0, upper) are possible."""
         # These values make it *extremely* unlikely the the heuristic check below fails:
         num_sides = 5
@@ -169,14 +164,13 @@ class TestUniformity:
 
         rand_rng = Random(rand_seed)
 
-        def patched_query_stdin_for_dice(required_num_rolls, **_ignored) -> list[int]:
-            out = [rand_rng.randint(1, num_sides) for _ in range(required_num_rolls)]
-            return out
+        def rolls_callback(required_num_rolls: int, **_ignored) -> list[int]:
+            return [rand_rng.randint(1, num_sides) for _ in range(required_num_rolls)]
 
-        monkeypatch.setattr(dice, "query_stdin_for_dice", patched_query_stdin_for_dice)
-        monkeypatch.setattr(click, "echo", lambda *_: None)
-
-        dice_rng = DiceRng(num_sides=num_sides, required_success_probability=0.99)
+        query = MockCallbackQueryForDice(rolls_callback)
+        dice_rng = DiceRng(
+            query_for_dice=query, num_sides=num_sides, required_success_probability=0.99
+        )
 
         obtained_values = [dice_rng.randbelow(upper) for _ in range(num_calls)]
         assert set(obtained_values) == set(range(upper)), "Heuristic surjectivity check."
