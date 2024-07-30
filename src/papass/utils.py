@@ -1,5 +1,6 @@
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from functools import reduce
+from typing import Generic, TypeVar, overload
 
 import click
 
@@ -56,7 +57,6 @@ def value_to_digits(value: int, *, base: int, length: int | None = None) -> list
 
     result.reverse()
     return result
-
 
 
 # TODO: testing
@@ -125,3 +125,69 @@ class QueryUserForDice:
             return None
 
         return rolls
+
+
+T = TypeVar("T")
+
+
+# TODO
+class PowerSequence(Generic[T]):
+    """A sequence representing a cartesian power product.
+
+    NOTE: In essence this thing is a Sequence. Unfortunately due to a limitation of
+    CPython __len__ is not allowed to return large integers (it must be "index-sized").
+
+    Example
+    =======
+
+    >>> ps = PowerSequence([0, 1, 2], 2)
+    >>> list(ps)
+    [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
+
+    It supports huge powers for which the entire sequence would not fit into memory:
+
+    >>> ps = PowerSequence(range(1000), 20)
+    >>> ps[1000**19 + 98765432101234567890876543210123456789]
+    (1, 0, 0, 0, 0, 0, 0, 98, 765, 432, 101, 234, 567, 890, 876, 543, 210, 123, 456, 789)
+    """
+
+    def __init__(self, sequence: Sequence[T], power: int):
+        """Create a power sequence."""
+
+        # TODO: test that power = 0 and sequence = [] should make [(,)].
+        assert power >= 0
+
+        self._sequence = sequence
+
+        self._power = power
+        self._base_length = len(sequence)
+
+    @property
+    def size(self) -> int:
+        """Number of elements in the power sequence.
+
+        NOTE: This replaces __len__. See class docstring for the reason.
+        """
+        return self._base_length**self._power
+
+    def __bool__(self):
+        """True iff the sequence is non-empty."""
+        return self.size != 0
+
+    @overload
+    def __getitem__(self, index: int) -> tuple[T, ...]: ...
+    @overload
+    def __getitem__(self, index: slice) -> Sequence[tuple[T, ...]]: ...
+    def __getitem__(self, index):
+        """Get item at given index.
+
+        The elements are ordered lexicographically.
+        """
+        if isinstance(index, slice):
+            raise NotImplementedError("Indexing by slices not supported.")
+
+        if index < 0 or index >= self.size:
+            raise IndexError("Index out of range")
+
+        indices = value_to_digits(index, base=self._base_length, length=self._power)
+        return tuple(self._sequence[i] for i in indices)
