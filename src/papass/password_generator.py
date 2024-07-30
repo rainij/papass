@@ -3,6 +3,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 
 from papass.random import RngBase
+from papass.utils import value_to_digits
 
 
 @dataclass
@@ -67,22 +68,3 @@ class PasswordGenerator:
     @property
     def _entropy_per_char(self) -> float:
         return math.log2(self._base)
-
-
-# TODO: move to utils, test, docstring
-def value_to_digits(value: int, *, base: int, length: int | None = None) -> list[int]:
-    assert value >= 0, "Only positive values allowed."
-
-    result: list[int] = []
-
-    while value:
-        result.append(value % base)
-        value //= base
-
-    if length is not None:
-        assert length >= len(result)
-        zeros = [0] * (length - len(result))
-        result.extend(zeros)
-
-    result.reverse()
-    return result

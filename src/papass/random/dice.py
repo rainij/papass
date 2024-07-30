@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Protocol
 
-from papass.utils import QueryStdinForDice, rolls_to_value
+from papass.utils import QueryUserForDice, rolls_to_value
 
 from .base import RngBase
 
@@ -32,13 +32,13 @@ class DiceRng(RngBase):
     def __init__(
         self,
         *,
-        query_for_dice: QueryForDice = QueryStdinForDice(),
+        query_for_dice: QueryForDice = QueryUserForDice(),
         num_sides: int = 6,
         required_success_probability: float = 0.99,
     ):
         """Create a `DiceRng`.
 
-        :param query_for_dice: TODO
+        :param query_for_dice: A callback to query for dice rolls.
         :param num_sides: Number of sides of the dice.
         :param required_success_probability: The minimal required probability that
             ``randbelow`` does not reject a roll. If ``upper`` is a power of ``num_sides``

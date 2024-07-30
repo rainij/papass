@@ -7,7 +7,9 @@ import click
 def digits_to_value(base: int, digits: Iterable[int]) -> int:
     """Compute the integer with the given digits in base.
 
-    Example:
+    Example
+    =======
+
     >>> digits_to_value(10, [1, 2, 3])
     123
     """
@@ -19,7 +21,9 @@ def digits_to_value(base: int, digits: Iterable[int]) -> int:
 def rolls_to_value(num_sides: int, rolls: Iterable[int]) -> int:
     """Compute the integer corresponding to the given dice rolls.
 
-    Example:
+    Example
+    =======
+
     >>> rolls_to_value(6, [5, 3])  # 6*(5-1) + (3-1)
     26
     """
@@ -28,36 +32,79 @@ def rolls_to_value(num_sides: int, rolls: Iterable[int]) -> int:
 
 
 # TODO: testing
-class QueryStdinForDice:
+def value_to_digits(value: int, *, base: int, length: int | None = None) -> list[int]:
+    """Return the digits of ``value`` in given base.
+
+    Example
+    =======
+
+    >>> value_to_digits(123, base=10, length=4)
+    [0, 1, 2, 3]
+    """
+    assert value >= 0, "Only positive values allowed."
+
+    result: list[int] = []
+
+    while value:
+        result.append(value % base)
+        value //= base
+
+    if length is not None:
+        assert length >= len(result)
+        zeros = [0] * (length - len(result))
+        result.extend(zeros)
+
+    result.reverse()
+    return result
+
+
+
+# TODO: testing
+class QueryUserForDice:
     def __call__(self, *, num_sides: int, required_num_rolls: int) -> list[int]:
-        """Query stdin for desired number of dice rolls.
+        """Ask user for desired number of dice rolls.
 
         Return ``None`` if user gives invalid input.
         """
         rolls = None
         while rolls is None:
             user_input = input(f"Roll at least {required_num_rolls} dice: ")
-            rolls = self._parse_stdin(
+            rolls = self._parse_input(
                 user_input, num_sides=num_sides, required_num_rolls=required_num_rolls
             )
 
         return rolls
 
     def notify_rejection(self) -> None:
+        """Print a message on the rejection to stdout.
+
+        Does nothing else.
+        """
         click.echo("Rejected. Please try again.")
 
     @staticmethod
-    def _parse_stdin(
+    def _parse_input(
         user_input: str, *, num_sides: int, required_num_rolls: int
     ) -> list[int] | None:
         """Parse user input as a list of dice rolls.
 
         Returns ``None`` if input is invalid.
 
-        TODO: also failing examples
-        Example:
-        >>> QueryStdinForDice._parse_stdin("2 3 5", num_sides=6, required_num_rolls=3)
+        Example
+        =======
+
+        >>> cls = QueryUserForDice
+        >>> cls._parse_input("2 3 5", num_sides=6, required_num_rolls=3)
         [2, 3, 5]
+
+        In case the user provides invalid input:
+
+        >>> cls._parse_input("2 3 7", num_sides=6, required_num_rolls=3)
+        Some rolls are not between 1 and 6. Roll again!
+        >>> cls._parse_input("2 3 5", num_sides=6, required_num_rolls=4)
+        Got only 3 rolls, need 4. Roll again!
+        >>> cls._parse_input("foo 3", num_sides=6, required_num_rolls=3)
+        Invalid. Require a space-separated list of integers (like: 1 3 2). Roll again!
         """
         try:
             rolls = [int(r) for r in user_input.split()]
