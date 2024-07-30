@@ -134,9 +134,6 @@ T = TypeVar("T")
 class PowerSequence(Generic[T]):
     """A sequence representing a cartesian power product.
 
-    NOTE: In essence this thing is a Sequence. Unfortunately due to a limitation of
-    CPython __len__ is not allowed to return large integers (it must be "index-sized").
-
     Example
     =======
 
@@ -149,6 +146,9 @@ class PowerSequence(Generic[T]):
     >>> ps = PowerSequence(range(1000), 20)
     >>> ps[1000**19 + 98765432101234567890876543210123456789]
     (1, 0, 0, 0, 0, 0, 0, 98, 765, 432, 101, 234, 567, 890, 876, 543, 210, 123, 456, 789)
+
+    NOTE: In essence this thing is a Sequence. Unfortunately due to a limitation of
+    CPython __len__ is not allowed to return large integers (it must be "index-sized").
     """
 
     def __init__(self, sequence: Sequence[T], power: int):
@@ -158,7 +158,6 @@ class PowerSequence(Generic[T]):
         assert power >= 0
 
         self._sequence = sequence
-
         self._power = power
         self._base_length = len(sequence)
 
