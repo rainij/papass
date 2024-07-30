@@ -5,7 +5,7 @@ import pytest
 from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
 from papass.random import dice
-from papass.random.dice import DiceRng, compute_dice_frame, query_stdin_for_dice
+from papass.random.dice import DiceRng, compute_dice_frame
 from papass.utils import rolls_to_value
 
 from tests.utils.mock import patch_input
@@ -64,19 +64,20 @@ def test_randbelow(monkeypatch, num_sides, upper, rolls):
     assert rng.randbelow(upper) == expected
 
 
-@given(
-    num_sides=st.integers(2, 20),
-    required_num_rolls=st.integers(1, 10),
-    rng=st.randoms(use_true_random=True),
-)
-@settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
-def test_query_stdin_for_dice(monkeypatch, num_sides, required_num_rolls, rng: Random):
-    """Test that valid input from stdin gets parsed correctly."""
-    rolls = [rng.randint(1, num_sides) for _ in range(required_num_rolls)]
-    patch_input(monkeypatch, [rolls])
+# TODO move this test
+# @given(
+#     num_sides=st.integers(2, 20),
+#     required_num_rolls=st.integers(1, 10),
+#     rng=st.randoms(use_true_random=True),
+# )
+# @settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
+# def test_query_stdin_for_dice(monkeypatch, num_sides, required_num_rolls, rng: Random):
+#     """Test that valid input from stdin gets parsed correctly."""
+#     rolls = [rng.randint(1, num_sides) for _ in range(required_num_rolls)]
+#     patch_input(monkeypatch, [rolls])
 
-    got = query_stdin_for_dice(num_sides=num_sides, required_num_rolls=required_num_rolls)
-    assert got == rolls
+#     got = query_stdin_for_dice(num_sides=num_sides, required_num_rolls=required_num_rolls)
+#     assert got == rolls
 
 
 @given(

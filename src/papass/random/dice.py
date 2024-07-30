@@ -8,15 +8,20 @@ from papass.utils import rolls_to_value
 from .base import RngBase
 
 
+# TODO: should appear in docs
 class QueryForDice(Protocol):
     """A callback to be used with ``DiceRng``."""
+
     # TODO: remove None
-    def __call__(self, *, num_sides: int, required_num_rolls: int) -> list[int] | None:
+    def __call__(self, *, num_sides: int, required_num_rolls: int) -> list[int]:
         """
         :param num_sides: Number of sides of the dice.
         :param require_num_rolls: The number of rolls.
         :return: A list of rolls of the required length.
         """
+
+    def notify_rejection(self) -> None:
+        """Called when output of ``__call__`` got rejected."""
 
 
 @dataclass
@@ -26,47 +31,60 @@ class DiceFrame:
 
 
 # TODO: move this somewhere else
-def query_stdin_for_dice(*, num_sides: int, required_num_rolls: int) -> list[int] | None:
-    """Query stdin for desired number of dice rolls.
+class QueryStdinForDice(QueryForDice):
+    def __init__(self):
+        self._max_allowed_rejections = 100
+        self._num_rejections = 0
 
-    Return ``None`` if user gives invalid input.
-    """
-    user_input = input(f"Roll at least {required_num_rolls} dice: ")
-    rolls = _parse_stdin(
-        user_input, num_sides=num_sides, required_num_rolls=required_num_rolls
-    )
-    return rolls
+    def __call__(self, *, num_sides: int, required_num_rolls: int) -> list[int]:
+        """Query stdin for desired number of dice rolls.
 
+        Return ``None`` if user gives invalid input.
+        """
+        user_input = input(f"Roll at least {required_num_rolls} dice: ")
 
-def _parse_stdin(
-    user_input: str, *, num_sides: int, required_num_rolls: int
-) -> list[int] | None:
-    """Parse user input as a list of dice rolls.
+        rolls = None
+        while rolls is None:
+            rolls = self._parse_stdin(
+                user_input, num_sides=num_sides, required_num_rolls=required_num_rolls
+            )
 
-    Returns ``None`` if input is invalid.
+        return rolls
 
-    Example:
-    >>> _parse_stdin("2 3 5", num_sides=6, required_num_rolls=3)
-    [2, 3, 5]
-    """
-    try:
-        rolls = [int(r) for r in user_input.split()]
-    except ValueError:
-        click.echo(
-            "Invalid. Require a space-separated list of integers (like: 1 3 2). Roll again!"
-        )
-        return None
+    def notify_rejection(self) -> None:
+        """TODO"""
+        click.echo("Rejected. Try again!")
 
-    if len(rolls) < required_num_rolls:
-        click.echo(f"Got only {len(rolls)} rolls, need {required_num_rolls}. Roll again!")
-        return None
+    def _parse_stdin(
+        self, user_input: str, *, num_sides: int, required_num_rolls: int
+    ) -> list[int] | None:
+        """Parse user input as a list of dice rolls.
 
-    if not all(1 <= r <= num_sides for r in rolls):
-        click.echo(f"Some rolls are not between 1 and {num_sides}. Roll again!")
-        return None
+        Returns ``None`` if input is invalid.
 
-    return rolls
+        Example:
+        >>> _parse_stdin("2 3 5", num_sides=6, required_num_rolls=3)
+        [2, 3, 5]
+        """
+        try:
+            rolls = [int(r) for r in user_input.split()]
+        except ValueError:
+            click.echo(
+                "Invalid. Require a space-separated list of integers (like: 1 3 2). Roll again!"
+            )
+            return None
 
+        if len(rolls) < required_num_rolls:
+            click.echo(
+                f"Got only {len(rolls)} rolls, need {required_num_rolls}. Roll again!"
+            )
+            return None
+
+        if not all(1 <= r <= num_sides for r in rolls):
+            click.echo(f"Some rolls are not between 1 and {num_sides}. Roll again!")
+            return None
+
+        return rolls
 
 
 class DiceRng(RngBase):
@@ -75,12 +93,13 @@ class DiceRng(RngBase):
     def __init__(
         self,
         *,
-        query_for_dice: QueryForDice = query_stdin_for_dice,
+        query_for_dice: QueryForDice = QueryStdinForDice(),  # TODO: remove default
         num_sides: int = 6,
         required_success_probability: float = 0.99,
     ):
         """Create a `DiceRng`.
 
+        :param query_for_dice: TODO
         :param num_sides: Number of sides of the dice.
         :param required_success_probability: The minimal required probability that
             ``randbelow`` does not reject a roll. If ``upper`` is a power of ``num_sides``
@@ -107,21 +126,20 @@ class DiceRng(RngBase):
         upper_multiple = frame.upper_multiple
 
         result = None
-        count = 0
+        num_rejections = 0
         while result is None:
-            assert count < 20, "Too many wrong inputs."
-
-            rolls = self._next_rolls(required_num_rolls)
-
-            if rolls is None:
-                count += 1
-                continue
-
+            rolls = self._query_for_dice(
+                num_sides=self._num_sides, required_num_rolls=required_num_rolls
+            )
             result = rolls_to_value(self._num_sides, rolls)
 
             if result >= upper_multiple:
-                count = 0
-                click.echo("Rejected. Try again!")
+                # To avoid infinite loops (note that rejection probability should be low
+                # under "normal" conditions):
+                num_rejections += 1
+                assert num_rejections < 100, "Absurdly many rejections!"
+
+                self._query_for_dice.notify_rejection()
                 result = None
                 continue
 
@@ -141,9 +159,6 @@ class DiceRng(RngBase):
         return self._query_for_dice(
             num_sides=self._num_sides, required_num_rolls=required_num_rolls
         )
-
-
-
 
 
 def compute_dice_frame(
