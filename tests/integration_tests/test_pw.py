@@ -47,7 +47,7 @@ def test_dice_rng_simple(monkeypatch, opt_dice_sides):
     output_pattern = re.compile(
         r"^Got only 2 rolls, need 5. Roll again!\n"
         r"Password: [abcd]{3}\nEntropy: 6\.0$"
-    )
+    )  # fmt: skip
 
     result = runner.invoke(
         cli,
