@@ -34,10 +34,9 @@ class QueryStdinForDice:
 
         Return ``None`` if user gives invalid input.
         """
-        user_input = input(f"Roll at least {required_num_rolls} dice: ")
-
         rolls = None
         while rolls is None:
+            user_input = input(f"Roll at least {required_num_rolls} dice: ")
             rolls = self._parse_stdin(
                 user_input, num_sides=num_sides, required_num_rolls=required_num_rolls
             )
