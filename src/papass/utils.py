@@ -1,4 +1,4 @@
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Iterator, Sequence
 from functools import reduce
 from typing import Generic, TypeVar, overload
 
@@ -77,7 +77,6 @@ class QueryUserForDice:
                 user_input, num_sides=num_sides, required_num_rolls=required_num_rolls
             )
 
-
         return rolls
 
     def notify_rejection(self) -> None:
@@ -129,7 +128,6 @@ class QueryUserForDice:
 T = TypeVar("T")
 
 
-# Testing
 class PowerSequence(Generic[T]):
     """A sequence representing a cartesian power product.
 
@@ -189,3 +187,7 @@ class PowerSequence(Generic[T]):
 
         indices = value_to_digits(index, base=self._base_length, length=self._power)
         return tuple(self._sequence[i] for i in indices)
+
+    def __iter__(self) -> Iterator[tuple[T, ...]]:
+        for i in range(self.size):
+            yield self[i]
