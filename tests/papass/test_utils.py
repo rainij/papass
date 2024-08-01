@@ -1,5 +1,5 @@
 import pytest
-from papass.utils import digits_to_value, rolls_to_value
+from papass.utils import digits_to_value, rolls_to_value, value_to_digits
 
 
 @pytest.mark.parametrize(
@@ -25,3 +25,19 @@ def test_digits_to_value(base, digits, expected):
 def test_rolls_to_value(num_sides, rolls):
     expected = digits_to_value(num_sides, [r - 1 for r in rolls])
     assert expected == rolls_to_value(num_sides, rolls)
+
+
+@pytest.mark.parametrize(
+    "value, base, length, expected",
+    [
+        (123, 10, 4, [0, 1, 2, 3]),
+        (3*6 + 4, 6, 2, [3, 4]),
+    ],
+)
+def test_value_to_digits(value, base, length, expected):
+    assert expected == value_to_digits(value, base=base, length=length)
+
+
+class TestQueryUserForDice:
+    def test_valid(self):
+        pass

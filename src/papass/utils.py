@@ -32,7 +32,6 @@ def rolls_to_value(num_sides: int, rolls: Iterable[int]) -> int:
     return digits_to_value(num_sides, digits)
 
 
-# TODO: testing
 def value_to_digits(value: int, *, base: int, length: int | None = None) -> list[int]:
     """Return the digits of ``value`` in given base.
 
@@ -66,12 +65,19 @@ class QueryUserForDice:
 
         Return ``None`` if user gives invalid input.
         """
-        rolls = None
-        while rolls is None:
-            user_input = input(f"Roll at least {required_num_rolls} dice: ")
-            rolls = self._parse_input(
+        rolls: list[int] = []
+        while len(rolls) < required_num_rolls:
+            remaining_num_rolls = required_num_rolls - len(rolls)
+
+            if not rolls:
+                user_input = input(f"Roll {remaining_num_rolls} dice: ")
+            else:
+                user_input = input(f"Roll remaining {remaining_num_rolls} dice: ")
+
+            rolls += self._parse_input(
                 user_input, num_sides=num_sides, required_num_rolls=required_num_rolls
             )
+
 
         return rolls
 
@@ -85,10 +91,10 @@ class QueryUserForDice:
     @staticmethod
     def _parse_input(
         user_input: str, *, num_sides: int, required_num_rolls: int
-    ) -> list[int] | None:
+    ) -> list[int]:
         """Parse user input as a list of dice rolls.
 
-        Returns ``None`` if input is invalid.
+        Returns ``[]`` if input is invalid.
 
         Example
         =======
@@ -100,29 +106,23 @@ class QueryUserForDice:
         In case the user provides invalid input:
 
         >>> cls._parse_input("2 3 7", num_sides=6, required_num_rolls=3)
-        Some rolls are not between 1 and 6. Roll again!
-        >>> cls._parse_input("2 3 5", num_sides=6, required_num_rolls=4)
-        Got only 3 rolls, need 4. Roll again!
+        Some rolls are not between 1 and 6.
+        []
         >>> cls._parse_input("foo 3", num_sides=6, required_num_rolls=3)
-        Invalid. Require a space-separated list of integers (like: 1 3 2). Roll again!
+        Invalid. Require a space-separated list of integers (like: 1 3 2).
+        []
         """
         try:
             rolls = [int(r) for r in user_input.split()]
         except ValueError:
             click.echo(
-                "Invalid. Require a space-separated list of integers (like: 1 3 2). Roll again!"
+                "Invalid. Require a space-separated list of integers (like: 1 3 2)."
             )
-            return None
-
-        if len(rolls) < required_num_rolls:
-            click.echo(
-                f"Got only {len(rolls)} rolls, need {required_num_rolls}. Roll again!"
-            )
-            return None
+            return []
 
         if not all(1 <= r <= num_sides for r in rolls):
-            click.echo(f"Some rolls are not between 1 and {num_sides}. Roll again!")
-            return None
+            click.echo(f"Some rolls are not between 1 and {num_sides}.")
+            return []
 
         return rolls
 
@@ -130,7 +130,7 @@ class QueryUserForDice:
 T = TypeVar("T")
 
 
-# TODO
+# Testing
 class PowerSequence(Generic[T]):
     """A sequence representing a cartesian power product.
 
