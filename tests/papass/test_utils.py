@@ -1,5 +1,11 @@
 import pytest
-from papass.utils import digits_to_value, rolls_to_value, value_to_digits
+from papass.utils import (
+    QueryUserForDice,
+    digits_to_value,
+    rolls_to_value,
+    value_to_digits,
+)
+from tests.utils.mock import patch_input
 
 
 @pytest.mark.parametrize(
@@ -39,5 +45,32 @@ def test_value_to_digits(value, base, length, expected):
 
 
 class TestQueryUserForDice:
-    def test_valid(self):
-        pass
+    @pytest.mark.parametrize("user_input, expected", [
+        (["1 2 3"], [1, 2, 3]),
+        (["1", "4 3"], [1, 4, 3]),
+        (["6", "2", "6"], [6, 2, 6]),
+        (["", "5 5 4"], [5, 5, 4]),
+        # more rolls than required is ok:
+        (["1 2 3 4 5 6"], [1, 2, 3, 4, 5, 6]),
+        # invalid input in between is ignored
+        (["1", "4 asdf", "2 3"], [1, 2, 3]),
+        (["1", "5 6 7", "2 2"], [1, 2, 2]),
+    ])
+    def test_valid(self, monkeypatch, user_input, expected):
+        query_user = QueryUserForDice()
+
+        patch_input(monkeypatch, user_input)
+        result = query_user(num_sides=6, required_num_rolls=3)
+        assert result == expected
+
+    @pytest.mark.parametrize("user_input", [
+        (["1 2 a"]),
+        (["1 2"]),
+        (["1 2", "foo"])
+    ])
+    def test_invalid(self, monkeypatch, user_input):
+        query_user = QueryUserForDice()
+        patch_input(monkeypatch, user_input)
+
+        with pytest.raises(StopIteration):
+            query_user(num_sides=6, required_num_rolls=3)
