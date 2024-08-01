@@ -42,7 +42,7 @@ def test_dice_rng_simple(monkeypatch, opt_dice_sides):
     alphabet = "abcd"
     length = 3
 
-    patch_input(monkeypatch, [[1], [1, 3, 6, 6]])
+    patch_input(monkeypatch, ["1", "1 3 6 6"])
 
     output_pattern = re.compile(
         r"Password: [abcd]{3}\nEntropy: 6\.0$"
