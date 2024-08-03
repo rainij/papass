@@ -166,15 +166,16 @@ class PowerSequence(Generic[T]):
         """
         return self._base_length**self._power
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
         """True iff the sequence is non-empty."""
         return self.size != 0
 
+    # TODO: slice not supported.
     @overload
     def __getitem__(self, index: int) -> tuple[T, ...]: ...
     @overload
     def __getitem__(self, index: slice) -> Sequence[tuple[T, ...]]: ...
-    def __getitem__(self, index):
+    def __getitem__(self, index: int | slice) -> tuple[T, ...] | Sequence[tuple[T, ...]]:
         """Get item at given index.
 
         The elements are ordered lexicographically.

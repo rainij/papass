@@ -4,7 +4,7 @@ from papass.random.base import RngBase
 from tests.utils.cycle_rng import CycleRng
 
 
-def get_cycle():
+def get_cycle() -> list[int]:
     return [0, 3, 2, 1]
 
 

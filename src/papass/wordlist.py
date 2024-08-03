@@ -55,7 +55,7 @@ class WordList(Sequence[str]):
     def __getitem__(self, index: int) -> str: ...
     @overload
     def __getitem__(self, index: slice) -> "WordList": ...
-    def __getitem__(self, index):
+    def __getitem__(self, index: int | slice) -> str | "WordList":
         """Get a word at an index or a new word list from a slice."""
         if isinstance(index, int):
             return self._words[index]
@@ -76,7 +76,7 @@ class WordList(Sequence[str]):
     def __add__(self, other: "WordList") -> "WordList": ...
     @overload
     def __add__(self, other: list[str]) -> "WordList": ...
-    def __add__(self, other) -> "WordList":
+    def __add__(self, other: "WordList" | list[str]) -> "WordList":
         """Combine two word lists to a new word list made of the union of their words.
 
         If the second summand is a list of words it behaves as if this list was converted
@@ -98,7 +98,7 @@ class WordList(Sequence[str]):
             fout.write("\n".join(self))
 
     @staticmethod
-    def from_file(file_path: Path | str, **options):
+    def from_file(file_path: Path | str, **options) -> "WordList":
         """Construct a wordlist from a file of words (newline separated).
 
         The ``options`` are the same as those for ``__init__``.

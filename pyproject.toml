@@ -61,5 +61,11 @@ select = ["F", "I"]
 
 [tool.mypy]
 packages = "papass,tests"
+strict = true
 
-check_untyped_defs = true
+[[tool.mypy.overrides]]
+module = [
+    "tests.*",
+]
+allow_untyped_defs = true
+allow_incomplete_defs = true

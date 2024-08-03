@@ -81,14 +81,14 @@ from .wordlist import WordList
 __version__ = "0.0.5"
 
 __all__ = [
-    DiceRng.__name__,
-    PassphraseGenerator.__name__,
-    PassphraseResult.__name__,
-    PasswordGenerator.__name__,
-    PasswordResult.__name__,
-    QueryForDice.__name__,
-    QueryUserForDice.__name__,
-    RngBase.__name__,
-    SystemRng.__name__,
-    WordList.__name__,
+    "DiceRng",
+    "PassphraseGenerator",
+    "PassphraseResult",
+    "PasswordGenerator",
+    "PasswordResult",
+    "QueryForDice",
+    "QueryUserForDice",
+    "RngBase",
+    "SystemRng",
+    "WordList",
 ]
