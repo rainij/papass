@@ -59,6 +59,8 @@ def value_to_digits(value: int, *, base: int, length: int | None = None) -> list
 
 
 class QueryUserForDice:
+    """Asks the user to roll some dice."""
+
     def __call__(self, *, num_sides: int, required_num_rolls: int) -> list[int]:
         """Ask user for desired number of dice rolls.
 

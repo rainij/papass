@@ -2,9 +2,8 @@ import math
 from dataclasses import dataclass
 from functools import cached_property
 
-from papass.utils import PowerSequence
-
 from .random.base import RngBase
+from .utils import PowerSequence
 from .wordlist import WordList
 
 
