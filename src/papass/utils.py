@@ -150,8 +150,6 @@ class PowerSequence(Generic[T]):
 
     def __init__(self, sequence: Sequence[T], power: int):
         """Create a power sequence."""
-
-        # TODO: test that power = 0 and sequence = [] should make [(,)].
         assert power >= 0
 
         self._sequence = sequence

@@ -34,7 +34,7 @@ class DiceRng(RngBase):
         *,
         query_for_dice: QueryForDice = QueryUserForDice(),
         num_sides: int = 6,
-        required_success_probability: float = 0.99,
+        required_success_probability: float = 0.999,
     ):
         """Create a `DiceRng`.
 
