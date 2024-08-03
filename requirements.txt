@@ -17,6 +17,10 @@ packaging==24.1
 pluggy==1.5.0
     # via pytest
 pytest==8.3.1
+    # via
+    #   papass (pyproject.toml)
+    #   pytest-timeout
+pytest-timeout==2.3.1
     # via papass (pyproject.toml)
 ruff==0.5.4
     # via papass (pyproject.toml)
