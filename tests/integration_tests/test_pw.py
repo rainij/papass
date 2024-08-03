@@ -41,9 +41,12 @@ def test_dice_rng_simple(monkeypatch, opt_dice_sides):
     runner = CliRunner()
     alphabet = "abcd"
     length = 3
-    output_pattern = re.compile(r"^Password: [abcd]{3}\nEntropy: 6\.0$")
 
-    patch_input(monkeypatch, [[1, 1], [1, 6], [6, 6]])
+    patch_input(monkeypatch, ["1", "1 3 6 6 2"])
+
+    output_pattern = re.compile(
+        r"Password: [abcd]{3}\nEntropy: 6\.0$"
+    )  # fmt: skip
 
     result = runner.invoke(
         cli,
@@ -52,7 +55,7 @@ def test_dice_rng_simple(monkeypatch, opt_dice_sides):
     )
 
     assert result.exit_code == 0
-    assert output_pattern.match(result.output)
+    assert output_pattern.match(result.output), result.output
 
 
 @pytest.mark.parametrize("opt", ["-e", "--alpha-exclude"])

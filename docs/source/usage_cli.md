@@ -41,18 +41,17 @@ Passphrase: grimy street acetone overcast
 Entropy: 51.6993
 ```
 
-You can use several wordlists in which case the wordlists are merged and deduplicated. To
-use **physical dice** use the ``-r dice`` option.
-
-In the following example you have to roll five dice four times:
+You can use several wordlists (`-w wordlist-1.txt -w wordlist-2.txt`) in which case the
+wordlists are merged and deduplicated. To use **physical dice** use the ``-r dice``
+option. In the following example you have to roll 20 dice:
 
 ```{code} console
 $ papass pp -l 4 -w wordlist.txt -r dice
-Roll at least 5 dice: 1 6 3 4 4
-Roll at least 5 dice: 4 1 1 2 5
-Roll at least 5 dice: 3 1 2 1 4
-Roll at least 5 dice: 4 4 1 3 6
-Passphrase: colossal math fleshed payday
+Roll 20 dice: 5 1 3 5 1
+Roll remaining 15 dice: 4 6 4 6 2
+Roll remaining 10 dice: 5 6 2 3 6
+Roll remaining 5 dice: 6 5 2 2 4
+Passphrase: renegade reapprove static uphold
 Entropy: 51.6993
 ```
 
@@ -65,14 +64,16 @@ like so:
 
 ```{code} console
 $ papass pp -l 4 -w wordlist.txt -r dice
-Roll at least 5 dice: 6 6 6 6 6
-Rejected. Try again!
-Roll at least 5 dice: ...
+Roll 20 dice: 6 6 6 6 6 6 6 6 6 6
+Roll remaining 10 dice: 6 6 6 6 6 6 6 6 6 6
+Rejected. Please try again.
+Roll 20 dice: ...
 ```
 
 This never happens if the number of words is actually a power of six. In all other cases
 the tool chooses the number of rolls in a way so that this does not happen too often.
 
+{#where-to-get-wordlists}
 #### Where to get wordlists from
 
 You can download a wordlist designed for passphrases from the
@@ -125,8 +126,8 @@ Either from `foobar` and `foo` or else from `foo` and `barfoo`. `papass` warns y
 something like this *could* happen:
 
 ```{code} console
-$ papass -c 2 -w wordlist.txt -r system -d ""
-Phrase: foobarfoo
+$ papass pp -l 2 -w wordlist.txt -r system -d ""
+Passphrase: foobarfoo
 Entropy: ...
 WARNING: Entropy might be slightly lower than estimated. See https://papass.readthedocs.io/en/stable/usage_cli.html#entropy-guarantee.
 ```
@@ -157,6 +158,17 @@ if you make your alphabet larger or use a bigger length.
 
 The above command uses the operating systems most secure random number generator. You can
 utilize physical dice with `-r dice`.
+
+```{code} console
+$ papass pw -l 20 -p letters,digits -i "@#" -e "0oO1l" -r dice
+Roll 50 dice: 4 1 6 1 1 5 4 6 2 3
+Roll remaining 40 dice: 5 2 4 5 1 2 3 3 2 1
+Roll remaining 30 dice: 6 5 3 6 3 5 6 3 2 5
+Roll remaining 20 dice: 4 1 5 5 2 4 4 4 2 5
+Roll remaining 10 dice: 3 1 6 2 6 1 1 4 1 2
+Password: wCYbzVgtKiqL7L5Jxxzk
+Entropy: 117.653
+```
 
 To see what `-p` accepts use
 

@@ -1,27 +1,69 @@
+import string
+
 import pytest
+from hypothesis import HealthCheck, given, settings
+from hypothesis import strategies as st
 from papass import PassphraseGenerator, WordList
 
 from tests.utils.cycle_rng import CycleRng
 
 
+@st.composite
+def st_ordered_pair(draw, min: int, max: int) -> tuple[int, int]:
+    """Strategy returning (i, j) with min <= i < j <= max."""
+    j = draw(st.integers(min + 1, max))
+    i = draw(st.integers(min, j - 1))
+    return (i, j)
+
+
 class TestPassphraseGenerator:
+    @given(ij=st_ordered_pair(0, 26**11 - 1))
+    @settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
+    def test_randbelow_to_passphrase_1(self, ij):
+        """Makes sure that the mapping preserves strict order and hence is bijective."""
+        length = 11
+        wordlist = WordList(string.ascii_lowercase)
+
+        # Compare with @given:
+        assert length == 11, "Assumption of test violated"
+        assert len(wordlist) == 26, "Assumption of test violated"
+
+        # Each call to generate calls randbelow exactly once:
+        i, j = ij
+        ppg = PassphraseGenerator(wordlist=wordlist, rng=CycleRng([i, j]))
+        passphrase_1 = ppg.generate(length).passphrase
+        passphrase_2 = ppg.generate(length).passphrase
+
+        assert i < j, "This shouldn't fail"
+        assert passphrase_1 < passphrase_2
+
     @pytest.fixture
     def wordlist(self):
-        """Four words. Two bits of entropy per word."""
-        return WordList(["a", "b", "c", "d"])
+        """Eight words. Three bits of entropy per word."""
+        return WordList(list("abcdefgh"))
 
     @pytest.mark.parametrize(
         "cycle, passphrase",
         [
-            ([2], "cccc"),
-            ([0, 1], "abab"),
-            ([0, 3, 1, 2], "adbc"),
+            # NOTE: choice and hence randbelow should only be called once.
+            ([0], "aaaa"),
+            ([1], "aaab"),
+            ([2], "aaac"),
+            # Checks that the second value in cycle is irrelevant:
+            ([0, 1], "aaaa"),
+            # Each coefficient corresponds to a letter in order:
+            ([4 * 8**3 + 0 * 8**2 + 2 * 8 + 7], "each"),
+            ([2 * 8**3 + 0 * 8**2 + 5 * 8 + 4], "cafe"),
+            ([8**4 - 1], "hhhh"),
         ],
     )
-    def test_uses_rng_choice_in_order(self, wordlist, cycle, passphrase):
+    def test_randbelow_to_passphrase_2(self, wordlist, cycle, passphrase):
+        """Similar purpose as the other test of the same name but from a different angle."""
         ppg = PassphraseGenerator(wordlist=wordlist, rng=CycleRng(cycle), delimiter="")
+        result = ppg.generate(4)
 
-        assert ppg.generate(4).passphrase == passphrase
+        assert result.passphrase == passphrase
+        assert result.entropy == pytest.approx(12.0)
 
     @pytest.mark.parametrize("length", range(4))
     def test_entropy(self, wordlist, length):
@@ -30,15 +72,15 @@ class TestPassphraseGenerator:
         )
 
         # wordlist has 4 words, so 2 bits of entropy per word.
-        assert ppg.generate(length).entropy == pytest.approx(2 * length)
+        assert ppg.generate(length).entropy == pytest.approx(3 * length)
 
     @pytest.mark.parametrize("delimiter", list(" @-*"))
     def test_delimiter(self, wordlist, delimiter: str):
         ppg = PassphraseGenerator(
-            wordlist=wordlist, rng=CycleRng(range(4)), delimiter=delimiter
+            wordlist=wordlist, rng=CycleRng([0]), delimiter=delimiter
         )
 
-        assert ppg.generate(3).passphrase == delimiter.join(wordlist[:3])
+        assert ppg.generate(3).passphrase == delimiter.join("aaa")
 
 
 class TestEntropyGuarantee:

@@ -27,7 +27,7 @@ myst_enable_extensions = [
 
 autodoc_default_options = {
     "public-members": True,
-    "exclude-members": "__weakref__, __hash__, __repr__",
+    "exclude-members": "__weakref__, __hash__, __repr__, __subclasshook__",
 }
 
 
