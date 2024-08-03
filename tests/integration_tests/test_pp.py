@@ -50,7 +50,7 @@ def test_dice_rng_simple(monkeypatch, tmp_path, opt_dice_sides):
     length = 3
     output_pattern = re.compile(r"^Passphrase: \w\w\w \w\w\w \w\w\w\nEntropy: 6\.0$")
 
-    patch_input(monkeypatch, ["1 2 1 6 6"])
+    patch_input(monkeypatch, ["6", "2 1 6 5 6"])
 
     with runner.isolated_filesystem(temp_dir=tmp_path):
         with open(WORDLIST_NAME, "w") as f:
