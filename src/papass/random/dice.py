@@ -7,10 +7,11 @@ from .base import RngBase
 
 
 class QueryForDice(Protocol):
-    """A callback to be used with ``DiceRng``."""
+    """Interface for the ``query_for_dice`` option of ``DiceRng``."""
 
     def __call__(self, *, num_sides: int, required_num_rolls: int) -> list[int]:
-        """
+        """Called within ``DiceRng.randbelow`` to query for dice rolls.
+
         :param num_sides: Number of sides of the dice.
         :param require_num_rolls: The number of rolls.
         :return: A list of rolls of the required length.
@@ -32,13 +33,13 @@ class DiceRng(RngBase):
     def __init__(
         self,
         *,
-        query_for_dice: QueryForDice = QueryUserForDice(),
+        query_for_dice: QueryForDice | None = None,
         num_sides: int = 6,
         required_success_probability: float = 0.999,
     ):
         """Create a `DiceRng`.
 
-        :param query_for_dice: A callback to query for dice rolls.
+        :param query_for_dice: A callback to query for dice rolls. ``None`` means *use default*.
         :param num_sides: Number of sides of the dice.
         :param required_success_probability: The minimal required probability that
             ``randbelow`` does not reject a roll. If ``upper`` is a power of ``num_sides``
@@ -50,7 +51,7 @@ class DiceRng(RngBase):
             0 <= required_success_probability < 1.0
         ), f"required_success_probability must be >= 0 and < 1.0. Got {required_success_probability}."
 
-        self._query_for_dice = query_for_dice
+        self._query_for_dice = query_for_dice or QueryUserForDice()
         self._num_sides = num_sides
         self._required_success_probability = required_success_probability
 
