@@ -63,22 +63,6 @@ def test_randbelow(num_sides, upper, rolls):
     assert query.num_rejections == len(rolls) - 1
 
 
-# TODO move this test
-# @given(
-#     num_sides=st.integers(2, 20),
-#     required_num_rolls=st.integers(1, 10),
-#     rng=st.randoms(use_true_random=True),
-# )
-# @settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
-# def test_query_stdin_for_dice(monkeypatch, num_sides, required_num_rolls, rng: Random):
-#     """Test that valid input from stdin gets parsed correctly."""
-#     rolls = [rng.randint(1, num_sides) for _ in range(required_num_rolls)]
-#     patch_input(monkeypatch, [rolls])
-
-#     got = query_stdin_for_dice(num_sides=num_sides, required_num_rolls=required_num_rolls)
-#     assert got == rolls
-
-
 @given(
     num_sides=st.integers(2, 20),
     upper=st.integers(2, 1000_000),
