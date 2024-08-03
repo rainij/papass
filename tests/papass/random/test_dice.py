@@ -141,7 +141,7 @@ class TestUniformity:
     )
     def test_part_2(self, rand_seed):
         """Test that all values from [0, upper) are possible."""
-        # These values make it *extremely* unlikely the the heuristic check below fails:
+        # These values make it *extremely* unlikely that the heuristic check below fails:
         num_sides = 5
         upper = 3
         num_calls = 200
