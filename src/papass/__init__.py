@@ -78,7 +78,7 @@ from .random import DiceRng, QueryForDice, RngBase, SystemRng
 from .utils import QueryUserForDice
 from .wordlist import WordList
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 __all__ = [
     DiceRng.__name__,
