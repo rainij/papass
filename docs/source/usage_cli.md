@@ -73,6 +73,7 @@ Roll at least 5 dice: ...
 This never happens if the number of words is actually a power of six. In all other cases
 the tool chooses the number of rolls in a way so that this does not happen too often.
 
+{#where-to-get-wordlists}
 #### Where to get wordlists from
 
 You can download a wordlist designed for passphrases from the
