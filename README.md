@@ -59,7 +59,7 @@ Run tests and type checking via
 
 ```{code} console
 $ pytest
-$ mypy .
+$ mypy
 ```
 
 Formatting and linting is done via [ruff](https://github.com/astral-sh/ruff).
