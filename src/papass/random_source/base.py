@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
-from typing import TypeVar
+from typing import TypeVar, final
 
 T = TypeVar("T")
 
@@ -12,6 +12,7 @@ class RngBase(ABC):
     def randbelow(self, upper: int) -> int:
         """Return a random integer ``i`` with ``0 <= i < upper``."""
 
+    @final
     def choice(self, items: Sequence[T]) -> T:
         """Return a random item from ``items``.
 
