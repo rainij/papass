@@ -29,7 +29,7 @@ def available_randomness_sources_str() -> str:
     return ", ".join(f"'{s}'" for s in available_random_sources())
 
 
-def get_rng(random_source: str, **possible_options: dict[str, Any]) -> RngBase:
+def get_rng(random_source: str, **possible_options: Any) -> RngBase:
     """Get a random number generator of the given source.
 
     The `possible_options` should contain all command line options which are relevant for

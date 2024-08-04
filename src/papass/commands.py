@@ -76,15 +76,15 @@ RESULT_BG_COLOR = (0, 44, 77)
     help="If wordlist contains entries like `123 foo` normalizes it to `foo`.",
 )
 def pp(
-    length,
-    randomness_source,
-    wordlist_file,
-    delimiter,
-    min_word_size,
-    max_word_size,
-    dice_sides,
-    remove_leading_digits,
-):
+    length: int,
+    randomness_source: str,
+    wordlist_file: str,
+    delimiter: str,
+    min_word_size: int,
+    max_word_size: int,
+    dice_sides: int,
+    remove_leading_digits: bool,
+) -> None:
     """Create a passphrase.
 
     \b
@@ -166,14 +166,14 @@ def pp(
     help="Show available --alpha-preset names and exit.",
 )
 def pw(
-    length,
-    randomness_source,
-    dice_sides,
-    alpha_include,
-    alpha_preset,
-    alpha_exclude,
-    help_alpha_preset,
-):
+    length: int,
+    randomness_source: str,
+    dice_sides: int,
+    alpha_include: str,
+    alpha_preset: str,
+    alpha_exclude: str,
+    help_alpha_preset: bool,
+) -> None:
     """Create a password.
 
     \b
