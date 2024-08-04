@@ -59,7 +59,7 @@ docstring-code-format = true
 [tool.ruff.lint]
 select = [
     # pycodestyle
-    #"E",
+    "E",
     # pydocstyle
     #"D",
     # Pyflakes

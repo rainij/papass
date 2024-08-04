@@ -47,9 +47,10 @@ class DiceRng(RngBase):
             increases with this probability.
         """
         assert num_sides > 1, f"num_sides must be at least 1, got {num_sides}"
-        assert (
-            0 <= required_success_probability < 1.0
-        ), f"required_success_probability must be >= 0 and < 1.0. Got {required_success_probability}."
+        assert 0 <= required_success_probability < 1.0, (
+            "required_success_probability must be >= 0 and < 1.0. "
+            f"Got {required_success_probability}."
+        )
 
         self._query_for_dice = query_for_dice or QueryUserForDice()
         self._num_sides = num_sides
