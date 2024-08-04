@@ -1,10 +1,10 @@
-from typing import Any, Type
+from typing import Any
 
 from .base import RngBase
 from .dice import DiceRng
 from .system import SystemRng
 
-_rng_registry: dict[str, tuple[Type[RngBase], dict[str, str]]] = dict(
+_rng_registry: dict[str, tuple[type[RngBase], dict[str, str]]] = dict(
     # This maps the random_source to two things:
     # 1. A ctor for an rng.
     # 2. A dict mapping the __init__ options of the rng to their corresponding command line options.

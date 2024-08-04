@@ -107,7 +107,7 @@ class WordList(Sequence[str]):
             file_path = Path(file_path)
         assert file_path.exists(), f"Wordfile does not exist: {file_path}"
 
-        with open(file_path, "r") as fin:
+        with open(file_path) as fin:
             words = [w.strip("\n") for w in fin.readlines()]
             return WordList(words, **options)
 
