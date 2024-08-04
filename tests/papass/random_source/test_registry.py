@@ -28,4 +28,4 @@ def test_get_rng(monkeypatch, random_source, options):
     rng = get_rng(random_source, **options)
 
     assert isinstance(rng, CycleRng)
-    assert [0, 1] == [rng.randbelow(2) for _ in range(2)]
+    assert [rng.randbelow(2) for _ in range(2)] == [0, 1]

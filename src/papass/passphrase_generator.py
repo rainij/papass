@@ -110,9 +110,7 @@ class PassphraseGenerator:
         if count <= 1:
             # In this case delimiter is not even used
             return True
-        elif self._delimiter == "":
-            return False
-        elif self._delimiter in self._word_alphabet:
+        elif self._delimiter == "" or self._delimiter in self._word_alphabet:
             return False
 
         return True

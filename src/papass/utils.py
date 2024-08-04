@@ -14,7 +14,7 @@ def digits_to_value(base: int, digits: Iterable[int]) -> int:
     >>> digits_to_value(10, [1, 2, 3])
     123
     """
-    assert 1 < base
+    assert base > 1
     assert all(0 <= d < base for d in digits)
     return reduce(lambda acc, r: base * acc + r, digits, 0)
 
