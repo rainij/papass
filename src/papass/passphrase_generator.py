@@ -2,7 +2,7 @@ import math
 from dataclasses import dataclass
 from functools import cached_property
 
-from .random.base import RngBase
+from .random_source.base import RngBase
 from .utils import PowerSequence
 from .wordlist import WordList
 

@@ -1,5 +1,5 @@
 import pytest
-from papass.random.base import RngBase
+from papass.random_source.base import RngBase
 
 from tests.utils.cycle_rng import CycleRng
 

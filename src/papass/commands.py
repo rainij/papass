@@ -12,7 +12,7 @@ from papass.alphabet import (
     alphabet_preset_base,
     alphabet_preset_shortcuts,
 )
-from papass.random import (
+from papass.random_source import (
     available_randomness_sources_str,
     default_randomness_source,
     get_rng,

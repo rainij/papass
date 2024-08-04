@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Iterable, Iterator, Sequence
 
-from papass.random.dice import QueryForDice
+from papass.random_source.dice import QueryForDice
 
 
 def patch_input(monkeypatch, rolls: Iterable[str]) -> None:

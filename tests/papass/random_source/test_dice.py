@@ -3,7 +3,7 @@ from random import Random
 import pytest
 from hypothesis import given
 from hypothesis import strategies as st
-from papass.random.dice import DiceRng, compute_dice_frame
+from papass.random_source.dice import DiceRng, compute_dice_frame
 from papass.utils import rolls_to_value
 
 from tests.utils.mock import MockCallbackQueryForDice, MockIterQueryForDice

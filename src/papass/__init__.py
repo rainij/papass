@@ -74,7 +74,7 @@ the ``alphabet`` like e.g ``'3002212230'``. The ``entropy`` is ``20.0`` because 
 
 from .passphrase_generator import PassphraseGenerator, PassphraseResult
 from .password_generator import PasswordGenerator, PasswordResult
-from .random import DiceRng, QueryForDice, RngBase, SystemRng
+from .random_source import DiceRng, QueryForDice, RngBase, SystemRng
 from .utils import QueryUserForDice
 from .wordlist import WordList
 

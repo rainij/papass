@@ -1,4 +1,4 @@
-from papass.random.system import SystemRng
+from papass.random_source.system import SystemRng
 
 
 def test_system():
