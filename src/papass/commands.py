@@ -94,7 +94,6 @@ def pp(
     Passphrase: gents backed marvelous mounting
     Entropy: 51.6993
     """
-
     try:
         rng = get_rng(randomness_source, dice_sides=dice_sides)
 
@@ -179,7 +178,6 @@ def pw(
 
     NOTE: You can use all --alpha-* options simultaneously.
     """
-
     if help_alpha_preset:
         print_alpha_preset()
         return

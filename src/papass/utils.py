@@ -8,11 +8,11 @@ import click
 def digits_to_value(base: int, digits: Iterable[int]) -> int:
     """Compute the integer with the given digits in base.
 
-    Example
-    =======
-
+    Example:
+    -------
     >>> digits_to_value(10, [1, 2, 3])
     123
+
     """
     assert base > 1
     assert all(0 <= d < base for d in digits)
@@ -22,11 +22,11 @@ def digits_to_value(base: int, digits: Iterable[int]) -> int:
 def rolls_to_value(num_sides: int, rolls: Iterable[int]) -> int:
     """Compute the integer corresponding to the given dice rolls.
 
-    Example
-    =======
-
+    Example:
+    -------
     >>> rolls_to_value(6, [5, 3])  # 6*(5-1) + (3-1)
     26
+
     """
     digits = [r - 1 for r in rolls]
     return digits_to_value(num_sides, digits)
@@ -35,11 +35,11 @@ def rolls_to_value(num_sides: int, rolls: Iterable[int]) -> int:
 def value_to_digits(value: int, *, base: int, length: int | None = None) -> list[int]:
     """Return the digits of ``value`` in given base.
 
-    Example
-    =======
-
+    Example:
+    -------
     >>> value_to_digits(123, base=10, length=4)
     [0, 1, 2, 3]
+
     """
     assert value >= 0, "Only positive values allowed."
 
@@ -94,9 +94,8 @@ class QueryUserForDice:
 
         Returns ``[]`` if input is invalid.
 
-        Example
-        =======
-
+        Example:
+        -------
         >>> cls = QueryUserForDice
         >>> cls._parse_input("2 3 5", num_sides=6, required_num_rolls=3)
         [2, 3, 5]
@@ -109,6 +108,7 @@ class QueryUserForDice:
         >>> cls._parse_input("foo 3", num_sides=6, required_num_rolls=3)
         Invalid. Require a space-separated list of integers (like: 1 3 2).
         []
+
         """
         try:
             rolls = [int(r) for r in user_input.split()]
@@ -129,9 +129,8 @@ T = TypeVar("T")
 class PowerSequence(Generic[T]):
     """A sequence representing a cartesian power product.
 
-    Example
-    =======
-
+    Example:
+    -------
     >>> ps = PowerSequence([0, 1, 2], 2)
     >>> list(ps)
     [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
@@ -144,6 +143,7 @@ class PowerSequence(Generic[T]):
 
     NOTE: In essence this thing is a Sequence. Unfortunately due to a limitation of
     CPython __len__ is not allowed to return large integers (it must be "index-sized").
+
     """
 
     def __init__(self, sequence: Sequence[T], power: int):

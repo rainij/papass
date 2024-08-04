@@ -62,8 +62,8 @@ select = [
     "I",
     # pycodestyle
     "E",
-    # TODO: pydocstyle
-    # "D",
+    # pydocstyle
+    "D",
     # Pyflakes
     "F",
     # pyupgrade

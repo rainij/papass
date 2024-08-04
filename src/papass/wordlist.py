@@ -9,15 +9,15 @@ class WordList(Sequence[str]):
 
     Internally the list of words is deduplicated and sorted (via ``sorted``).
 
-    Example
-    =======
-
+    Example:
+    -------
     >>> wordlist = WordList(["c", "b", "a"])
     >>> wordlist
     WordList(['a', 'b', 'c'])
     >>> assert wordlist[0] == "a"
     >>> assert list(wordlist) == ["a", "b", "c"]
     >>> assert wordlist == WordList(["a", "b", "c"])
+
     """
 
     def __init__(
