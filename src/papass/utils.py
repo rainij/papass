@@ -164,7 +164,8 @@ class PowerSequence(Generic[T]):
 
         NOTE: This replaces __len__. See class docstring for the reason.
         """
-        return self._base_length**self._power
+        result: int = self._base_length ** self._power
+        return result
 
     def __bool__(self) -> bool:
         """True iff the sequence is non-empty."""
