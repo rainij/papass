@@ -17,9 +17,7 @@ def test_available_random_sources():
     assert len(available_random_sources()) >= 2
 
 
-@pytest.mark.parametrize(
-    "random_source,options", [("cycle_rng", dict(cycle_from_cmd=[0, 1]))]
-)
+@pytest.mark.parametrize("random_source,options", [("cycle_rng", dict(cycle_from_cmd=[0, 1]))])
 def test_get_rng(monkeypatch, random_source, options):
     monkeypatch.setattr(
         papass.random_source.registry,

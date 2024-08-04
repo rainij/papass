@@ -54,9 +54,7 @@ from tests.utils.mock import MockCallbackQueryForDice, MockIterQueryForDice
 def test_randbelow(num_sides, upper, rolls):
     """*Basic* test showing that randbelow behaves as expected."""
     query = MockIterQueryForDice(rolls)
-    rng = DiceRng(
-        query_for_dice=query, num_sides=num_sides, required_success_probability=0.99
-    )
+    rng = DiceRng(query_for_dice=query, num_sides=num_sides, required_success_probability=0.99)
 
     expected = rolls_to_value(num_sides, rolls[-1]) % upper
     assert rng.randbelow(upper) == expected

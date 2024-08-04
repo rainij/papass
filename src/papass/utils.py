@@ -89,9 +89,7 @@ class QueryUserForDice:
         click.echo("Rejected. Please try again.")
 
     @staticmethod
-    def _parse_input(
-        user_input: str, *, num_sides: int, required_num_rolls: int
-    ) -> list[int]:
+    def _parse_input(user_input: str, *, num_sides: int, required_num_rolls: int) -> list[int]:
         """Parse user input as a list of dice rolls.
 
         Returns ``[]`` if input is invalid.
@@ -115,9 +113,7 @@ class QueryUserForDice:
         try:
             rolls = [int(r) for r in user_input.split()]
         except ValueError:
-            click.echo(
-                "Invalid. Require a space-separated list of integers (like: 1 3 2)."
-            )
+            click.echo("Invalid. Require a space-separated list of integers (like: 1 3 2).")
             return []
 
         if not all(1 <= r <= num_sides for r in rolls):

@@ -105,9 +105,7 @@ def pp(
             remove_leading_digits=remove_leading_digits,
         )
 
-        passphrase_generator = PassphraseGenerator(
-            wordlist=wordlist, rng=rng, delimiter=delimiter
-        )
+        passphrase_generator = PassphraseGenerator(wordlist=wordlist, rng=rng, delimiter=delimiter)
         result = passphrase_generator.generate(length)
     except AssertionError as error:
         click.secho(f"ERROR: {error}", fg="red")
@@ -149,17 +147,13 @@ def pp(
     default=6,
     help="Number of sides of dice (default: 6).",
 )
-@click.option(
-    "--alpha-include", "-i", help="Include these characters for password generation."
-)
+@click.option("--alpha-include", "-i", help="Include these characters for password generation.")
 @click.option(
     "--alpha-preset",
     "-p",
     help="Comma separated list of pre-defined character sets. See also --help-alpha-preset.",
 )
-@click.option(
-    "--alpha-exclude", "-e", help="Exclude these characters for password generation."
-)
+@click.option("--alpha-exclude", "-e", help="Exclude these characters for password generation.")
 @click.option(
     "--help-alpha-preset",
     is_flag=True,
@@ -217,9 +211,7 @@ def pw(
 
 
 def print_alpha_preset() -> None:
-    base = {
-        k: click.style(v, bg=RESULT_BG_COLOR) for k, v in alphabet_preset_base().items()
-    }
+    base = {k: click.style(v, bg=RESULT_BG_COLOR) for k, v in alphabet_preset_base().items()}
     shortcuts = {k: ",".join(v) for k, v in alphabet_preset_shortcuts().items()}
 
     click.echo("The following names can be used with -p, --alpha-preset:")
