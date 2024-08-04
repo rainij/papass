@@ -1,6 +1,6 @@
 from collections.abc import Iterable, Iterator, Sequence
 from functools import reduce
-from typing import Generic, TypeVar, overload
+from typing import Generic, NoReturn, TypeVar, overload
 
 import click
 
@@ -164,19 +164,18 @@ class PowerSequence(Generic[T]):
 
         NOTE: This replaces __len__. See class docstring for the reason.
         """
-        result: int = self._base_length ** self._power
+        result: int = self._base_length**self._power
         return result
 
     def __bool__(self) -> bool:
         """True iff the sequence is non-empty."""
         return self.size != 0
 
-    # TODO: slice not supported.
     @overload
     def __getitem__(self, index: int) -> tuple[T, ...]: ...
     @overload
-    def __getitem__(self, index: slice) -> Sequence[tuple[T, ...]]: ...
-    def __getitem__(self, index: int | slice) -> tuple[T, ...] | Sequence[tuple[T, ...]]:
+    def __getitem__(self, index: slice) -> NoReturn: ...
+    def __getitem__(self, index: int | slice) -> tuple[T, ...]:
         """Get item at given index.
 
         The elements are ordered lexicographically.
