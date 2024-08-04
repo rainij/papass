@@ -9,12 +9,12 @@ from .registry import (
 from .system import SystemRng
 
 __all__ = [
-    available_random_sources.__name__,
-    available_randomness_sources_str.__name__,
-    default_randomness_source.__name__,
-    DiceRng.__name__,
-    get_rng.__name__,
-    QueryForDice.__name__,
-    RngBase.__name__,
-    SystemRng.__name__,
+    "available_random_sources",
+    "available_randomness_sources_str",
+    "default_randomness_source",
+    "DiceRng",
+    "get_rng",
+    "QueryForDice",
+    "RngBase",
+    "SystemRng",
 ]

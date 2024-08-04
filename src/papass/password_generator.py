@@ -2,7 +2,7 @@ import math
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from papass.random import RngBase
+from papass.random_source import RngBase
 from papass.utils import PowerSequence
 
 

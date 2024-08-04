@@ -74,21 +74,21 @@ the ``alphabet`` like e.g ``'3002212230'``. The ``entropy`` is ``20.0`` because 
 
 from .passphrase_generator import PassphraseGenerator, PassphraseResult
 from .password_generator import PasswordGenerator, PasswordResult
-from .random import DiceRng, QueryForDice, RngBase, SystemRng
+from .random_source import DiceRng, QueryForDice, RngBase, SystemRng
 from .utils import QueryUserForDice
 from .wordlist import WordList
 
 __version__ = "0.0.5"
 
 __all__ = [
-    DiceRng.__name__,
-    PassphraseGenerator.__name__,
-    PassphraseResult.__name__,
-    PasswordGenerator.__name__,
-    PasswordResult.__name__,
-    QueryForDice.__name__,
-    QueryUserForDice.__name__,
-    RngBase.__name__,
-    SystemRng.__name__,
-    WordList.__name__,
+    "DiceRng",
+    "PassphraseGenerator",
+    "PassphraseResult",
+    "PasswordGenerator",
+    "PasswordResult",
+    "QueryForDice",
+    "QueryUserForDice",
+    "RngBase",
+    "SystemRng",
+    "WordList",
 ]

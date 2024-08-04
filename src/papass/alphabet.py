@@ -65,9 +65,9 @@ def alphabet_from_preset(preset: Iterable[str]) -> str:
     return "".join(sorted(set(raw_result)))
 
 
-def _preset_base_join():
+def _preset_base_join() -> str:
     return ",".join(_preset_base)
 
 
-def _preset_shortcut_join():
+def _preset_shortcut_join() -> str:
     return ",".join(_preset_shortcuts)

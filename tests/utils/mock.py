@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Iterable, Iterator, Sequence
 
-from papass.random.dice import QueryForDice
+from papass.random_source.dice import QueryForDice
 
 
 def patch_input(monkeypatch, rolls: Iterable[str]) -> None:
@@ -11,7 +11,7 @@ def patch_input(monkeypatch, rolls: Iterable[str]) -> None:
 
 
 class MockQueryForDice(ABC, QueryForDice):
-    def __init__(self):
+    def __init__(self) -> None:
         self._num_rejections = 0
 
     @abstractmethod

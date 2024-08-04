@@ -67,18 +67,14 @@ class TestPassphraseGenerator:
 
     @pytest.mark.parametrize("length", range(4))
     def test_entropy(self, wordlist, length):
-        ppg = PassphraseGenerator(
-            wordlist=wordlist, rng=CycleRng(range(4)), delimiter=" "
-        )
+        ppg = PassphraseGenerator(wordlist=wordlist, rng=CycleRng(range(4)), delimiter=" ")
 
         # wordlist has 4 words, so 2 bits of entropy per word.
         assert ppg.generate(length).entropy == pytest.approx(3 * length)
 
     @pytest.mark.parametrize("delimiter", list(" @-*"))
     def test_delimiter(self, wordlist, delimiter: str):
-        ppg = PassphraseGenerator(
-            wordlist=wordlist, rng=CycleRng([0]), delimiter=delimiter
-        )
+        ppg = PassphraseGenerator(wordlist=wordlist, rng=CycleRng([0]), delimiter=delimiter)
 
         assert ppg.generate(3).passphrase == delimiter.join("aaa")
 
@@ -115,9 +111,7 @@ class TestEntropyGuarantee:
         ],
     )
     def test_is_guaranteed(self, wordlist, delimiter):
-        ppg = PassphraseGenerator(
-            wordlist=wordlist, delimiter=delimiter, rng=CycleRng([0, 1])
-        )
+        ppg = PassphraseGenerator(wordlist=wordlist, delimiter=delimiter, rng=CycleRng([0, 1]))
         result = ppg.generate(2)
         assert result.entropy_is_guaranteed
 
@@ -132,9 +126,7 @@ class TestEntropyGuarantee:
     def test_is_not_guaranteed(self, wordlist, delimiter):
         """With the chosen wordlist these delimiters decrease the number of possible
         passphrases. Hence check must return False."""
-        ppg = PassphraseGenerator(
-            wordlist=wordlist, delimiter=delimiter, rng=CycleRng([0, 1])
-        )
+        ppg = PassphraseGenerator(wordlist=wordlist, delimiter=delimiter, rng=CycleRng([0, 1]))
 
         # Edge case: If only one word is generated the guarantee naturally holds.
         result_1 = ppg.generate(1)

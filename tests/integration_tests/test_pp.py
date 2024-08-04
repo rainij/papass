@@ -35,8 +35,7 @@ def test_system_rng_simple(tmp_path, opt_length, opt_wordlist_file, opt_random_s
 
         result = runner.invoke(
             cli,
-            ["pp", opt_length, str(length), opt_wordlist_file, WORDLIST_NAME]
-            + random_source,
+            ["pp", opt_length, str(length), opt_wordlist_file, WORDLIST_NAME] + random_source,
         )
 
         assert result.exit_code == 0
@@ -58,8 +57,7 @@ def test_dice_rng_simple(monkeypatch, tmp_path, opt_dice_sides):
 
         result = runner.invoke(
             cli,
-            ["pp", "-l", str(length), "-w", WORDLIST_NAME]
-            + [opt_dice_sides, "6", "-r", "dice"],
+            ["pp", "-l", str(length), "-w", WORDLIST_NAME, opt_dice_sides, "6", "-r", "dice"],
         )
 
         assert result.exit_code == 0
@@ -73,9 +71,7 @@ def test_delimiter(tmp_path, opt_delimiter, delimiter):
     # whitespace intentional:
     wordlist_content = " foo\n bar"
     length = 2
-    output_pattern = re.compile(
-        rf"^Passphrase: ( foo| bar){delimiter}( foo| bar)\nEntropy: 2\.0\n"
-    )
+    output_pattern = re.compile(rf"^Passphrase: ( foo| bar){delimiter}( foo| bar)\nEntropy: 2\.0\n")
 
     with runner.isolated_filesystem(temp_dir=tmp_path):
         with open(WORDLIST_NAME, "w") as f:
@@ -138,9 +134,7 @@ def test_remove_leading_digits(tmp_path, opt_remove):
         with open(WORDLIST_NAME, "w") as f:
             f.write(wordlist_content)
 
-        result = runner.invoke(
-            cli, ["pp", "-l", str(length), "-w", WORDLIST_NAME, opt_remove]
-        )
+        result = runner.invoke(cli, ["pp", "-l", str(length), "-w", WORDLIST_NAME, opt_remove])
 
         assert result.exit_code == 0
         assert output_pattern.match(result.output)

@@ -1,6 +1,6 @@
 from collections.abc import Iterable, Iterator, Sequence
 from functools import reduce
-from typing import Generic, TypeVar, overload
+from typing import Generic, NoReturn, TypeVar, overload
 
 import click
 
@@ -14,7 +14,7 @@ def digits_to_value(base: int, digits: Iterable[int]) -> int:
     >>> digits_to_value(10, [1, 2, 3])
     123
     """
-    assert 1 < base
+    assert base > 1
     assert all(0 <= d < base for d in digits)
     return reduce(lambda acc, r: base * acc + r, digits, 0)
 
@@ -89,9 +89,7 @@ class QueryUserForDice:
         click.echo("Rejected. Please try again.")
 
     @staticmethod
-    def _parse_input(
-        user_input: str, *, num_sides: int, required_num_rolls: int
-    ) -> list[int]:
+    def _parse_input(user_input: str, *, num_sides: int, required_num_rolls: int) -> list[int]:
         """Parse user input as a list of dice rolls.
 
         Returns ``[]`` if input is invalid.
@@ -115,9 +113,7 @@ class QueryUserForDice:
         try:
             rolls = [int(r) for r in user_input.split()]
         except ValueError:
-            click.echo(
-                "Invalid. Require a space-separated list of integers (like: 1 3 2)."
-            )
+            click.echo("Invalid. Require a space-separated list of integers (like: 1 3 2).")
             return []
 
         if not all(1 <= r <= num_sides for r in rolls):
@@ -164,17 +160,18 @@ class PowerSequence(Generic[T]):
 
         NOTE: This replaces __len__. See class docstring for the reason.
         """
-        return self._base_length**self._power
+        result: int = self._base_length**self._power
+        return result
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
         """True iff the sequence is non-empty."""
         return self.size != 0
 
     @overload
     def __getitem__(self, index: int) -> tuple[T, ...]: ...
     @overload
-    def __getitem__(self, index: slice) -> Sequence[tuple[T, ...]]: ...
-    def __getitem__(self, index):
+    def __getitem__(self, index: slice) -> NoReturn: ...
+    def __getitem__(self, index: int | slice) -> tuple[T, ...]:
         """Get item at given index.
 
         The elements are ordered lexicographically.

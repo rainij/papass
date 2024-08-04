@@ -13,7 +13,7 @@ G. Reinhold.
 # Quickstart
 
 Assuming you have a wordlist file `wordlist.txt` ([where to get
-one](https://papass.readthedocs.io/en/stable/usage_cli.html#where-to-get-wordlist)) you
+one](https://papass.readthedocs.io/en/stable/usage_cli.html#where-to-get-wordlists)) you
 can run the following command to generate a random list of four words:
 
 ```{code} console

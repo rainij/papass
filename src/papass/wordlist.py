@@ -1,7 +1,7 @@
 import re
 from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import overload
+from typing import Any, overload
 
 
 class WordList(Sequence[str]):
@@ -55,7 +55,7 @@ class WordList(Sequence[str]):
     def __getitem__(self, index: int) -> str: ...
     @overload
     def __getitem__(self, index: slice) -> "WordList": ...
-    def __getitem__(self, index):
+    def __getitem__(self, index: Any) -> Any:
         """Get a word at an index or a new word list from a slice."""
         if isinstance(index, int):
             return self._words[index]
@@ -76,7 +76,7 @@ class WordList(Sequence[str]):
     def __add__(self, other: "WordList") -> "WordList": ...
     @overload
     def __add__(self, other: list[str]) -> "WordList": ...
-    def __add__(self, other) -> "WordList":
+    def __add__(self, other: Any) -> "WordList":
         """Combine two word lists to a new word list made of the union of their words.
 
         If the second summand is a list of words it behaves as if this list was converted
@@ -98,7 +98,7 @@ class WordList(Sequence[str]):
             fout.write("\n".join(self))
 
     @staticmethod
-    def from_file(file_path: Path | str, **options):
+    def from_file(file_path: Path | str, **options: Any) -> "WordList":
         """Construct a wordlist from a file of words (newline separated).
 
         The ``options`` are the same as those for ``__init__``.
@@ -107,7 +107,7 @@ class WordList(Sequence[str]):
             file_path = Path(file_path)
         assert file_path.exists(), f"Wordfile does not exist: {file_path}"
 
-        with open(file_path, "r") as fin:
+        with open(file_path) as fin:
             words = [w.strip("\n") for w in fin.readlines()]
             return WordList(words, **options)
 

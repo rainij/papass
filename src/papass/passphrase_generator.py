@@ -2,7 +2,7 @@ import math
 from dataclasses import dataclass
 from functools import cached_property
 
-from .random.base import RngBase
+from .random_source.base import RngBase
 from .utils import PowerSequence
 from .wordlist import WordList
 
@@ -110,9 +110,7 @@ class PassphraseGenerator:
         if count <= 1:
             # In this case delimiter is not even used
             return True
-        elif self._delimiter == "":
-            return False
-        elif self._delimiter in self._word_alphabet:
+        elif self._delimiter == "" or self._delimiter in self._word_alphabet:
             return False
 
         return True
