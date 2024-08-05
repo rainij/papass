@@ -9,7 +9,7 @@ class WordList(Sequence[str]):
 
     Internally the list of words is deduplicated and sorted (via ``sorted``).
 
-    Example:
+    Example
     -------
     >>> wordlist = WordList(["c", "b", "a"])
     >>> wordlist
