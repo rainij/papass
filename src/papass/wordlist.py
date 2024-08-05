@@ -10,14 +10,14 @@ class WordList(Sequence[str]):
     Internally the list of words is deduplicated and sorted (via ``sorted``).
 
     Example
-    =======
-
+    -------
     >>> wordlist = WordList(["c", "b", "a"])
     >>> wordlist
     WordList(['a', 'b', 'c'])
     >>> assert wordlist[0] == "a"
     >>> assert list(wordlist) == ["a", "b", "c"]
     >>> assert wordlist == WordList(["a", "b", "c"])
+
     """
 
     def __init__(
@@ -89,7 +89,7 @@ class WordList(Sequence[str]):
         raise ValueError(f"Unsupported type {type(other)}")
 
     def __repr__(self) -> str:
-        """A string representation which could be used to initialize an equivalent word list."""
+        """Exact representation of wordlist."""
         return f"{WordList.__name__}({self._words})"
 
     def to_file(self, file_path: Path | str) -> None:

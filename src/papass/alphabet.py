@@ -40,13 +40,13 @@ def alphabet_from_preset(preset: Iterable[str]) -> str:
     :param preset: The preset. Can contain duplicates.
     :return: A deduplicated and sorted string representing the alphabet.
 
-    Example
-    =======
-
+    Example:
+    -------
     >>> alphabet_from_preset(["digits"])
     '0123456789'
     >>> alphabet_from_preset(["digits", "letters", "digits"])
     '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+
     """
     raw_names: list[str] = []
 

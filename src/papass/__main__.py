@@ -7,7 +7,7 @@ from papass.commands import pp, pw
 @click.help_option("--help", "-h")
 @click.version_option()
 def cli() -> None:
-    "Create passphrases and passwords."
+    """Create passphrases and passwords."""
 
 
 cli.add_command(pp, "pp")

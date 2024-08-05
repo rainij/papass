@@ -85,7 +85,7 @@ def pp(
     dice_sides: int,
     remove_leading_digits: bool,
 ) -> None:
-    """Create a passphrase.
+    r"""Create a passphrase.
 
     \b
     Example:
@@ -94,7 +94,6 @@ def pp(
     Passphrase: gents backed marvelous mounting
     Entropy: 51.6993
     """
-
     try:
         rng = get_rng(randomness_source, dice_sides=dice_sides)
 
@@ -168,7 +167,7 @@ def pw(
     alpha_exclude: str,
     help_alpha_preset: bool,
 ) -> None:
-    """Create a password.
+    r"""Create a password.
 
     \b
     Example:
@@ -179,9 +178,8 @@ def pw(
 
     NOTE: You can use all --alpha-* options simultaneously.
     """
-
     if help_alpha_preset:
-        print_alpha_preset()
+        _print_alpha_preset()
         return
 
     try:
@@ -210,7 +208,7 @@ def pw(
     click.echo(f"Entropy: {result.entropy:.6}")
 
 
-def print_alpha_preset() -> None:
+def _print_alpha_preset() -> None:
     base = {k: click.style(v, bg=RESULT_BG_COLOR) for k, v in alphabet_preset_base().items()}
     shortcuts = {k: ",".join(v) for k, v in alphabet_preset_shortcuts().items()}
 

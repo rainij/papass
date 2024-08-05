@@ -10,7 +10,9 @@ class QueryForDice(Protocol):
     """Interface for the ``query_for_dice`` option of ``DiceRng``."""
 
     def __call__(self, *, num_sides: int, required_num_rolls: int) -> list[int]:
-        """Called within ``DiceRng.randbelow`` to query for dice rolls.
+        """Return dice rolls to be turned into the output of ``DiceRng.randbelow``.
+
+        Called within ``DiceRng.randbelow`` until its output is not rejected.
 
         :param num_sides: Number of sides of the dice.
         :param require_num_rolls: The number of rolls.
@@ -18,11 +20,23 @@ class QueryForDice(Protocol):
         """
 
     def notify_rejection(self) -> None:
-        """Called when output of ``__call__`` got rejected."""
+        """React to rejected dice rolls.
+
+        Called by ``DiceRng`` if output of ``__call__`` got rejected.
+        """
 
 
 @dataclass
 class DiceFrame:
+    """Metadata required to convert dice rolls into integers.
+
+    The dice frame contains information on how to turn dice rolls into numbers from an
+    interval ``[0, upper)`` with a uniform distribution.
+
+    We assume that the dice rolls themselves is (at least approximately) uniform and
+    independent.
+    """
+
     upper_multiple: int
     required_num_rolls: int
 
@@ -105,14 +119,7 @@ class DiceRng(RngBase):
 def compute_dice_frame(
     *, num_sides: int, upper: int, required_success_probability: float
 ) -> DiceFrame:
-    """Computes the dice frame.
-
-    The dice frame contains information on how to turn dice rolls into numbers from an
-    interval ``[0, upper)`` with a uniform distribution.
-
-    We assume that the dice rolls themselves is (at least approximately) uniform and
-    independent.
-    """
+    """Return the dice frame."""
     required_num_rolls = 1
     upper_dice = num_sides
     upper_multiple = (upper_dice // upper) * upper

@@ -80,7 +80,9 @@ class TestPassphraseGenerator:
 
 
 class TestEntropyGuarantee:
-    """We only test the following:
+    """Test correctness of entropy guarantee.
+
+    We only test the following:
 
     - Guarantee MUST be True if current implementation SHOULD be able to prove it true.
     - Guarantee MUST be False if entropy IS indeed lower.
@@ -124,8 +126,8 @@ class TestEntropyGuarantee:
         ],
     )
     def test_is_not_guaranteed(self, wordlist, delimiter):
-        """With the chosen wordlist these delimiters decrease the number of possible
-        passphrases. Hence check must return False."""
+        # With the chosen wordlist these delimiters decrease the number of possible passphrases.
+        # Hence check must return False.
         ppg = PassphraseGenerator(wordlist=wordlist, delimiter=delimiter, rng=CycleRng([0, 1]))
 
         # Edge case: If only one word is generated the guarantee naturally holds.

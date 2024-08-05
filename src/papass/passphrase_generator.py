@@ -88,7 +88,7 @@ class PassphraseGenerator:
         return math.log2(len(self._wordlist))
 
     def _entropy_is_guaranteed(self, count: int) -> bool:
-        """Returns True if we can guarantee that the entropy estimate is exact.
+        """Return ``True`` if we can guarantee that the entropy estimate is exact.
 
         We use a simple heuristic: If the delimiter does not occur in any of the words it
         serves as marker forfor the word boundaries. In that case the number of possible
