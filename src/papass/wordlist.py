@@ -89,7 +89,7 @@ class WordList(Sequence[str]):
         raise ValueError(f"Unsupported type {type(other)}")
 
     def __repr__(self) -> str:
-        """A string representation which could be used to initialize an equivalent word list."""
+        """Exact representation of wordlist."""
         return f"{WordList.__name__}({self._words})"
 
     def to_file(self, file_path: Path | str) -> None:

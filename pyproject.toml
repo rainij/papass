@@ -73,6 +73,20 @@ select = [
     # flake8-simplify
     "SIM",
 ]
+ignore = [
+   "D100", # undocumented-public-module
+   "D104", # undocumented-public-package
+   "D203", # incompatible with D211
+   "D213", # incompatible with D212
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**py" = [
+    # Missing docstrings are OK (D100-D107).
+    "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107",
+    # Others
+    "D400", "D415",
+]
 
 [tool.mypy]
 packages = "papass,tests"

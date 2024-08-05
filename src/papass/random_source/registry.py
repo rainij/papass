@@ -14,7 +14,7 @@ _rng_registry: dict[str, tuple[type[RngBase], dict[str, str]]] = dict(
 
 
 def default_randomness_source() -> str:
-    """Default value for --random-source."""
+    """Return default value for --random-source."""
     # NOTE: dicts are ordered by insertion order.
     return list(_rng_registry.keys())[0]
 
@@ -25,7 +25,7 @@ def available_random_sources() -> list[str]:
 
 
 def available_randomness_sources_str() -> str:
-    """A string representing all valid values for --random-source."""
+    """Return a string representing all valid values for --random-source."""
     return ", ".join(f"'{s}'" for s in available_random_sources())
 
 

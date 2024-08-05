@@ -96,7 +96,7 @@ class TestUniformity:
 
     @given(rand_rng=st.randoms(use_true_random=True))
     def test_part_1(self, rand_rng):
-        """This tests that randbelow maps into [0,upper) and is uniform on its range.
+        """Tests that randbelow maps into [0,upper) and is uniform on its range.
 
         It does not test that the range of randbelow the full interval.
         """

@@ -164,7 +164,7 @@ class PowerSequence(Generic[T]):
         return result
 
     def __bool__(self) -> bool:
-        """True iff the sequence is non-empty."""
+        """Return ``True`` iff the sequence is non-empty."""
         return self.size != 0
 
     @overload
@@ -186,5 +186,6 @@ class PowerSequence(Generic[T]):
         return tuple(self._sequence[i] for i in indices)
 
     def __iter__(self) -> Iterator[tuple[T, ...]]:
+        """Iterate over the entire power sequence."""
         for i in range(self.size):
             yield self[i]
