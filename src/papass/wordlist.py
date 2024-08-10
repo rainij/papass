@@ -1,7 +1,28 @@
 import re
-from collections.abc import Iterable, Sequence
+from collections.abc import Callable, Iterable, Sequence
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, overload
+
+
+@dataclass
+class FrequencyEntry:
+    """TODO."""
+
+    word: str
+    frequency: int
+
+    pattern: re.Pattern[str] = field(default=re.compile(r"^\d+\t[^\t]+\t\d+$"), init=False)
+
+    @classmethod
+    def from_line(cls, line: str, line_number: int) -> "FrequencyEntry":
+        """TODO."""
+        assert cls.pattern.match(
+            line
+        ), f"Line {line_number} `{line}` does not match pattern {cls.pattern}."
+        entries = line.split("\t")
+
+        return FrequencyEntry(word=entries[1], frequency=int(entries[2]))
 
 
 class WordList(Sequence[str]):
@@ -113,24 +134,25 @@ class WordList(Sequence[str]):
 
     # TODO: testing
     @staticmethod
-    def from_frequency_file(file_path: Path | str) -> "WordList":
+    def from_frequency_file(
+        file_path: Path | str,
+        *,
+        transform_fn: Callable[[str], str] = lambda word: word,
+        filter_fn: Callable[[FrequencyEntry], bool] = lambda _: True,
+        **options: Any,
+    ) -> "WordList":
         """TODO."""
         if isinstance(file_path, str):
             file_path = Path(file_path)
         assert file_path.exists(), f"Frequency file does not exist: {file_path}"
 
-        pattern = r"^\d+\t[^\t]+\t\d+$"
-        compiled_pattern = re.compile(pattern)
-
         with open(file_path) as fin:
             lines = [w.strip("\n") for w in fin.readlines()]
 
-        for i, e in enumerate(lines):
-            assert compiled_pattern.match(e), f"Line {i} `{e}` does not satisfy pattern `{pattern}`"
+        entries = [FrequencyEntry.from_line(transform_fn(w), i) for i, w in enumerate(lines)]
+        entries = [e for e in entries if filter_fn(e)]
 
-        entries: list[tuple[str, ...]] = [tuple(e.split("\t")) for e in lines]
-
-        return WordList(e[1] for e in entries)
+        return WordList([e.word for e in entries], **options)
 
     def _filter_min_word_size(self, min_word_size: int) -> None:
         self._words = [w for w in self._words if len(w) >= min_word_size]
