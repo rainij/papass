@@ -111,6 +111,27 @@ class WordList(Sequence[str]):
             words = [w.strip("\n") for w in fin.readlines()]
             return WordList(words, **options)
 
+    # TODO: testing
+    @staticmethod
+    def from_frequency_file(file_path: Path | str) -> "WordList":
+        """TODO."""
+        if isinstance(file_path, str):
+            file_path = Path(file_path)
+        assert file_path.exists(), f"Frequency file does not exist: {file_path}"
+
+        pattern = r"^\d+\t[^\t]+\t\d+$"
+        compiled_pattern = re.compile(pattern)
+
+        with open(file_path) as fin:
+            lines = [w.strip("\n") for w in fin.readlines()]
+
+        for i, e in enumerate(lines):
+            assert compiled_pattern.match(e), f"Line {i} `{e}` does not satisfy pattern `{pattern}`"
+
+        entries: list[tuple[str, ...]] = [tuple(e.split("\t")) for e in lines]
+
+        return WordList(e[1] for e in entries)
+
     def _filter_min_word_size(self, min_word_size: int) -> None:
         self._words = [w for w in self._words if len(w) >= min_word_size]
 
