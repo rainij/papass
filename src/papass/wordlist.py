@@ -1,7 +1,32 @@
+import math
 import re
 from collections.abc import Iterable, Sequence
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, overload
+
+
+@dataclass
+class FrequencyEntry:
+    """Represents a line a word frequency file."""
+
+    word: str
+    frequency: int
+
+    pattern: re.Pattern[str] = field(default=re.compile(r"^\d+\t[^\t]+\t\d+$"), init=False)
+
+    @classmethod
+    def from_line(cls, line: str, line_number: int) -> "FrequencyEntry":
+        """Convert a single line into a `FrequencyEntry`.
+
+        The line number is only required for error messages.
+        """
+        assert cls.pattern.match(
+            line
+        ), f"Line {line_number} `{line}` does not match pattern {cls.pattern}."
+        entries = line.split("\t")
+
+        return FrequencyEntry(word=entries[1], frequency=int(entries[2]))
 
 
 class WordList(Sequence[str]):
@@ -55,6 +80,7 @@ class WordList(Sequence[str]):
     def __getitem__(self, index: int) -> str: ...
     @overload
     def __getitem__(self, index: slice) -> "WordList": ...
+
     def __getitem__(self, index: Any) -> Any:
         """Get a word at an index or a new word list from a slice."""
         if isinstance(index, int):
@@ -76,6 +102,7 @@ class WordList(Sequence[str]):
     def __add__(self, other: "WordList") -> "WordList": ...
     @overload
     def __add__(self, other: list[str]) -> "WordList": ...
+
     def __add__(self, other: Any) -> "WordList":
         """Combine two word lists to a new word list made of the union of their words.
 
@@ -99,7 +126,7 @@ class WordList(Sequence[str]):
 
     @staticmethod
     def from_file(file_path: Path | str, **options: Any) -> "WordList":
-        """Construct a wordlist from a file of words (newline separated).
+        """Create a wordlist from a file of words (newline separated).
 
         The ``options`` are the same as those for ``__init__``.
         """
@@ -110,6 +137,52 @@ class WordList(Sequence[str]):
         with open(file_path) as fin:
             words = [w.strip("\n") for w in fin.readlines()]
             return WordList(words, **options)
+
+    @staticmethod
+    def from_frequency_file(
+        file_path: Path | str,
+        *,
+        min_frequency: int = 1,
+        max_frequency: int | None = None,
+        **options: Any,
+    ) -> "WordList":
+        """Create a wordlist from a frequency file.
+
+        We assume the following format for each line:
+
+        LINENO TAB WORD TAB FREQUENCY
+
+        We ignore the LINENO (digits). We are only interested in WORD (str) and FREQUENCY
+        (int). Example::
+
+            1	der	1000
+            2	haus	120
+            3	felsen	100
+            4	foo bar-baz	100
+            5	rareword	1
+
+        Note that the three columns must be separated by tabs and that no tabs appear elsewhere.
+
+        :param min_frequency: Consider only words with at least this frequency.
+        :param max_frequency: Consider only words with at most this frequency. ``None`` means
+            infinite.
+        """
+        if isinstance(file_path, str):
+            file_path = Path(file_path)
+        assert file_path.exists(), f"Frequency file does not exist: {file_path}"
+
+        with open(file_path) as fin:
+            lines = [w.strip("\n") for w in fin.readlines()]
+
+        max_frequency_or_inf = max_frequency if max_frequency is not None else math.inf
+
+        def filter_fn(entry: FrequencyEntry) -> bool:
+            return min_frequency <= entry.frequency <= max_frequency_or_inf
+
+        entries = [FrequencyEntry.from_line(w, i) for i, w in enumerate(lines)]
+        entries = [e for e in entries if filter_fn(e)]
+
+        return WordList([e.word for e in entries], **options)
 
     def _filter_min_word_size(self, min_word_size: int) -> None:
         self._words = [w for w in self._words if len(w) >= min_word_size]

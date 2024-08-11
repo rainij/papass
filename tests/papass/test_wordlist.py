@@ -76,7 +76,7 @@ class TestInterface:
         assert f"{wordlist}" == "WordList(['a', 'b', 'c', 'd', 'e'])"
 
     def test_from_file(self, tmp_path, words, wordlist):
-        file_path = tmp_path / "test.wordlist"
+        file_path = tmp_path / "test.wordlist.txt"
 
         with open(file_path, "w") as fin:
             for word in words:
@@ -84,6 +84,25 @@ class TestInterface:
 
         wordlist_from_file = WordList.from_file(file_path)
         assert wordlist_from_file == wordlist
+
+    def test_from_frequency_file(self, tmp_path):
+        file_path = tmp_path / "test.frequencylist.txt"
+
+        with open(file_path, "w") as fin:
+            for line in [
+                "1\tder\t1000",
+                "2\thaus\t100",
+                "3\tfelsen\t120",
+                "4\trareword\t1",
+            ]:
+                fin.write(f"{line}\n")
+
+        wordlist_from_file = WordList.from_frequency_file(
+            file_path, min_frequency=100, max_frequency=120
+        )
+        wordlist_ref = WordList(["haus", "felsen"])
+
+        assert wordlist_from_file == wordlist_ref
 
     def test_to_file(self, tmp_path, words, wordlist):
         file_path = tmp_path / "test.wordlist"

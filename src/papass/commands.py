@@ -85,7 +85,7 @@ def pp(
     dice_sides: int,
     remove_leading_digits: bool,
 ) -> None:
-    r"""Create a passphrase.
+    """Create a passphrase.
 
     \b
     Example:
@@ -93,7 +93,7 @@ def pp(
     $ papass pp -l 4 -w wordlist.txt
     Passphrase: gents backed marvelous mounting
     Entropy: 51.6993
-    """
+    """  # noqa: D301
     try:
         rng = get_rng(randomness_source, dice_sides=dice_sides)
 
@@ -167,7 +167,7 @@ def pw(
     alpha_exclude: str,
     help_alpha_preset: bool,
 ) -> None:
-    r"""Create a password.
+    """Create a password.
 
     \b
     Example:
@@ -177,7 +177,7 @@ def pw(
     Entropy: 119.084
 
     NOTE: You can use all --alpha-* options simultaneously.
-    """
+    """  # noqa: D301
     if help_alpha_preset:
         _print_alpha_preset()
         return
