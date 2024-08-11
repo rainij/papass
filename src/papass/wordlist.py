@@ -162,6 +162,10 @@ class WordList(Sequence[str]):
             5	rareword	1
 
         Note that the three columns must be separated by tabs and that no tabs appear elsewhere.
+
+        :param min_frequency: Consider only words with at least this frequency.
+        :param max_frequency: Consider only words with at most this frequency. ``None`` means
+            infinite.
         """
         if isinstance(file_path, str):
             file_path = Path(file_path)
